@@ -1,0 +1,150 @@
+-----------------------------------------------
+# completed tasks
+
+SparkMetric_CL
+| where name_s contains "completetasks"
+| project TimeGenerated , taskscompleted=value_d
+| order by TimeGenerated nulls last 
+| render timechart 
+--------------------------------------------
+# % deserialization cpu  per executor
+
+let results = SparkMetric_CL 
+| where name_s contains "executor.deserializetime" 
+| extend sname=split(name_s, ".") 
+| project TimeGenerated , desetime=count_d , executor=strcat(sname[0],sname[1]) ,name_s
+| join kind= inner (
+SparkMetric_CL
+| where name_s contains "executor.RunTime"
+| extend sname=split(name_s, ".") 
+| project TimeGenerated , runTime=count_d , executor=strcat(sname[0],sname[1]) ,name_s
+) on executor, TimeGenerated;
+results
+| extend deseUsage=(desetime/runTime)*100
+| summarize deSerializationCpuTime=percentiles(deseUsage,25, 50, 75, 100) by bin(TimeGenerated, 1m), executor
+| order by TimeGenerated asc nulls last 
+| render timechart 
+
+---------------------------------------------------------------------------------
+# % executor cpu
+
+let results = SparkMetric_CL 
+| where name_s contains "executor.cpuTime" 
+| extend sname=split(name_s, ".") 
+| project TimeGenerated , cpuTime=count_d/1000000  ,  executor=strcat(sname[0],sname[1]) ,name_s
+| join kind= inner (
+    SparkMetric_CL
+| where name_s contains "executor.RunTime"
+| extend sname=split(name_s, ".") 
+| project TimeGenerated , runTime=count_d  ,  executor=strcat(sname[0],sname[1]) ,name_s
+) on executor, TimeGenerated;
+results
+| extend cpuUsage=(cpuTime/runTime)*100
+| summarize ExecutorCpuTime=percentiles(cpuUsage,25, 50, 75, 90) by bin(TimeGenerated, 1m), executor
+| order by TimeGenerated asc nulls last 
+| render timechart
+----------------------------------------------------------
+# file System bytes read per executor
+
+SparkMetric_CL
+| where  name_s  contains "executor.filesystem.file.read_bytes" 
+| extend sname=split(name_s, ".")
+| summarize FileSystemReadBytes=any(value_d)  by bin(TimeGenerated,  1m), strcat(sname[0],sname[1])
+| order by TimeGenerated asc  nulls last 
+| render timechart
+
+---------------------------------------------------------------------------
+# file system bytes write per executor
+SparkMetric_CL
+| where  name_s  contains "executor.filesystem.file.write_bytes"
+| extend sname=split(name_s, ".")  
+| summarize FileSystemWriteBytes=any(value_d)  by bin(TimeGenerated,  1m), strcat(sname[0],sname[1]) 
+| order by TimeGenerated asc  nulls last 
+| render timechart
+
+--------------------------------------------------------------------------------
+# jobs activity
+SparkMetric_CL 
+| where name_s contains "driver.DAGScheduler.job.allJobs"
+| project TimeGenerated , RunningJobs=value_d
+| order by TimeGenerated asc nulls last 
+| render timechart 
+------------------------------------------------------------------------
+# % JVM cpu per executor
+let results = SparkMetric_CL
+| where name_s contains "executor.jvmGCTime" 
+| extend sname=split(name_s, ".") 
+| project TimeGenerated , jvmgcTime=count_d , executor=strcat(sname[0],sname[1]) ,name_s
+| join kind= inner (
+SparkMetric_CL
+| where name_s contains "executor.RunTime"
+| extend sname=split(name_s, ".") 
+| project TimeGenerated , runTime=count_d , executor=strcat(sname[0],sname[1]) ,name_s
+) on executor, TimeGenerated;
+results
+| extend JvmcpuUsage=(jvmgcTime/runTime)*100
+| summarize JvmCpuTime = percentiles(JvmcpuUsage,25, 50, 75, 90) by bin(TimeGenerated, 1m), executor
+| order by TimeGenerated asc nulls last
+| render timechart  
+--------------------------------------------------------------------------------------------
+# memory bytes spilled by executor
+SparkMetric_CL
+| where  name_s  contains "executor.memoryBytesSpilled"
+| extend sname=split(name_s, ".")  
+| summarize ShuffleMemory=any(value_d)  by bin(TimeGenerated,  1m), strcat(sname[0],sname[1]) 
+| order by TimeGenerated asc  nulls last 
+| render timechart
+-----------------------------------------------------------------------------------------------
+# Running executors
+SparkMetric_CL
+| extend sname=split(name_s, ".")
+| extend executor=strcat(sname[0],sname[1]) 
+| summarize dcount(executor)  by bin(TimeGenerated,  1m)
+| order by TimeGenerated asc  nulls last 
+| render timechart
+-------------------------------------------------------------------------------------------------
+% serialization cpu time per executor
+let results = SparkMetric_CL
+| where name_s contains "executor.resultserializationtime" 
+| extend sname=split(name_s, ".") 
+| project TimeGenerated , setime=count_d , executor=strcat(sname[0],sname[1]) ,name_s
+| join kind= inner (
+SparkMetric_CL
+| where name_s contains "executor.RunTime"
+| extend sname=split(name_s, ".") 
+| project TimeGenerated , runTime=count_d , executor=strcat(sname[0],sname[1]) ,name_s
+) on executor, TimeGenerated;
+results
+| extend serUsage=(setime/runTime)*100
+| summarize SerializationCpuTime=percentiles(serUsage,25, 50, 75, 100) by bin(TimeGenerated, 1m), executor
+| order by TimeGenerated asc nulls last
+| render timechart 
+--------------------------------------------------------------------------------------------------------------
+# shuffle bytes read per executor
+SparkMetric_CL
+| where  name_s  contains "executor.shuffleTotalBytesRead"
+| extend sname=split(name_s, ".")  
+| summarize ShuffleBytesWrite=any(count_d)  by bin(TimeGenerated,  1m), strcat(sname[0],sname[1]) 
+| order by TimeGenerated asc  nulls last 
+| render timechart
+-----------------------------------------------------------------------------------------------------------
+# shuffle bytes write per executor
+SparkMetric_CL
+| where  name_s  contains "executor.shuffleBytesWritten"
+| extend sname=split(name_s, ".")  
+| summarize ShuffleBytesWrite=any(count_d)  by bin(TimeGenerated,  1m), strcat(sname[0],sname[1]) 
+| order by TimeGenerated asc  nulls last 
+| render timechart
+-------------------------------------------------------------------------------------------------------------
+# shuffle memory used for shuffle by executorSparkMetric_CL
+SparkMetric_CL
+| where  name_s  contains "ExternalShuffle.shuffle-client.usedDirectMemory"
+| extend sname=split(name_s, ".")  
+| summarize ShuffleMemory=any(value_d)  by bin(TimeGenerated,  1m), strcat(sname[0],sname[1]) 
+| order by TimeGenerated asc  nulls last 
+| render timechart
+
+
+
+
+
