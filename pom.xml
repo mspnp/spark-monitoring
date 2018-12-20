@@ -10,6 +10,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>spark-metrics</module>
+        <module>spark-listeners</module>
     </modules>
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -112,18 +113,6 @@
         <dependency>
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-library</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.spark</groupId>
-            <artifactId>spark-core_2.11</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.spark</groupId>
-            <artifactId>spark-sql_2.11</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.spark</groupId>
-            <artifactId>spark-streaming_2.11</artifactId>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
