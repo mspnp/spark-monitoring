@@ -66,7 +66,7 @@
             "yaxis": ""
           },
           "azureLogAnalytics": {
-            "query": "let results=SparkMetric_CL \n| where name_s contains \"driver.DAGScheduler.job.allJobs\"\n| where $__timeFilter()\n| summarize max=arg_max(value_d, value_d), min=arg_min(value_d,value_d) by bin(TimeGenerated,2m) \n| order by TimeGenerated asc nulls last;\nresults\n| extend NumberJobs=max - min \n| project JobsPerMinute=NumberJobs/2,TimeGenerated",
+            "query": "let results=SparkListenerEvent_CL\n| where $__timeFilter(TimeGenerated)\n| where  Event_s  contains \"SparkListenerJobStart\"\n| project Job_ID_d,Properties_callSite_short_s,TimeGenerated\n| order by TimeGenerated asc  nulls last \n| join kind= inner (\n    SparkListenerEvent_CL\n    | where $__timeFilter(TimeGenerated)\n    | where Event_s contains \"SparkListenerJobEnd\"\n    | where Job_Result_Result_s contains \"JobSucceeded\"\n    | project Event_s,Job_ID_d,TimeGenerated\n) on Job_ID_d;\nresults\n| extend slice=strcat(\"Jobs \",Properties_callSite_short_s)\n| summarize count(Event_s)   by bin(TimeGenerated,  1m),slice\n| order by TimeGenerated asc nulls last",
             "resultFormat": "time_series",
             "workspace": "6cdabfff-ca67-46d4-a18c-8e5b2d81b6bf"
           },
@@ -80,6 +80,60 @@
           },
           "queryType": "Azure Log Analytics",
           "refId": "A"
+        },
+        {
+          "appInsights": {
+            "groupBy": "none",
+            "metricName": "select",
+            "rawQuery": false,
+            "rawQueryString": "",
+            "spliton": "",
+            "timeGrainType": "auto",
+            "xaxis": "timestamp",
+            "yaxis": ""
+          },
+          "azureLogAnalytics": {
+            "query": "SparkListenerEvent_CL\n| where  $__timeFilter(TimeGenerated)\n| where Event_s contains \"SparkListenerTaskEnd\" \n| summarize TasksCompleted=count(Event_s) by bin(TimeGenerated,1m)\n| order by TimeGenerated asc nulls last",
+            "resultFormat": "time_series",
+            "workspace": "6cdabfff-ca67-46d4-a18c-8e5b2d81b6bf"
+          },
+          "azureMonitor": {
+            "dimensionFilter": "*",
+            "metricDefinition": "select",
+            "metricName": "select",
+            "resourceGroup": "select",
+            "resourceName": "select",
+            "timeGrain": "auto"
+          },
+          "queryType": "Azure Log Analytics",
+          "refId": "B"
+        },
+        {
+          "appInsights": {
+            "groupBy": "none",
+            "metricName": "select",
+            "rawQuery": false,
+            "rawQueryString": "",
+            "spliton": "",
+            "timeGrainType": "auto",
+            "xaxis": "timestamp",
+            "yaxis": ""
+          },
+          "azureLogAnalytics": {
+            "query": "SparkListenerEvent_CL\n| where  $__timeFilter(TimeGenerated)\n| where Event_s contains \"SparkListenerStageCompleted\"\n| extend slice = strcat(\"stages \",Stage_Info_Stage_Name_s)  \n| summarize StagesCompleted=count(Event_s) by bin(TimeGenerated,1m), slice\n| order by TimeGenerated asc nulls last",
+            "resultFormat": "time_series",
+            "workspace": "6cdabfff-ca67-46d4-a18c-8e5b2d81b6bf"
+          },
+          "azureMonitor": {
+            "dimensionFilter": "*",
+            "metricDefinition": "select",
+            "metricName": "select",
+            "resourceGroup": "select",
+            "resourceName": "select",
+            "timeGrain": "auto"
+          },
+          "queryType": "Azure Log Analytics",
+          "refId": "C"
         }
       ],
       "thresholds": [],
@@ -102,8 +156,8 @@
       "yaxes": [
         {
           "format": "short",
-          "label": "Stages / Jobs per Minute",
-          "logBase": 1,
+          "label": "Throughput Per Minute",
+          "logBase": 2,
           "max": null,
           "min": null,
           "show": true
@@ -600,7 +654,7 @@
             "yaxis": ""
           },
           "azureLogAnalytics": {
-            "query": "SparkListenerEvent_CL\n| where $__timeFilter()\n| where Event_s contains \"stagecompleted\"\n| summarize percentiles(Stage_Info_Number_of_Tasks_d,90 )  by bin(TimeGenerated, 1m), Stage_Info_Stage_Name_s\n| order by TimeGenerated asc nulls last \n",
+            "query": "SparkListenerEvent_CL\n| where $__timeFilter(TimeGenerated)\n| where Event_s contains \"SparkListenerStageCompleted\"\n| project Stage_Info_Number_of_Tasks_d,Stage_Info_Stage_Name_s,TimeGenerated \n| order by TimeGenerated asc nulls last",
             "resultFormat": "time_series",
             "workspace": "6cdabfff-ca67-46d4-a18c-8e5b2d81b6bf"
           },
@@ -3007,7 +3061,7 @@
       "type": "table"
     }
   ],
-  "refresh": "10s",
+  "refresh": false,
   "schemaVersion": 16,
   "style": "dark",
   "tags": [],
@@ -3015,8 +3069,8 @@
     "list": []
   },
   "time": {
-    "from": "2018-12-12T21:09:59.000Z",
-    "to": "2018-12-12T21:40:16.000Z"
+    "from": "2019-01-02T23:03:53.000Z",
+    "to": "2019-01-02T23:33:53.000Z"
   },
   "timepicker": {
     "refresh_intervals": [
@@ -3046,5 +3100,5 @@
   "timezone": "",
   "title": "Spark Metrics",
   "uid": "SP3yfcBmz",
-  "version": 273
+  "version": 286
 }
