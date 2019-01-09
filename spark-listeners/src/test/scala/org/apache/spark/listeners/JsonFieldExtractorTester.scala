@@ -1,7 +1,10 @@
 package org.apache.spark.listeners
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import org.apache.spark.SparkFunSuite
-import org.apache.spark.util.Utils
+import org.apache.spark.scheduler.SparkListenerApplicationStart
+import org.apache.spark.util.{JsonProtocol, Utils}
 import org.json4s.DefaultFormats
 import org.json4s.JsonAST.{JNothing, JValue}
 import org.json4s.jackson.JsonMethods.parse
@@ -69,6 +72,37 @@ class JsonFieldExtractorTester extends SparkFunSuite {
   def extractJValue(input: JValue, field: String) = {
 
     input \ field
+  }
+
+
+  case class TimeGenerated(timeGenerated: String)
+
+  test("should insert a new field ") {
+
+    val mockSparkListAppStartEvent = SparkListenerApplicationStart(
+      "someAppName",
+      Option.empty[String],
+      1L,
+      "someSparkUser",
+      Option.empty[String]
+    )
+
+    val mockTimeGenerated = TimeGenerated("someTimeGenerated")
+    val mapper = new ObjectMapper().registerModule(DefaultScalaModule)
+    val jValEvent = JsonProtocol.sparkEventToJson(mockSparkListAppStartEvent)
+
+    println(jValEvent.toString)
+
+    val jValTimeGenerated = parse(mapper.writeValueAsString(mockTimeGenerated))
+
+    val finalValEvent = jValEvent.merge(jValTimeGenerated)
+
+    println("******************")
+    println(finalValEvent.toString)
+
+    println("******************")
+
+
   }
 
 

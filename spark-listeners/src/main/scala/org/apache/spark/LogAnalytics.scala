@@ -4,13 +4,17 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import org.apache.spark.internal.Logging
+import org.apache.spark.listeners.TimeGeneratorLambda
 import org.apache.spark.listeners.microsoft.pnp.loganalytics.LogAnalyticsClient
 import org.apache.spark.scheduler.SparkListenerEvent
 import org.apache.spark.streaming.scheduler.StreamingListenerEvent
 import org.apache.spark.util.JsonProtocol
+import org.json4s.JsonAST.JValue
 import org.json4s.jackson.JsonMethods.{compact, parse}
 
 import scala.util.control.NonFatal
+
+case class TimeGenerated(timeGenerated: String)
 
 trait LogAnalytics {
   this: Logging =>
@@ -27,7 +31,8 @@ trait LogAnalytics {
   // Add the Event field since the StreamingListenerEvents don't extend the SparkListenerEvent trait
   mapper.addMixIn(classOf[StreamingListenerEvent], classOf[StreamingListenerEventMixIn])
 
-  protected def logEvent(event: AnyRef) {
+
+  protected def logEvent(event: AnyRef, lambda: AnyRef => String = TimeGeneratorLambda.defaultLambda) {
     val s = try {
       logDebug(s"Serializing event to JSON")
       val json = event match {
@@ -38,7 +43,7 @@ trait LogAnalytics {
           None
       }
       if (json.isDefined) {
-        Some(compact(json.get))
+        Some(compact(json.get.merge(getTimeGeneratedJVal(lambda.apply(event)))))
       } else {
         None
       }
@@ -52,7 +57,13 @@ trait LogAnalytics {
     if (s.isDefined) {
       logDebug(s"Sending event to Log Analytics")
       logDebug(s.get)
-      logAnalyticsClient.send(s.get, config.logType, config.timestampFieldName)
+      logAnalyticsClient.send(s.get, config.logType, "timeGenerated")
     }
+  }
+
+  protected def getTimeGeneratedJVal(time: String): JValue = {
+    val timeGenerated = TimeGenerated(time)
+    parse(mapper.writeValueAsString(timeGenerated))
+
   }
 }

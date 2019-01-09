@@ -22,7 +22,7 @@ class LogAnalyticsListener(sparkConf: SparkConf)
 
   override def onStageSubmitted(event: SparkListenerStageSubmitted): Unit = logEvent(event)
 
-  override def onTaskStart(event: SparkListenerTaskStart): Unit = logEvent(event)
+  override def onTaskStart(event: SparkListenerTaskStart): Unit = logEvent(event, TimeGeneratorLambda.onTaskStartLambda)
 
   override def onTaskGettingResult(event: SparkListenerTaskGettingResult): Unit = logEvent(event)
 
@@ -59,6 +59,7 @@ class LogAnalyticsListener(sparkConf: SparkConf)
   override def onApplicationEnd(event: SparkListenerApplicationEnd): Unit = {
     logEvent(event)
   }
+
   override def onExecutorAdded(event: SparkListenerExecutorAdded): Unit = {
     logEvent(event)
   }
@@ -90,7 +91,7 @@ class LogAnalyticsListener(sparkConf: SparkConf)
   }
 
   // No-op because logging every update would be overkill
-  override def onExecutorMetricsUpdate(event: SparkListenerExecutorMetricsUpdate): Unit = { }
+  override def onExecutorMetricsUpdate(event: SparkListenerExecutorMetricsUpdate): Unit = {}
 
   override def onOtherEvent(event: SparkListenerEvent): Unit = {
     if (event.logEvent) {
@@ -106,7 +107,7 @@ class LogAnalyticsListener(sparkConf: SparkConf)
     // ...
     // where jvmInformation, sparkProperties, etc. are sequence of tuples.
     // We go through the various  of properties and redact sensitive information from them.
-    val redactedProps = event.environmentDetails.map{ case (name, props) =>
+    val redactedProps = event.environmentDetails.map { case (name, props) =>
       name -> Utils.redact(sparkConf, props)
     }
     SparkListenerEnvironmentUpdate(redactedProps)

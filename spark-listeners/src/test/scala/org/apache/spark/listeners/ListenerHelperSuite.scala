@@ -13,7 +13,7 @@ class ListenerHelperSuite extends SparkFunSuite {
 
     var isLogEventInvoked = false
 
-    override protected def logEvent(event: AnyRef): Unit = {
+    override protected def logEvent(event: AnyRef,lambda: AnyRef => String = TimeGeneratorLambda.defaultLambda): Unit = {
       println("Log event got invoked")
       isLogEventInvoked = !isLogEventInvoked
     }
