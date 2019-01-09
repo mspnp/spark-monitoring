@@ -2,12 +2,12 @@ package org.apache.spark.listeners
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
-import org.apache.spark.SparkFunSuite
 import org.apache.spark.scheduler.SparkListenerApplicationStart
 import org.apache.spark.util.{JsonProtocol, Utils}
+import org.apache.spark.{SparkFunSuite, TimeGenerated}
 import org.json4s.DefaultFormats
 import org.json4s.JsonAST.{JNothing, JValue}
-import org.json4s.jackson.JsonMethods.parse
+import org.json4s.jackson.JsonMethods.{compact, parse}
 
 class JsonFieldExtractorTester extends SparkFunSuite {
 
@@ -75,8 +75,6 @@ class JsonFieldExtractorTester extends SparkFunSuite {
   }
 
 
-  case class TimeGenerated(timeGenerated: String)
-
   test("should insert a new field ") {
 
     val mockSparkListAppStartEvent = SparkListenerApplicationStart(
@@ -90,17 +88,17 @@ class JsonFieldExtractorTester extends SparkFunSuite {
     val mockTimeGenerated = TimeGenerated("someTimeGenerated")
     val mapper = new ObjectMapper().registerModule(DefaultScalaModule)
     val jValEvent = JsonProtocol.sparkEventToJson(mockSparkListAppStartEvent)
-
-    println(jValEvent.toString)
+    val jsonStringEvent = compact(jValEvent)
+    val expectedFinalEvent = jsonStringEvent.substring(0, jsonStringEvent.length - 1).concat(",\"TimeGenerated\":\"someTimeGenerated\"}")
 
     val jValTimeGenerated = parse(mapper.writeValueAsString(mockTimeGenerated))
-
     val finalValEvent = jValEvent.merge(jValTimeGenerated)
 
-    println("******************")
-    println(finalValEvent.toString)
+    val actualFinalEvent = compact(finalValEvent)
 
-    println("******************")
+    println(expectedFinalEvent)
+    println(actualFinalEvent)
+    assert(expectedFinalEvent.contentEquals(actualFinalEvent))
 
 
   }

@@ -14,7 +14,7 @@ import org.json4s.jackson.JsonMethods.{compact, parse}
 
 import scala.util.control.NonFatal
 
-case class TimeGenerated(timeGenerated: String)
+case class TimeGenerated(TimeGenerated: String)
 
 trait LogAnalytics {
   this: Logging =>
@@ -57,7 +57,7 @@ trait LogAnalytics {
     if (s.isDefined) {
       logDebug(s"Sending event to Log Analytics")
       logDebug(s.get)
-      logAnalyticsClient.send(s.get, config.logType, "timeGenerated")
+      logAnalyticsClient.send(s.get, config.logType, "TimeGenerated")
     }
   }
 
