@@ -40,9 +40,9 @@ public class LogAnalyticsClient implements Closeable {
     }
 
     private static final class LogAnalyticsHttpHeaders {
-        public static final String LOG_TYPE = "Log-Type";
-        public static final String X_MS_DATE = "x-ms-date";
-        public static final String TIME_GENERATED_FIELD = "time-generated-field";
+        static final String LOG_TYPE = "Log-Type";
+        static final String X_MS_DATE = "x-ms-date";
+        static final String TIME_GENERATED_FIELD = "time-generated-field";
     }
 
     private String workspaceId;
@@ -59,17 +59,17 @@ public class LogAnalyticsClient implements Closeable {
     }
 
     public LogAnalyticsClient(String workspaceId, String workspaceKey,
-                              HttpClient httpClient) {
+                               HttpClient httpClient) {
         this(workspaceId, workspaceKey, httpClient, DEFAULT_URL_SUFFIX);
     }
 
     public LogAnalyticsClient(String workspaceId, String workspaceKey,
-                              HttpClient httpClient, String urlSuffix) {
+                               HttpClient httpClient, String urlSuffix) {
         this(workspaceId, workspaceKey, httpClient, urlSuffix, DEFAULT_API_VERSION);
     }
 
     public LogAnalyticsClient(String workspaceId, String workspaceKey,
-                              HttpClient httpClient, String urlSuffix, String apiVersion) {
+                               HttpClient httpClient, String urlSuffix, String apiVersion) {
         if (isNullOrWhitespace(workspaceId)) {
             throw new IllegalArgumentException("workspaceId cannot be null, empty, or only whitespace");
         }
@@ -137,7 +137,7 @@ public class LogAnalyticsClient implements Closeable {
 
             HttpResponse httpResponse = null;
             try {
-                httpResponse = this.httpClient.execute(httpPost);
+                httpResponse = httpClient.execute(httpPost);
                 if (httpResponse.getStatusLine().getStatusCode() != 200) {
                     throw new IOException(
                             String.format(
@@ -155,7 +155,7 @@ public class LogAnalyticsClient implements Closeable {
         }
     }
 
-    private static String buildSignature(
+    private String buildSignature(
             String primaryKey,
             String xmsDate,
             int contentLength,
@@ -181,7 +181,7 @@ public class LogAnalyticsClient implements Closeable {
         return result;
     }
 
-    private static boolean isNullOrWhitespace(String str) {
+    private boolean isNullOrWhitespace(String str) {
         int strLen;
         if (str == null || (strLen = str.length()) == 0) {
             return true;

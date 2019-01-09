@@ -1,5 +1,7 @@
 package org.apache.spark
 
+import java.time.Instant
+
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
@@ -8,9 +10,13 @@ import org.apache.spark.listeners.microsoft.pnp.loganalytics.LogAnalyticsClient
 import org.apache.spark.scheduler.SparkListenerEvent
 import org.apache.spark.streaming.scheduler.StreamingListenerEvent
 import org.apache.spark.util.JsonProtocol
-import org.json4s.jackson.JsonMethods.{compact, parse}
+import org.json4s.JsonAST.JValue
+import org.json4s.JsonDSL._
+import org.json4s.jackson.JsonMethods.{compact, parse, render}
 
 import scala.util.control.NonFatal
+
+case class TimeGenerated(TimeGenerated: String)
 
 trait LogAnalytics {
   this: Logging =>
@@ -27,32 +33,69 @@ trait LogAnalytics {
   // Add the Event field since the StreamingListenerEvents don't extend the SparkListenerEvent trait
   mapper.addMixIn(classOf[StreamingListenerEvent], classOf[StreamingListenerEventMixIn])
 
-  protected def logEvent(event: AnyRef) {
-    val s = try {
-      logDebug(s"Serializing event to JSON")
-      val json = event match {
-        case e: SparkListenerEvent => Some(JsonProtocol.sparkEventToJson(e))
-        case e: StreamingListenerEvent => Some(parse(mapper.writeValueAsString(e)))
-        case e =>
-          logWarning(s"Class '${e.getClass.getCanonicalName}' is not a supported event type")
-          None
-      }
-      if (json.isDefined) {
-        Some(compact(json.get))
-      } else {
-        None
-      }
+
+  protected def logStreamingListenerEvent[T <: StreamingListenerEvent](event: T,
+                                                                       getTimestamp: () => Instant =
+                                                                       () => Instant.now()): Unit = {
+    val json = try {
+      Some(
+        parse(mapper.writeValueAsString(event))
+          .merge(render(
+            "TimeGenerated" -> getTimestamp.toString
+          ))
+      )
     } catch {
       case NonFatal(e) =>
-        logError(s"Error sending to Log Analytics: $e")
+        logError(s"Error serializing StreamingListenerEvent to JSON", e)
         logError(s"event: $event")
         None
     }
 
-    if (s.isDefined) {
-      logDebug(s"Sending event to Log Analytics")
-      logDebug(s.get)
-      logAnalyticsClient.send(s.get, config.logType, config.timestampFieldName)
+    logEvent(json)
+  }
+
+  protected def logSparkListenerEvent[T <: SparkListenerEvent](
+                                                                event: T,
+                                                                getTimestamp: () => Instant =
+                                                                () => Instant.now()): Unit = {
+    val json = try {
+      Some(
+        JsonProtocol.sparkEventToJson(event)
+          .merge(render(
+            "TimeGenerated" -> getTimestamp.toString
+          ))
+      )
+    } catch {
+      case NonFatal(e) =>
+        logError(s"Error serializing SparkListenerEvent to JSON", e)
+        logError(s"event: $event")
+        None
     }
+
+    logEvent(json)
+  }
+
+  private def logEvent(json: Option[JValue]): Unit = {
+    try {
+      json match {
+        case Some(j) => {
+          val jsonString = compact(j)
+          logDebug(s"Sending event to Log Analytics: ${jsonString}")
+          logAnalyticsClient.send(jsonString, config.logType, "TimeGenerated")
+        }
+        case None => {
+          logWarning("json value was None")
+        }
+      }
+    } catch {
+      case NonFatal(e) =>
+        logError(s"Error sending to Log Analytics: $e")
+    }
+  }
+
+  protected def getTimeGeneratedJVal(time: String): JValue = {
+    val timeGenerated = TimeGenerated(time)
+    parse(mapper.writeValueAsString(timeGenerated))
+
   }
 }

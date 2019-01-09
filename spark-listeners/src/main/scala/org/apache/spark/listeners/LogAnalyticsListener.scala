@@ -1,5 +1,7 @@
 package org.apache.spark.listeners
 
+import java.time.Instant
+
 import org.apache.spark.internal.Logging
 import org.apache.spark.scheduler._
 import org.apache.spark.util.Utils
@@ -20,81 +22,87 @@ class LogAnalyticsListener(sparkConf: SparkConf)
 
   val config = new LogAnalyticsListenerConfiguration(sparkConf)
 
-  override def onStageSubmitted(event: SparkListenerStageSubmitted): Unit = logEvent(event)
+  override def onStageSubmitted(event: SparkListenerStageSubmitted): Unit = logSparkListenerEvent(event)
 
-  override def onTaskStart(event: SparkListenerTaskStart): Unit = logEvent(event)
+  override def onTaskStart(event: SparkListenerTaskStart): Unit = logSparkListenerEvent(event, () => {
+    Instant.ofEpochMilli(event.taskInfo.launchTime)
+  })
 
-  override def onTaskGettingResult(event: SparkListenerTaskGettingResult): Unit = logEvent(event)
+  override def onTaskGettingResult(event: SparkListenerTaskGettingResult): Unit = logSparkListenerEvent(event)
 
-  override def onTaskEnd(event: SparkListenerTaskEnd): Unit = logEvent(event)
+  override def onTaskEnd(event: SparkListenerTaskEnd): Unit = logSparkListenerEvent(event)
 
   override def onEnvironmentUpdate(event: SparkListenerEnvironmentUpdate): Unit = {
-    logEvent(redactEvent(event))
+    logSparkListenerEvent(redactEvent(event))
   }
 
   override def onStageCompleted(event: SparkListenerStageCompleted): Unit = {
-    logEvent(event)
+    logSparkListenerEvent(event)
   }
 
-  override def onJobStart(event: SparkListenerJobStart): Unit = logEvent(event)
+  override def onJobStart(event: SparkListenerJobStart): Unit = logSparkListenerEvent(event)
 
-  override def onJobEnd(event: SparkListenerJobEnd): Unit = logEvent(event)
+  override def onJobEnd(event: SparkListenerJobEnd): Unit = logSparkListenerEvent(
+    event,
+    () => Instant.ofEpochMilli(event.time)
+  )
 
   override def onBlockManagerAdded(event: SparkListenerBlockManagerAdded): Unit = {
-    logEvent(event)
+    logSparkListenerEvent(event)
   }
 
   override def onBlockManagerRemoved(event: SparkListenerBlockManagerRemoved): Unit = {
-    logEvent(event)
+    logSparkListenerEvent(event)
   }
 
   override def onUnpersistRDD(event: SparkListenerUnpersistRDD): Unit = {
-    logEvent(event)
+    logSparkListenerEvent(event)
   }
 
   override def onApplicationStart(event: SparkListenerApplicationStart): Unit = {
-    logEvent(event)
+    logSparkListenerEvent(event)
   }
 
   override def onApplicationEnd(event: SparkListenerApplicationEnd): Unit = {
-    logEvent(event)
+    logSparkListenerEvent(event)
   }
+
   override def onExecutorAdded(event: SparkListenerExecutorAdded): Unit = {
-    logEvent(event)
+    logSparkListenerEvent(event)
   }
 
   override def onExecutorRemoved(event: SparkListenerExecutorRemoved): Unit = {
-    logEvent(event)
+    logSparkListenerEvent(event)
   }
 
   override def onExecutorBlacklisted(event: SparkListenerExecutorBlacklisted): Unit = {
-    logEvent(event)
+    logSparkListenerEvent(event)
   }
 
   override def onExecutorUnblacklisted(event: SparkListenerExecutorUnblacklisted): Unit = {
-    logEvent(event)
+    logSparkListenerEvent(event)
   }
 
   override def onNodeBlacklisted(event: SparkListenerNodeBlacklisted): Unit = {
-    logEvent(event)
+    logSparkListenerEvent(event)
   }
 
   override def onNodeUnblacklisted(event: SparkListenerNodeUnblacklisted): Unit = {
-    logEvent(event)
+    logSparkListenerEvent(event)
   }
 
   override def onBlockUpdated(event: SparkListenerBlockUpdated): Unit = {
     if (config.logBlockUpdates) {
-      logEvent(event)
+      logSparkListenerEvent(event)
     }
   }
 
   // No-op because logging every update would be overkill
-  override def onExecutorMetricsUpdate(event: SparkListenerExecutorMetricsUpdate): Unit = { }
+  override def onExecutorMetricsUpdate(event: SparkListenerExecutorMetricsUpdate): Unit = {}
 
   override def onOtherEvent(event: SparkListenerEvent): Unit = {
     if (event.logEvent) {
-      logEvent(event)
+      logSparkListenerEvent(event)
     }
   }
 
@@ -106,7 +114,7 @@ class LogAnalyticsListener(sparkConf: SparkConf)
     // ...
     // where jvmInformation, sparkProperties, etc. are sequence of tuples.
     // We go through the various  of properties and redact sensitive information from them.
-    val redactedProps = event.environmentDetails.map{ case (name, props) =>
+    val redactedProps = event.environmentDetails.map { case (name, props) =>
       name -> Utils.redact(sparkConf, props)
     }
     SparkListenerEnvironmentUpdate(redactedProps)

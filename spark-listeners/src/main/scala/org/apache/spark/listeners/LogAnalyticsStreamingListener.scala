@@ -10,38 +10,38 @@ class LogAnalyticsStreamingListener(sparkConf: SparkConf) extends StreamingListe
   val config = new LogAnalyticsListenerConfiguration(sparkConf)
 
   override def onStreamingStarted(streamingStarted: StreamingListenerStreamingStarted): Unit = {
-    logEvent(streamingStarted)
+    logStreamingListenerEvent(streamingStarted)
   }
 
   override def onReceiverStarted(receiverStarted: StreamingListenerReceiverStarted): Unit = {
-    logEvent(receiverStarted)
+    logStreamingListenerEvent(receiverStarted)
   }
 
   override def onReceiverError(receiverError: StreamingListenerReceiverError): Unit = {
-    logEvent(receiverError)
+    logStreamingListenerEvent(receiverError)
   }
 
   override def onReceiverStopped(receiverStopped: StreamingListenerReceiverStopped): Unit = {
-    logEvent(receiverStopped)
+    logStreamingListenerEvent(receiverStopped)
   }
 
   override def onBatchSubmitted(batchSubmitted: StreamingListenerBatchSubmitted): Unit = {
-    logEvent(batchSubmitted)
+    logStreamingListenerEvent(batchSubmitted)
   }
 
   override def onBatchStarted(batchStarted: StreamingListenerBatchStarted): Unit = {
-    logEvent(batchStarted)
+    logStreamingListenerEvent(batchStarted)
   }
 
   override def onBatchCompleted(batchCompleted: StreamingListenerBatchCompleted): Unit = {
-    logEvent(batchCompleted)
+    logStreamingListenerEvent(batchCompleted)
   }
 
   override def onOutputOperationStarted(outputOperationStarted: StreamingListenerOutputOperationStarted): Unit = {
-    logEvent(outputOperationStarted)
+    logStreamingListenerEvent(outputOperationStarted)
   }
 
   override def onOutputOperationCompleted(outputOperationCompleted: StreamingListenerOutputOperationCompleted): Unit = {
-    logEvent(outputOperationCompleted)
+    logStreamingListenerEvent(outputOperationCompleted)
   }
 }
