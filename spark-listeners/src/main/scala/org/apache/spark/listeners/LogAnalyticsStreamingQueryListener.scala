@@ -10,14 +10,14 @@ class LogAnalyticsStreamingQueryListener(sparkConf: SparkConf) extends Streaming
   val config = new LogAnalyticsListenerConfiguration(sparkConf)
 
   override def onQueryStarted(event: StreamingQueryListener.QueryStartedEvent): Unit = {
-    logEvent(event)
+    logSparkListenerEvent(event)
   }
 
   override def onQueryProgress(event: StreamingQueryListener.QueryProgressEvent): Unit = {
-    logEvent(event)
+    logSparkListenerEvent(event)
   }
 
   override def onQueryTerminated(event: StreamingQueryListener.QueryTerminatedEvent): Unit = {
-    logEvent(event)
+    logSparkListenerEvent(event)
   }
 }
