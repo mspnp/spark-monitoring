@@ -2,6 +2,8 @@ package org.apache.spark.listeners
 
 import org.apache.spark.SparkConf
 import org.apache.spark.scheduler._
+import org.json4s.DefaultFormats
+import org.json4s.jackson.JsonMethods.parse
 import org.mockito.Mockito.{mock, when}
 
 /**
@@ -224,5 +226,86 @@ class LogAnalyticsListenerTester extends ListenerHelperSuite {
     val sut = new LogAnalyticsListener(conf) with LogAnalyticsMock
     sut.onOtherEvent(mockEvent)
     assert(sut.isLogEventInvoked)
+  }
+
+
+  // these  test  tests the lamda function for following cases
+  // scenario 1 - event has time stamp
+  // scenario 2 - event has timestamp field but could be optional. in that case instant.now needs to plugged
+  // scenario 3 - event has no explicit time stamp field. in that case, default lambda in the definition
+  // should be picked up and should result in instant.now value
+
+  test("should invoke onBlockManagerAdded with serialized mock Event with lamda  ") {
+
+    val mockEvent = SparkTestEvents.sparkListenerBlockManagerAddedEvent
+    val sut = new LogAnalyticsListener(conf) with LogAnalyticsMock
+    sut.onBlockManagerAdded(mockEvent)
+    assert(sut.isLogEventInvoked)
+
+    val timeGeneratedField = parse(sut.enrichedLogEvent).findField { case (n, v) => n == "TimeGenerated" }
+
+
+    assert(timeGeneratedField.isDefined)
+    assert(timeGeneratedField.get._1 == "TimeGenerated")
+
+    implicit val formats = DefaultFormats
+    assert(timeGeneratedField.get._2.extract[String].contentEquals(SparkTestEvents.iso8601TestTime))
+
+  }
+
+  test("onStageSubmitted with submission time optional empty should populate TimeGenerated") {
+
+    val mockEvent = SparkTestEvents.sparkListenerStageSubmittedWithSubmissonTimeEmptyEvent
+    val sut = new LogAnalyticsListener(conf) with LogAnalyticsMock
+    sut.onStageSubmitted(mockEvent)
+    assert(sut.isLogEventInvoked)
+
+    val timeGeneratedField = parse(sut.enrichedLogEvent).findField { case (n, v) => n == "TimeGenerated" }
+
+
+    assert(timeGeneratedField.isDefined)
+    assert(timeGeneratedField.get._1 == "TimeGenerated")
+
+    implicit val formats = DefaultFormats
+    assert(!timeGeneratedField.get._2.extract[String].isEmpty)
+
+
+  }
+
+  test("onStageSubmitted with submission time  should populate expected TimeGenerated") {
+
+    val mockEvent = SparkTestEvents.sparkListenerStageSubmittedEvent
+    val sut = new LogAnalyticsListener(conf) with LogAnalyticsMock
+    sut.onStageSubmitted(mockEvent)
+    assert(sut.isLogEventInvoked)
+
+    val timeGeneratedField = parse(sut.enrichedLogEvent).findField { case (n, v) => n == "TimeGenerated" }
+
+
+    assert(timeGeneratedField.isDefined)
+    assert(timeGeneratedField.get._1 == "TimeGenerated")
+
+
+    implicit val formats = DefaultFormats
+    assert(timeGeneratedField.get._2.extract[String].contentEquals(SparkTestEvents.iso8601TestTime))
+
+
+  }
+
+  test("onEnvironmentUpdate should populate instat.now timegenerated field") {
+
+    val mockEvent = SparkTestEvents.sparkListenerEnvironmentUpdateEvent
+    val sut = new LogAnalyticsListener(conf) with LogAnalyticsMock
+    sut.onEnvironmentUpdate(mockEvent)
+    assert(sut.isLogEventInvoked)
+
+    val timeGeneratedField = parse(sut.enrichedLogEvent).findField { case (n, v) => n == "TimeGenerated" }
+
+
+    assert(timeGeneratedField.isDefined)
+    assert(timeGeneratedField.get._1 == "TimeGenerated")
+
+    implicit val formats = DefaultFormats
+    assert(!timeGeneratedField.get._2.extract[String].isEmpty)
   }
 }

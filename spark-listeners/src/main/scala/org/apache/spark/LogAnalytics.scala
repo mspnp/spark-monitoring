@@ -41,7 +41,7 @@ trait LogAnalytics {
       Some(
         parse(mapper.writeValueAsString(event))
           .merge(render(
-            "TimeGenerated" -> getTimestamp.toString
+            "TimeGenerated" -> getTimestamp.apply().toString
           ))
       )
     } catch {
@@ -62,7 +62,7 @@ trait LogAnalytics {
       Some(
         JsonProtocol.sparkEventToJson(event)
           .merge(render(
-            "TimeGenerated" -> getTimestamp.toString
+            "TimeGenerated" -> getTimestamp.apply().toString
           ))
       )
     } catch {
@@ -75,7 +75,7 @@ trait LogAnalytics {
     logEvent(json)
   }
 
-  private def logEvent(json: Option[JValue]): Unit = {
+  protected def logEvent(json: Option[JValue]): Unit = {
     try {
       json match {
         case Some(j) => {

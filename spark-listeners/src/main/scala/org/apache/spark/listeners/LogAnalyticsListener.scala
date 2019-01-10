@@ -22,74 +22,99 @@ class LogAnalyticsListener(sparkConf: SparkConf)
 
   val config = new LogAnalyticsListenerConfiguration(sparkConf)
 
-  override def onStageSubmitted(event: SparkListenerStageSubmitted): Unit = logSparkListenerEvent(event)
+  override def onStageSubmitted(event: SparkListenerStageSubmitted): Unit = logSparkListenerEvent(
+    event,
+    () => Instant.ofEpochMilli(event.stageInfo.submissionTime.getOrElse(Instant.now().toEpochMilli))
+  )
 
-  override def onTaskStart(event: SparkListenerTaskStart): Unit = logSparkListenerEvent(event, () => {
-    Instant.ofEpochMilli(event.taskInfo.launchTime)
-  })
+  override def onTaskStart(event: SparkListenerTaskStart): Unit = logSparkListenerEvent(
+    event,
+    () => Instant.ofEpochMilli(event.taskInfo.launchTime)
+  )
 
   override def onTaskGettingResult(event: SparkListenerTaskGettingResult): Unit = logSparkListenerEvent(event)
 
-  override def onTaskEnd(event: SparkListenerTaskEnd): Unit = logSparkListenerEvent(event)
+  override def onTaskEnd(event: SparkListenerTaskEnd): Unit = logSparkListenerEvent(
+    event,
+    () => Instant.ofEpochMilli(event.taskInfo.finishTime)
+  )
 
-  override def onEnvironmentUpdate(event: SparkListenerEnvironmentUpdate): Unit = {
+  override def onEnvironmentUpdate(event: SparkListenerEnvironmentUpdate): Unit =
     logSparkListenerEvent(redactEvent(event))
-  }
 
-  override def onStageCompleted(event: SparkListenerStageCompleted): Unit = {
-    logSparkListenerEvent(event)
-  }
 
-  override def onJobStart(event: SparkListenerJobStart): Unit = logSparkListenerEvent(event)
+  override def onStageCompleted(event: SparkListenerStageCompleted): Unit = logSparkListenerEvent(
+    event,
+    () => Instant.ofEpochMilli(event.stageInfo.completionTime.getOrElse(Instant.now().toEpochMilli))
+  )
+
+
+  override def onJobStart(event: SparkListenerJobStart): Unit = logSparkListenerEvent(
+    event,
+    () => Instant.ofEpochMilli(event.time)
+  )
 
   override def onJobEnd(event: SparkListenerJobEnd): Unit = logSparkListenerEvent(
     event,
     () => Instant.ofEpochMilli(event.time)
   )
 
-  override def onBlockManagerAdded(event: SparkListenerBlockManagerAdded): Unit = {
-    logSparkListenerEvent(event)
-  }
+  override def onBlockManagerAdded(event: SparkListenerBlockManagerAdded): Unit = logSparkListenerEvent(
+    event,
+    () => Instant.ofEpochMilli(event.time)
+  )
 
-  override def onBlockManagerRemoved(event: SparkListenerBlockManagerRemoved): Unit = {
-    logSparkListenerEvent(event)
-  }
+
+  override def onBlockManagerRemoved(event: SparkListenerBlockManagerRemoved): Unit = logSparkListenerEvent(
+    event,
+    () => Instant.ofEpochMilli(event.time)
+  )
+
 
   override def onUnpersistRDD(event: SparkListenerUnpersistRDD): Unit = {
     logSparkListenerEvent(event)
   }
 
-  override def onApplicationStart(event: SparkListenerApplicationStart): Unit = {
-    logSparkListenerEvent(event)
-  }
+  override def onApplicationStart(event: SparkListenerApplicationStart): Unit = logSparkListenerEvent(
+    event,
+    () => Instant.ofEpochMilli(event.time)
+  )
 
-  override def onApplicationEnd(event: SparkListenerApplicationEnd): Unit = {
-    logSparkListenerEvent(event)
-  }
 
-  override def onExecutorAdded(event: SparkListenerExecutorAdded): Unit = {
-    logSparkListenerEvent(event)
-  }
+  override def onApplicationEnd(event: SparkListenerApplicationEnd): Unit = logSparkListenerEvent(
+    event,
+    () => Instant.ofEpochMilli(event.time)
+  )
 
-  override def onExecutorRemoved(event: SparkListenerExecutorRemoved): Unit = {
-    logSparkListenerEvent(event)
-  }
+  override def onExecutorAdded(event: SparkListenerExecutorAdded): Unit = logSparkListenerEvent(
+    event,
+    () => Instant.ofEpochMilli(event.time)
+  )
 
-  override def onExecutorBlacklisted(event: SparkListenerExecutorBlacklisted): Unit = {
-    logSparkListenerEvent(event)
-  }
+  override def onExecutorRemoved(event: SparkListenerExecutorRemoved): Unit = logSparkListenerEvent(
+    event,
+    () => Instant.ofEpochMilli(event.time)
+  )
 
-  override def onExecutorUnblacklisted(event: SparkListenerExecutorUnblacklisted): Unit = {
-    logSparkListenerEvent(event)
-  }
+  override def onExecutorBlacklisted(event: SparkListenerExecutorBlacklisted): Unit = logSparkListenerEvent(
+    event,
+    () => Instant.ofEpochMilli(event.time)
+  )
 
-  override def onNodeBlacklisted(event: SparkListenerNodeBlacklisted): Unit = {
-    logSparkListenerEvent(event)
-  }
+  override def onExecutorUnblacklisted(event: SparkListenerExecutorUnblacklisted): Unit = logSparkListenerEvent(
+    event,
+    () => Instant.ofEpochMilli(event.time)
+  )
 
-  override def onNodeUnblacklisted(event: SparkListenerNodeUnblacklisted): Unit = {
-    logSparkListenerEvent(event)
-  }
+  override def onNodeBlacklisted(event: SparkListenerNodeBlacklisted): Unit = logSparkListenerEvent(
+    event,
+    () => Instant.ofEpochMilli(event.time)
+  )
+
+  override def onNodeUnblacklisted(event: SparkListenerNodeUnblacklisted): Unit = logSparkListenerEvent(
+    event,
+    () => Instant.ofEpochMilli(event.time)
+  )
 
   override def onBlockUpdated(event: SparkListenerBlockUpdated): Unit = {
     if (config.logBlockUpdates) {
