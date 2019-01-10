@@ -1,5 +1,7 @@
 package org.apache.spark.listeners
 
+import java.time.Instant
+
 import org.apache.spark.internal.Logging
 import org.apache.spark.streaming.scheduler._
 import org.apache.spark.{LogAnalytics, LogAnalyticsListenerConfiguration, SparkConf}
@@ -9,13 +11,12 @@ class LogAnalyticsStreamingListener(sparkConf: SparkConf) extends StreamingListe
 
   val config = new LogAnalyticsListenerConfiguration(sparkConf)
 
-  override def onStreamingStarted(streamingStarted: StreamingListenerStreamingStarted): Unit = {
-    logStreamingListenerEvent(streamingStarted)
-  }
+  override def onStreamingStarted(streamingStarted: StreamingListenerStreamingStarted): Unit = logStreamingListenerEvent(
+    streamingStarted,
+    () => Instant.ofEpochMilli(streamingStarted.time)
+  )
 
-  override def onReceiverStarted(receiverStarted: StreamingListenerReceiverStarted): Unit = {
-    logStreamingListenerEvent(receiverStarted)
-  }
+  override def onReceiverStarted(receiverStarted: StreamingListenerReceiverStarted): Unit = logStreamingListenerEvent(receiverStarted)
 
   override def onReceiverError(receiverError: StreamingListenerReceiverError): Unit = {
     logStreamingListenerEvent(receiverError)
@@ -25,17 +26,20 @@ class LogAnalyticsStreamingListener(sparkConf: SparkConf) extends StreamingListe
     logStreamingListenerEvent(receiverStopped)
   }
 
-  override def onBatchSubmitted(batchSubmitted: StreamingListenerBatchSubmitted): Unit = {
-    logStreamingListenerEvent(batchSubmitted)
-  }
+  override def onBatchSubmitted(batchSubmitted: StreamingListenerBatchSubmitted): Unit = logStreamingListenerEvent(
+    batchSubmitted,
+    () => Instant.ofEpochMilli(batchSubmitted.batchInfo.batchTime.milliseconds)
+  )
 
-  override def onBatchStarted(batchStarted: StreamingListenerBatchStarted): Unit = {
-    logStreamingListenerEvent(batchStarted)
-  }
+  override def onBatchStarted(batchStarted: StreamingListenerBatchStarted): Unit = logStreamingListenerEvent(
+    batchStarted,
+    () => Instant.ofEpochMilli(batchStarted.batchInfo.batchTime.milliseconds)
+  )
 
-  override def onBatchCompleted(batchCompleted: StreamingListenerBatchCompleted): Unit = {
-    logStreamingListenerEvent(batchCompleted)
-  }
+  override def onBatchCompleted(batchCompleted: StreamingListenerBatchCompleted): Unit = logStreamingListenerEvent(
+    batchCompleted,
+    () => Instant.ofEpochMilli(batchCompleted.batchInfo.batchTime.milliseconds)
+  )
 
   override def onOutputOperationStarted(outputOperationStarted: StreamingListenerOutputOperationStarted): Unit = {
     logStreamingListenerEvent(outputOperationStarted)

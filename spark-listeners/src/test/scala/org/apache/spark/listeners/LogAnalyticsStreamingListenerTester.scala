@@ -2,6 +2,8 @@ package org.apache.spark.listeners
 
 import org.apache.spark.SparkConf
 import org.apache.spark.streaming.scheduler._
+import org.json4s.DefaultFormats
+import org.json4s.jackson.JsonMethods.parse
 import org.mockito.Mockito.mock
 
 
@@ -104,6 +106,40 @@ class LogAnalyticsStreamingListenerTester extends ListenerHelperSuite {
 
   }
 
+  test("onStreamingStarted with  time  should populate expected TimeGenerated") {
+
+    val mockEvent = SparkTestEvents.streamingListenerStreamingStartedEvent
+    val sut = new LogAnalyticsStreamingListener(conf) with LogAnalyticsMock
+    sut.onStreamingStarted(mockEvent)
+    assert(sut.isLogEventInvoked)
+
+    val timeGeneratedField = parse(sut.enrichedLogEvent).findField { case (n, v) => n == "TimeGenerated" }
+
+
+    assert(timeGeneratedField.isDefined)
+    assert(timeGeneratedField.get._1 == "TimeGenerated")
+
+    implicit val formats = DefaultFormats
+    assert(timeGeneratedField.get._2.extract[String].contentEquals(SparkTestEvents.iso8601TestTime))
+
+  }
+
+  test("onReceiverStarted with no time field should populate TimeGeneratedField"){
+    val mockEvent = SparkTestEvents.streamingListenerReceiverStartedEvent
+    val sut = new LogAnalyticsStreamingListener(conf) with LogAnalyticsMock
+    sut.onReceiverStarted(mockEvent)
+    assert(sut.isLogEventInvoked)
+
+    val timeGeneratedField = parse(sut.enrichedLogEvent).findField { case (n, v) => n == "TimeGenerated" }
+
+
+    assert(timeGeneratedField.isDefined)
+    assert(timeGeneratedField.get._1 == "TimeGenerated")
+
+    implicit val formats = DefaultFormats
+    assert(!timeGeneratedField.get._2.extract[String].isEmpty)
+
+  }
 
 
 }
