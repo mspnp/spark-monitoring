@@ -124,7 +124,7 @@ class LogAnalyticsStreamingListenerTester extends ListenerHelperSuite {
 
   }
 
-  test("onReceiverStarted with time field should populate TimeGeneratedField"){
+  test("onReceiverStarted with no time field should populate TimeGeneratedField"){
     val mockEvent = SparkTestEvents.streamingListenerReceiverStartedEvent
     val sut = new LogAnalyticsStreamingListener(conf) with LogAnalyticsMock
     sut.onReceiverStarted(mockEvent)
