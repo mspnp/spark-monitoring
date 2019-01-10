@@ -41,7 +41,7 @@ trait LogAnalytics {
       Some(
         parse(mapper.writeValueAsString(event))
           .merge(render(
-            "TimeGenerated" -> getTimestamp.apply().toString
+            "TimeGenerated" -> getTimestamp().toString
           ))
       )
     } catch {
@@ -62,7 +62,7 @@ trait LogAnalytics {
       Some(
         JsonProtocol.sparkEventToJson(event)
           .merge(render(
-            "TimeGenerated" -> getTimestamp.apply().toString
+            "TimeGenerated" -> getTimestamp().toString
           ))
       )
     } catch {

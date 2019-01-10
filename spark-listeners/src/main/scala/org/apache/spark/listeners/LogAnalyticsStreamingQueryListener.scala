@@ -11,7 +11,9 @@ class LogAnalyticsStreamingQueryListener(sparkConf: SparkConf) extends Streaming
 
   val config = new LogAnalyticsListenerConfiguration(sparkConf)
 
-  // TODO event.id.timestamp() check id is UUID??
+  //event.id.timestamp. here is id is of type UUID and UUID is generated based on random strategy and this timestamp is
+  //not helpful to know when this event happened
+
   override def onQueryStarted(event: StreamingQueryListener.QueryStartedEvent): Unit = logSparkListenerEvent(event)
 
 
@@ -21,6 +23,7 @@ class LogAnalyticsStreamingQueryListener(sparkConf: SparkConf) extends Streaming
     () => Instant.parse(event.progress.timestamp)
   )
 
-  // TODO event.id.timestamp() check id is UUID??
+  //event.id.timestamp. here is id is of type UUID and UUID is generated based on random strategy and this timestamp is
+  //not helpful to know when this event happened
   override def onQueryTerminated(event: StreamingQueryListener.QueryTerminatedEvent): Unit = logSparkListenerEvent(event)
 }
