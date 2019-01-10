@@ -2,69 +2,68 @@ package org.apache.spark.sql.streaming
 
 import java.util.UUID
 
-import org.apache.spark.SparkConf
-import org.apache.spark.listeners.SparkTestEvents.iso8601TestTime
-import org.apache.spark.listeners.{ListenerHelperSuite, LogAnalyticsStreamingQueryListener, SparkTestEvents}
+import org.apache.spark.{SparkConf, SparkFunSuite}
+import org.apache.spark.listeners.{LogAnalyticsStreamingQueryListener, SparkTestEvents}
 import org.apache.spark.sql.streaming.StreamingQueryListener.QueryProgressEvent
-import org.json4s.DefaultFormats
-import org.json4s.jackson.JsonMethods.parse
-import org.mockito.Mockito.mock
+import org.json4s.JsonAST.JValue
+import org.mockito.ArgumentCaptor
+import org.mockito.Matchers.any
+import org.mockito.Mockito.{doNothing, mock, spy, verify}
+import org.scalatest.BeforeAndAfterEach
 
-import scala.collection.JavaConverters._
+class LogAnalyticsStreamingQueryListenerTester extends SparkFunSuite
+  with BeforeAndAfterEach {
 
-/**
-  * This is more of behavior tester for LogAnalyticsStreamingQueryListener implementation
-  * that is extended from StreamingQueryListener
-  */
-class LogAnalyticsStreamingQueryListenerTester extends ListenerHelperSuite {
+  implicit val defaultFormats = org.json4s.DefaultFormats
 
-  private var conf: SparkConf = null
+  private var listener: LogAnalyticsStreamingQueryListener = null
+  private var captor: ArgumentCaptor[Option[JValue]] = null
 
-  override def beforeAll(): Unit = {
-    conf = new SparkConf()
+  override def beforeEach(): Unit = {
+    super.beforeEach()
+    val conf = new SparkConf()
     conf.set("spark.logAnalytics.workspaceId", "id")
     conf.set("spark.logAnalytics.secret", "secret")
+    this.captor = ArgumentCaptor.forClass(classOf[Option[JValue]])
+    this.listener = spy(new LogAnalyticsStreamingQueryListener(conf))
+    doNothing.when(this.listener).logEvent(any(classOf[Option[JValue]]))
+  }
+
+  override def afterEach(): Unit = {
+    super.afterEach()
+    this.captor = null
+    this.listener = null
   }
 
   test("should invoke onQueryStarted ") {
-
-    val mockEvent = mock(classOf[StreamingQueryListener.QueryStartedEvent])
-    val sut = new LogAnalyticsStreamingQueryListener(conf) with LogAnalyticsMock
-    sut.onQueryStarted(mockEvent)
-    assert(sut.isLogEventInvoked)
-
+    val event = mock(classOf[StreamingQueryListener.QueryStartedEvent])
+    this.listener.onQueryStarted(event)
+    verify(this.listener).logEvent(any(classOf[Option[JValue]]))
   }
 
   test("should invoke onQueryTerminated ") {
-
-    val mockEvent = mock(classOf[StreamingQueryListener.QueryTerminatedEvent])
-    val sut = new LogAnalyticsStreamingQueryListener(conf) with LogAnalyticsMock
-    sut.onQueryTerminated(mockEvent)
-    assert(sut.isLogEventInvoked)
-
+    val event = mock(classOf[StreamingQueryListener.QueryTerminatedEvent])
+    this.listener.onQueryTerminated(event)
+    verify(this.listener).logEvent(any(classOf[Option[JValue]]))
   }
 
   test("should invoke QueryProgressEvent ") {
-
-    val mockEvent = mock(classOf[StreamingQueryListener.QueryProgressEvent])
-    val sut = new LogAnalyticsStreamingQueryListener(conf) with LogAnalyticsMock
-    sut.onQueryProgress(mockEvent)
-    assert(sut.isLogEventInvoked)
-
+    val event = mock(classOf[StreamingQueryListener.QueryProgressEvent])
+    this.listener.onQueryProgress(event)
+    verify(this.listener).logEvent(any(classOf[Option[JValue]]))
   }
 
-
-  // these  test  tests the lamda function for following cases
   test("onQueryProgress with  time  should populate expected TimeGenerated") {
 
-    val queryProgress = new StreamingQueryProgress(
+    import scala.collection.JavaConversions.mapAsJavaMap
+    val event = new QueryProgressEvent(new StreamingQueryProgress(
       UUID.randomUUID,
       UUID.randomUUID,
       null,
-      iso8601TestTime,
+      SparkTestEvents.EPOCH_TIME_AS_ISO8601,
       2L,
-      new java.util.HashMap(Map("total" -> 0L).mapValues(long2Long).asJava),
-      new java.util.HashMap(Map.empty[String, String].asJava),
+      mapAsJavaMap(Map("total" -> 0L)),
+      mapAsJavaMap(Map.empty[String, String]),
       Array(new StateOperatorProgress(
         0, 1, 2)),
       Array(
@@ -78,24 +77,20 @@ class LogAnalyticsStreamingQueryListenerTester extends ListenerHelperSuite {
         )
       ),
       new SinkProgress("sink")
-    )
+    ))
 
-    val mockEvent = new QueryProgressEvent(queryProgress)
-    val sut = new LogAnalyticsStreamingQueryListener(conf) with LogAnalyticsMock
-    sut.onQueryProgress(mockEvent)
-    assert(sut.isLogEventInvoked)
-
-    val timeGeneratedField = parse(sut.enrichedLogEvent).findField { case (n, v) => n == "TimeGenerated" }
-
-
-    assert(timeGeneratedField.isDefined)
-    assert(timeGeneratedField.get._1 == "TimeGenerated")
-
-
-    implicit val formats = DefaultFormats
-    assert(timeGeneratedField.get._2.extract[String].contentEquals(SparkTestEvents.iso8601TestTime))
-
-
+    this.listener.onQueryProgress(event)
+    verify(this.listener).logEvent(this.captor.capture)
+    this.captor.getValue match {
+      case Some(jValue) => {
+        jValue.findField { case (n, v) => n == "TimeGenerated" } match {
+          case Some(t) => {
+            assert(t._2.extract[String] == SparkTestEvents.EPOCH_TIME_AS_ISO8601)
+          }
+          case None => fail("TimeGenerated field not found")
+        }
+      }
+      case None => fail("None passed to logEvent")
+    }
   }
-
 }

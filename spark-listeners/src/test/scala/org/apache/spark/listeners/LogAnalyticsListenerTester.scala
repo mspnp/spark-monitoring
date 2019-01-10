@@ -2,17 +2,44 @@ package org.apache.spark.listeners
 
 import org.apache.spark.SparkConf
 import org.apache.spark.scheduler._
-import org.json4s.DefaultFormats
+import org.apache.spark.storage.BlockManagerId
+import org.json4s.JsonAST.JValue
 import org.json4s.jackson.JsonMethods.parse
-import org.mockito.Mockito.{mock, when}
+import org.mockito.ArgumentCaptor
+import org.mockito.Mockito._
+import org.mockito.Matchers.any
+import org.scalatest.BeforeAndAfterEach
 
 /**
   * This is more of behavior tester for LogAnalyticsListener implementation
   * that is extended from spark listener
   */
-class LogAnalyticsListenerTester extends ListenerHelperSuite {
+class LogAnalyticsListenerTester extends ListenerHelperSuite
+  with BeforeAndAfterEach {
+
+  implicit val defaultFormats = org.json4s.DefaultFormats
 
   private var conf: SparkConf = null
+
+  private var listener: LogAnalyticsListener = null
+  private var captor: ArgumentCaptor[Option[JValue]] = null
+
+  override def beforeEach(): Unit = {
+    super.beforeEach()
+    val conf = new SparkConf()
+    conf.set("spark.logAnalytics.workspaceId", "id")
+    conf.set("spark.logAnalytics.secret", "secret")
+    this.captor = ArgumentCaptor.forClass(classOf[Option[JValue]])
+    this.listener = spy(new LogAnalyticsListener(conf))
+    //when(listener.logEvent(any(classOf[Option[JValue]]))).thenReturn()
+    doNothing.when(this.listener).logEvent(any(classOf[Option[JValue]]))
+  }
+
+  override def afterEach(): Unit = {
+    super.afterEach()
+    this.captor = null
+    this.listener = null
+  }
 
   override def beforeAll(): Unit = {
     conf = new SparkConf()
@@ -23,10 +50,8 @@ class LogAnalyticsListenerTester extends ListenerHelperSuite {
   test("should invoke onStageSubmitted ") {
 
     val mockEvent = mock(classOf[SparkListenerStageSubmitted])
-    val sut = new LogAnalyticsListener(conf) with LogAnalyticsMock
-    sut.onStageSubmitted(mockEvent)
-    assert(sut.isLogEventInvoked)
-
+    this.listener.onStageSubmitted(mockEvent)
+    verify(this.listener).logEvent(any(classOf[Option[JValue]]))
   }
 
   test("should invoke onTaskStart ") {
@@ -237,20 +262,26 @@ class LogAnalyticsListenerTester extends ListenerHelperSuite {
 
   test("should invoke onBlockManagerAdded with serialized mock Event with lamda  ") {
 
-    val mockEvent = SparkTestEvents.sparkListenerBlockManagerAddedEvent
-    val sut = new LogAnalyticsListener(conf) with LogAnalyticsMock
-    sut.onBlockManagerAdded(mockEvent)
-    assert(sut.isLogEventInvoked)
+    val event = SparkListenerBlockManagerAdded(
+      SparkTestEvents.EPOCH_TIME,
+      BlockManagerId.apply("driver", "localhost", 57967),
+      278302556
+    )
 
-    val timeGeneratedField = parse(sut.enrichedLogEvent).findField { case (n, v) => n == "TimeGenerated" }
+    this.listener.onBlockManagerAdded(event)
+    verify(this.listener).logEvent(this.captor.capture)
 
-
-    assert(timeGeneratedField.isDefined)
-    assert(timeGeneratedField.get._1 == "TimeGenerated")
-
-    implicit val formats = DefaultFormats
-    assert(timeGeneratedField.get._2.extract[String].contentEquals(SparkTestEvents.iso8601TestTime))
-
+    this.captor.getValue match {
+      case Some(jValue) => {
+        jValue.findField { case (n, v) => n == "TimeGenerated" } match {
+          case Some(t) => {
+            assert(t._2.extract[String] == SparkTestEvents.EPOCH_TIME_AS_ISO8601)
+          }
+          case None => fail("TimeGenerated field not found")
+        }
+      }
+      case None => fail("None passed to logEvent")
+    }
   }
 
   test("onStageSubmitted with submission time optional empty should populate TimeGenerated") {
@@ -266,7 +297,6 @@ class LogAnalyticsListenerTester extends ListenerHelperSuite {
     assert(timeGeneratedField.isDefined)
     assert(timeGeneratedField.get._1 == "TimeGenerated")
 
-    implicit val formats = DefaultFormats
     assert(!timeGeneratedField.get._2.extract[String].isEmpty)
 
 
@@ -286,8 +316,7 @@ class LogAnalyticsListenerTester extends ListenerHelperSuite {
     assert(timeGeneratedField.get._1 == "TimeGenerated")
 
 
-    implicit val formats = DefaultFormats
-    assert(timeGeneratedField.get._2.extract[String].contentEquals(SparkTestEvents.iso8601TestTime))
+    assert(timeGeneratedField.get._2.extract[String].contentEquals(SparkTestEvents.EPOCH_TIME_AS_ISO8601))
 
 
   }
@@ -305,7 +334,7 @@ class LogAnalyticsListenerTester extends ListenerHelperSuite {
     assert(timeGeneratedField.isDefined)
     assert(timeGeneratedField.get._1 == "TimeGenerated")
 
-    implicit val formats = DefaultFormats
+    //implicit val formats = DefaultFormats
     assert(!timeGeneratedField.get._2.extract[String].isEmpty)
   }
 }

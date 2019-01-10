@@ -120,7 +120,7 @@ class LogAnalyticsStreamingListenerTester extends ListenerHelperSuite {
     assert(timeGeneratedField.get._1 == "TimeGenerated")
 
     implicit val formats = DefaultFormats
-    assert(timeGeneratedField.get._2.extract[String].contentEquals(SparkTestEvents.iso8601TestTime))
+    assert(timeGeneratedField.get._2.extract[String].contentEquals(SparkTestEvents.EPOCH_TIME_AS_ISO8601))
 
   }
 

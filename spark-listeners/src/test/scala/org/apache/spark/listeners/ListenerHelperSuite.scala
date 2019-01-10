@@ -18,7 +18,7 @@ class ListenerHelperSuite extends SparkFunSuite {
 
     var enrichedLogEvent = ""
 
-    override protected def logEvent(json: Option[JsonAST.JValue]): Unit = {
+    override protected[spark] def logEvent(json: Option[JsonAST.JValue]): Unit = {
       println("log Event got invoked")
       isLogEventInvoked = !isLogEventInvoked
 

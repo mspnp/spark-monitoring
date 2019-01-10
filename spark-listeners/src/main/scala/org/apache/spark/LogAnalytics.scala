@@ -75,7 +75,7 @@ trait LogAnalytics {
     logEvent(json)
   }
 
-  protected def logEvent(json: Option[JValue]): Unit = {
+  protected[spark] def logEvent(json: Option[JValue]): Unit = {
     try {
       json match {
         case Some(j) => {
