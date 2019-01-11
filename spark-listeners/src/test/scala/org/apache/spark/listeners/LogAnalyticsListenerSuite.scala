@@ -1,8 +1,8 @@
 package org.apache.spark.listeners
 
-import org.apache.spark.SparkConf
 import org.apache.spark.scheduler._
 import org.apache.spark.storage.BlockManagerId
+import org.apache.spark.{SparkConf, SparkEnv}
 import org.json4s.JsonAST.JValue
 import org.mockito.Matchers.any
 import org.mockito.Mockito._
@@ -134,18 +134,31 @@ class LogAnalyticsListenerSuite extends ListenerSuite[LogAnalyticsListener]
   // should be picked up and should result in instant.now value
   test("should invoke onBlockManagerAdded with serialized mock Event with lamda  ") {
     val event = SparkListenerBlockManagerAdded(
-      SparkTestEvents.EPOCH_TIME,
+      EPOCH_TIME,
       BlockManagerId.apply("driver", "localhost", 57967),
       278302556
     )
     this.assertTimeGenerated(
       this.onSparkListenerEvent(this.listener.onBlockManagerAdded, event),
-      t => assert(t._2.extract[String] == SparkTestEvents.EPOCH_TIME_AS_ISO8601)
+      t => assert(t._2.extract[String] == EPOCH_TIME_AS_ISO8601)
     )
   }
 
   test("onStageSubmitted with submission time optional empty should populate TimeGenerated") {
-    val event = SparkTestEvents.sparkListenerStageSubmittedWithSubmissonTimeEmptyEvent
+
+    val stageInfo = new StageInfo(
+      0,
+      0,
+      "dummy",
+      1,
+      Seq.empty,
+      Seq.empty,
+      "details")
+
+    val event = SparkListenerStageSubmitted(
+      stageInfo
+    )
+
     this.assertTimeGenerated(
       this.onSparkListenerEvent(this.listener.onStageSubmitted, event),
       t => assert(!t._2.extract[String].isEmpty)
@@ -153,15 +166,35 @@ class LogAnalyticsListenerSuite extends ListenerSuite[LogAnalyticsListener]
   }
 
   test("onStageSubmitted with submission time should populate expected TimeGenerated") {
-    val event = SparkTestEvents.sparkListenerStageSubmittedEvent
+    val stageInfo = new StageInfo(
+      0,
+      0,
+      "dummy",
+      1,
+      Seq.empty,
+      Seq.empty,
+      "details"
+    )
+    // submission time is not set via constructor
+    stageInfo.submissionTime = Option(EPOCH_TIME)
+
+    val event = SparkListenerStageSubmitted(
+      stageInfo
+    )
+
     this.assertTimeGenerated(
       this.onSparkListenerEvent(this.listener.onStageSubmitted, event),
-      t => assert(t._2.extract[String] == SparkTestEvents.EPOCH_TIME_AS_ISO8601)
+      t => assert(t._2.extract[String] == EPOCH_TIME_AS_ISO8601)
     )
   }
 
   test("onEnvironmentUpdate should populate instant.now TimeGenerated field") {
-    val event = SparkTestEvents.sparkListenerEnvironmentUpdateEvent
+
+    val envDetails = SparkEnv.environmentDetails(new SparkConf(), "FIFO", Seq.empty, Seq.empty)
+    val event = SparkListenerEnvironmentUpdate(
+      envDetails
+    )
+
     this.assertTimeGenerated(
       this.onSparkListenerEvent(this.listener.onEnvironmentUpdate, event),
       t => assert(!t._2.extract[String].isEmpty)

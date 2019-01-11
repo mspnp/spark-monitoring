@@ -1,12 +1,9 @@
 package org.apache.spark.listeners
 
-import org.apache.spark.internal.Logging
 import org.apache.spark.scheduler.SparkListenerEvent
 import org.apache.spark.streaming.scheduler.StreamingListenerEvent
 import org.apache.spark.{LogAnalytics, SparkConf, SparkFunSuite}
-import org.json4s.JsonAST
 import org.json4s.JsonAST.{JField, JValue}
-import org.json4s.jackson.JsonMethods.compact
 import org.mockito.ArgumentCaptor
 import org.mockito.Matchers.any
 import org.mockito.Mockito.{doNothing, mock, spy, verify}
@@ -21,6 +18,9 @@ class ListenerSuite[T <: LogAnalytics](implicit tag: ClassTag[T]) extends SparkF
 
   protected var listener: T = null.asInstanceOf[T]
   private var logEventCaptor: ArgumentCaptor[Option[JValue]] = null
+
+  val EPOCH_TIME = 1422981759407L
+  val EPOCH_TIME_AS_ISO8601 = "2015-02-03T16:42:39.407Z"
 
   private val listenerFactory: (SparkConf) => T = conf => {
     tag.runtimeClass
