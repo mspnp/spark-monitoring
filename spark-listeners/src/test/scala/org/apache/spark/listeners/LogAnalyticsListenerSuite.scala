@@ -1,8 +1,8 @@
 package org.apache.spark.listeners
 
+import org.apache.spark.SparkConf
 import org.apache.spark.scheduler._
 import org.apache.spark.storage.BlockManagerId
-import org.apache.spark.{SparkConf, SparkEnv}
 import org.json4s.JsonAST.JValue
 import org.mockito.Matchers.any
 import org.mockito.Mockito._
@@ -146,17 +146,15 @@ class LogAnalyticsListenerSuite extends ListenerSuite[LogAnalyticsListener]
 
   test("onStageSubmitted with submission time optional empty should populate TimeGenerated") {
 
-    val stageInfo = new StageInfo(
-      0,
-      0,
-      "dummy",
-      1,
-      Seq.empty,
-      Seq.empty,
-      "details")
-
     val event = SparkListenerStageSubmitted(
-      stageInfo
+      new StageInfo(
+        0,
+        0,
+        "dummy",
+        1,
+        Seq.empty,
+        Seq.empty,
+        "details")
     )
 
     this.assertTimeGenerated(
@@ -189,10 +187,12 @@ class LogAnalyticsListenerSuite extends ListenerSuite[LogAnalyticsListener]
   }
 
   test("onEnvironmentUpdate should populate instant.now TimeGenerated field") {
-
-    val envDetails = SparkEnv.environmentDetails(new SparkConf(), "FIFO", Seq.empty, Seq.empty)
     val event = SparkListenerEnvironmentUpdate(
-      envDetails
+      Map[String, Seq[(String, String)]](
+        "JVM Information" -> Seq(("", "")),
+        "Spark Properties" -> Seq(("", "")),
+        "System Properties" -> Seq(("", "")),
+        "Classpath Entries" -> Seq(("", "")))
     )
 
     this.assertTimeGenerated(
