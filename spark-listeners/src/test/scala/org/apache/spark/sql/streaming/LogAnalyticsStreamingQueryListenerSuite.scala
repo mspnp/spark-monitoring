@@ -1,7 +1,7 @@
 package org.apache.spark.sql.streaming
 
 import java.util.UUID
-import org.apache.spark.listeners.{ListenerSuite, LogAnalyticsStreamingQueryListener, SparkTestEvents}
+import org.apache.spark.listeners.{ListenerSuite, LogAnalyticsStreamingQueryListener}
 import org.apache.spark.sql.streaming.StreamingQueryListener.QueryProgressEvent
 import org.scalatest.BeforeAndAfterEach
 
@@ -27,7 +27,7 @@ class LogAnalyticsStreamingQueryListenerSuite extends ListenerSuite[LogAnalytics
       UUID.randomUUID,
       UUID.randomUUID,
       null,
-      SparkTestEvents.EPOCH_TIME_AS_ISO8601,
+      EPOCH_TIME_AS_ISO8601,
       2L,
       mapAsJavaMap(Map("total" -> 0L)),
       mapAsJavaMap(Map.empty[String, String]),
@@ -48,7 +48,7 @@ class LogAnalyticsStreamingQueryListenerSuite extends ListenerSuite[LogAnalytics
 
     this.assertTimeGenerated(
       this.onSparkListenerEvent(this.listener.onQueryProgress, event),
-      t => assert(t._2.extract[String] == SparkTestEvents.EPOCH_TIME_AS_ISO8601)
+      t => assert(t._2.extract[String] == EPOCH_TIME_AS_ISO8601)
     )
   }
 }

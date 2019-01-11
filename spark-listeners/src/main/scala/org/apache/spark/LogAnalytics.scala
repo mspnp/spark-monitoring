@@ -75,7 +75,7 @@ trait LogAnalytics {
     logEvent(json)
   }
 
-  protected[spark] def logEvent(json: Option[JValue]): Unit = {
+  private[spark] def logEvent(json: Option[JValue]): Unit = {
     try {
       json match {
         case Some(j) => {
@@ -91,11 +91,5 @@ trait LogAnalytics {
       case NonFatal(e) =>
         logError(s"Error sending to Log Analytics: $e")
     }
-  }
-
-  protected def getTimeGeneratedJVal(time: String): JValue = {
-    val timeGenerated = TimeGenerated(time)
-    parse(mapper.writeValueAsString(timeGenerated))
-
   }
 }

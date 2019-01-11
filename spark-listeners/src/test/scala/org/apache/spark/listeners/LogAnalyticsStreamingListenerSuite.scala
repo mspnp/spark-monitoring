@@ -1,5 +1,7 @@
 package org.apache.spark.listeners
 
+import org.apache.spark.streaming.scheduler.{ReceiverInfo, StreamingListenerReceiverStarted, StreamingListenerStreamingStarted}
+
 class LogAnalyticsStreamingListenerSuite extends ListenerSuite[LogAnalyticsStreamingListener] {
 
   test("should invoke onStreamingStarted ") {
@@ -39,15 +41,21 @@ class LogAnalyticsStreamingListenerSuite extends ListenerSuite[LogAnalyticsStrea
   }
 
   test("onStreamingStarted with  time  should populate expected TimeGenerated") {
-    val event = SparkTestEvents.streamingListenerStreamingStartedEvent
+    val event = StreamingListenerStreamingStarted(EPOCH_TIME)
     this.assertTimeGenerated(
       this.onStreamingListenerEvent(this.listener.onStreamingStarted, event),
-      t => assert(t._2.extract[String] == SparkTestEvents.EPOCH_TIME_AS_ISO8601)
+      t => assert(t._2.extract[String] == EPOCH_TIME_AS_ISO8601)
     )
   }
 
   test("onReceiverStarted with no time field should populate TimeGeneratedField") {
-    val event = SparkTestEvents.streamingListenerReceiverStartedEvent
+    val event = StreamingListenerReceiverStarted(ReceiverInfo(
+      streamId = 2,
+      name = "test",
+      active = true,
+      location = "localhost",
+      executorId = "1"
+    ))
     this.assertTimeGenerated(
       this.onStreamingListenerEvent(this.listener.onReceiverStarted, event),
       t => assert(!t._2.extract[String].isEmpty)
