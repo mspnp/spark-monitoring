@@ -2,9 +2,11 @@ package org.apache.spark.listeners
 
 import org.apache.spark.SparkConf
 import org.apache.spark.streaming.scheduler._
-import org.json4s.DefaultFormats
-import org.json4s.jackson.JsonMethods.parse
-import org.mockito.Mockito.mock
+import org.json4s.JsonAST.JValue
+import org.mockito.ArgumentCaptor
+import org.mockito.Matchers.any
+import org.mockito.Mockito.{doNothing, mock, spy, verify}
+import org.scalatest.BeforeAndAfterEach
 
 
 /**
@@ -12,10 +14,31 @@ import org.mockito.Mockito.mock
   * if overriding certain methods in LogAnalyticsStreamingListener change
   * then come , validate and change here
   */
-class LogAnalyticsStreamingListenerTester extends ListenerHelperSuite {
+class LogAnalyticsStreamingListenerTester extends ListenerHelperSuite
+  with BeforeAndAfterEach {
 
+  implicit val defaultFormats = org.json4s.DefaultFormats
 
   private var conf: SparkConf = null
+
+  private var listener: LogAnalyticsStreamingListener = null
+  private var captor: ArgumentCaptor[Option[JValue]] = null
+
+  override def beforeEach(): Unit = {
+    super.beforeEach()
+    val conf = new SparkConf()
+    conf.set("spark.logAnalytics.workspaceId", "id")
+    conf.set("spark.logAnalytics.secret", "secret")
+    this.captor = ArgumentCaptor.forClass(classOf[Option[JValue]])
+    this.listener = spy(new LogAnalyticsStreamingListener(conf))
+    doNothing.when(this.listener).logEvent(any(classOf[Option[JValue]]))
+  }
+
+  override def afterEach(): Unit = {
+    super.afterEach()
+    this.captor = null
+    this.listener = null
+  }
 
   override def beforeAll(): Unit = {
     conf = new SparkConf()
@@ -27,9 +50,8 @@ class LogAnalyticsStreamingListenerTester extends ListenerHelperSuite {
   test("should invoke onStreamingStarted ") {
 
     val mockEvent = mock(classOf[StreamingListenerStreamingStarted])
-    val sut = new LogAnalyticsStreamingListener(conf) with LogAnalyticsMock
-    sut.onStreamingStarted(mockEvent)
-    assert(sut.isLogEventInvoked)
+    this.listener.onStreamingStarted(mockEvent)
+    verify(this.listener).logEvent(any(classOf[Option[JValue]]))
 
   }
 
@@ -37,107 +59,102 @@ class LogAnalyticsStreamingListenerTester extends ListenerHelperSuite {
   test("should invoke onReceiverStarted ") {
 
     val mockEvent = mock(classOf[StreamingListenerReceiverStarted])
-    val sut = new LogAnalyticsStreamingListener(conf) with LogAnalyticsMock
-    sut.onReceiverStarted(mockEvent)
-    assert(sut.isLogEventInvoked)
+    this.listener.onReceiverStarted(mockEvent)
+    verify(this.listener).logEvent(any(classOf[Option[JValue]]))
 
   }
 
   test("should invoke onReceiverError ") {
 
     val mockEvent = mock(classOf[StreamingListenerReceiverError])
-    val sut = new LogAnalyticsStreamingListener(conf) with LogAnalyticsMock
-    sut.onReceiverError(mockEvent)
-    assert(sut.isLogEventInvoked)
+    this.listener.onReceiverError(mockEvent)
+    verify(this.listener).logEvent(any(classOf[Option[JValue]]))
 
   }
 
   test("should invoke onReceiverStopped ") {
 
     val mockEvent = mock(classOf[StreamingListenerReceiverStopped])
-    val sut = new LogAnalyticsStreamingListener(conf) with LogAnalyticsMock
-    sut.onReceiverStopped(mockEvent)
-    assert(sut.isLogEventInvoked)
+    this.listener.onReceiverStopped(mockEvent)
+    verify(this.listener).logEvent(any(classOf[Option[JValue]]))
 
   }
 
   test("should invoke onBatchSubmitted ") {
 
     val mockEvent = mock(classOf[StreamingListenerBatchSubmitted])
-    val sut = new LogAnalyticsStreamingListener(conf) with LogAnalyticsMock
-    sut.onBatchSubmitted(mockEvent)
-    assert(sut.isLogEventInvoked)
+    this.listener.onBatchSubmitted(mockEvent)
+    verify(this.listener).logEvent(any(classOf[Option[JValue]]))
 
   }
 
   test("should invoke onBatchStarted ") {
 
     val mockEvent = mock(classOf[StreamingListenerBatchStarted])
-    val sut = new LogAnalyticsStreamingListener(conf) with LogAnalyticsMock
-    sut.onBatchStarted(mockEvent)
-    assert(sut.isLogEventInvoked)
+    this.listener.onBatchStarted(mockEvent)
+    verify(this.listener).logEvent(any(classOf[Option[JValue]]))
 
   }
 
   test("should invoke onBatchCompleted ") {
 
     val mockEvent = mock(classOf[StreamingListenerBatchCompleted])
-    val sut = new LogAnalyticsStreamingListener(conf) with LogAnalyticsMock
-    sut.onBatchCompleted(mockEvent)
-    assert(sut.isLogEventInvoked)
+    this.listener.onBatchCompleted(mockEvent)
+    verify(this.listener).logEvent(any(classOf[Option[JValue]]))
 
   }
 
   test("should invoke onOutputOperationStarted ") {
 
     val mockEvent = mock(classOf[StreamingListenerOutputOperationStarted])
-    val sut = new LogAnalyticsStreamingListener(conf) with LogAnalyticsMock
-    sut.onOutputOperationStarted(mockEvent)
-    assert(sut.isLogEventInvoked)
+    this.listener.onOutputOperationStarted(mockEvent)
+    verify(this.listener).logEvent(any(classOf[Option[JValue]]))
 
   }
 
   test("should invoke onOutputOperationCompleted ") {
 
     val mockEvent = mock(classOf[StreamingListenerOutputOperationCompleted])
-    val sut = new LogAnalyticsStreamingListener(conf) with LogAnalyticsMock
-    sut.onOutputOperationCompleted(mockEvent)
-    assert(sut.isLogEventInvoked)
+    this.listener.onOutputOperationCompleted(mockEvent)
+    verify(this.listener).logEvent(any(classOf[Option[JValue]]))
 
   }
 
   test("onStreamingStarted with  time  should populate expected TimeGenerated") {
 
     val mockEvent = SparkTestEvents.streamingListenerStreamingStartedEvent
-    val sut = new LogAnalyticsStreamingListener(conf) with LogAnalyticsMock
-    sut.onStreamingStarted(mockEvent)
-    assert(sut.isLogEventInvoked)
+    this.listener.onStreamingStarted(mockEvent)
+    verify(this.listener).logEvent(this.captor.capture)
 
-    val timeGeneratedField = parse(sut.enrichedLogEvent).findField { case (n, v) => n == "TimeGenerated" }
-
-
-    assert(timeGeneratedField.isDefined)
-    assert(timeGeneratedField.get._1 == "TimeGenerated")
-
-    implicit val formats = DefaultFormats
-    assert(timeGeneratedField.get._2.extract[String].contentEquals(SparkTestEvents.EPOCH_TIME_AS_ISO8601))
-
+    this.captor.getValue match {
+      case Some(jValue) => {
+        jValue.findField { case (n, v) => n == "TimeGenerated" } match {
+          case Some(t) => {
+            assert(t._2.extract[String] == SparkTestEvents.EPOCH_TIME_AS_ISO8601)
+          }
+          case None => fail("TimeGenerated field not found")
+        }
+      }
+      case None => fail("None passed to logEvent")
+    }
   }
 
-  test("onReceiverStarted with no time field should populate TimeGeneratedField"){
+  test("onReceiverStarted with no time field should populate TimeGeneratedField") {
     val mockEvent = SparkTestEvents.streamingListenerReceiverStartedEvent
-    val sut = new LogAnalyticsStreamingListener(conf) with LogAnalyticsMock
-    sut.onReceiverStarted(mockEvent)
-    assert(sut.isLogEventInvoked)
+    this.listener.onReceiverStarted(mockEvent)
+    verify(this.listener).logEvent(this.captor.capture)
 
-    val timeGeneratedField = parse(sut.enrichedLogEvent).findField { case (n, v) => n == "TimeGenerated" }
-
-
-    assert(timeGeneratedField.isDefined)
-    assert(timeGeneratedField.get._1 == "TimeGenerated")
-
-    implicit val formats = DefaultFormats
-    assert(!timeGeneratedField.get._2.extract[String].isEmpty)
+    this.captor.getValue match {
+      case Some(jValue) => {
+        jValue.findField { case (n, v) => n == "TimeGenerated" } match {
+          case Some(t) => {
+            assert(!t._2.extract[String].isEmpty)
+          }
+          case None => fail("TimeGenerated field not found")
+        }
+      }
+      case None => fail("None passed to logEvent")
+    }
 
   }
 
