@@ -6,8 +6,8 @@
       "defaultValue": "[toLower( concat( parameters('TelemetrySystemName'),'-grafana-','vm-',uniqueString(resourceGroup().id) ) )]",
       "type": "string"
     },
-    "networkInterfaces_grafanavm735_name": {
-      "defaultValue": "grafanavm735",
+    "networkInterfaces_grafananic_name": {
+      "defaultValue": "[toLower( concat( parameters('TelemetrySystemName'),'-nic-',uniqueString(resourceGroup().id) ) )]",
       "type": "string"
     },
     "publicIPAddresses_grafanavm_ip_name": {
@@ -18,8 +18,8 @@
       "defaultValue": "[toLower( concat( 'diag',uniqueString(resourceGroup().id) ) )]",
       "type": "string"
     },
-    "virtualNetworks_granaspark_vnet_name": {
-      "defaultValue": "granaspark-vnet",
+    "virtualNetworks_grafana_vnet_name": {
+      "defaultValue": "grafanaspark-vnet",
       "type": "string"
     },
     "networkSecurityGroups_grafanavm_nsg_name": {
@@ -47,8 +47,8 @@
       "type": "string"
     },
     "adminPass": {
-      "defaultValue": "",
-      "type": "string"
+      "type": "securestring",
+      "defaultValue": ""
     },
     "vmSize": {
       "defaultValue": "Standard_D1_v2",
@@ -74,7 +74,7 @@
       "type": "Microsoft.Compute/virtualMachines",
       "name": "[variables('grafanaVmName')]",
       "apiVersion": "2018-06-01",
-      "location": "centralus",
+      "location": "[variables('location')]",
       "plan": {
         "name": "default",
         "product": "grafana",
@@ -95,12 +95,12 @@
           },
           "osDisk": {
             "osType": "Linux",
-            "name": "[concat(parameters('virtualMachines_grafanavm_name'),'_OsDisk_1_b1d9939e2d144b219f8380594c27afc8')]",
+            //"name": "[concat(parameters('virtualMachines_grafanavm_name'),'_OsDisk_1_b1d9939e2d144b219f8380594c27afc8')]",
             "createOption": "FromImage",
             "caching": "ReadWrite",
             "managedDisk": {
               "storageAccountType": "StandardSSD_LRS",
-              "id": "[parameters('virtualMachines_grafanavm_id')]"
+              //"id": "[parameters('virtualMachines_grafanavm_id')]"
             },
             "diskSizeGB": 30
           },
@@ -120,7 +120,7 @@
         "networkProfile": {
           "networkInterfaces": [
             {
-              "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_grafanavm735_name'))]"
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_grafananic_name'))]"
             }
           ]
         },
@@ -132,34 +132,34 @@
         }
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_grafanavm735_name'))]",
+        "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_grafananic_name'))]",
         "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_granasparkdiag_name'))]"
       ]
     },
     {
 
       "type": "Microsoft.Network/networkInterfaces",
-      "name": "[parameters('networkInterfaces_grafanavm735_name')]",
+      "name": "[parameters('networkInterfaces_grafananic_name')]",
       "apiVersion": "2018-08-01",
-      "location": "centralus",
+      "location": "[variables('location')]",
       "tags": {},
       "scale": null,
       "properties": {
         "provisioningState": "Succeeded",
-        "resourceGuid": "61b97bae-ce2f-4a70-bfc6-8065de1984f0",
+        "resourceGuid": "[guid(subscription().subscriptionId)]",
         "ipConfigurations": [
           {
             "name": "ipconfig1",
             "etag": "W/\"f8859540-7fcd-4ee0-835b-63c3925a78c8\"",
             "properties": {
               "provisioningState": "Succeeded",
-              "privateIPAddress": "172.19.2.4",
+              //"privateIPAddress": "172.19.2.4",
               "privateIPAllocationMethod": "Dynamic",
               "publicIPAddress": {
                 "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_grafanavm_ip_name'))]"
               },
               "subnet": {
-                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_granaspark_vnet_name'), parameters('subnets_default_name'))]"
+                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_grafana_vnet_name'), parameters('subnets_default_name'))]"
               },
               "primary": true,
               "privateIPAddressVersion": "IPv4"
@@ -171,7 +171,7 @@
           "appliedDnsServers": [],
           "internalDomainNameSuffix": "fpht1zlk0zgehgaex3wi1i0mkh.gx.internal.cloudapp.net"
         },
-        "macAddress": "00-0D-3A-94-8F-D6",
+        //"macAddress": "00-0D-3A-94-8F-D6",
         "enableAcceleratedNetworking": false,
         "enableIPForwarding": false,
         "networkSecurityGroup": {
@@ -182,7 +182,7 @@
       },
       "dependsOn": [
         "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_grafanavm_ip_name'))]",
-        "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_granaspark_vnet_name'), parameters('subnets_default_name'))]",
+        "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_grafana_vnet_name'), parameters('subnets_default_name'))]",
         "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_grafanavm_nsg_name'))]"
       ]
     },
@@ -191,12 +191,12 @@
       "type": "Microsoft.Network/networkSecurityGroups",
       "name": "[parameters('networkSecurityGroups_grafanavm_nsg_name')]",
       "apiVersion": "2018-08-01",
-      "location": "centralus",
+      "location": "[variables('location')]",
       "tags": {},
       "scale": null,
       "properties": {
         "provisioningState": "Succeeded",
-        "resourceGuid": "18cd2241-61b0-4ff9-9ae8-c081e4915f8b",
+        "resourceGuid": "[guid(subscription().subscriptionId)]",
         "securityRules": [
           {
             "name": "SSH",
@@ -371,12 +371,12 @@
       },
       "name": "[parameters('publicIPAddresses_grafanavm_ip_name')]",
       "apiVersion": "2018-08-01",
-      "location": "centralus",
+      "location": "[variables('location')]",
       "tags": {},
       "scale": null,
       "properties": {
         "provisioningState": "Succeeded",
-        "resourceGuid": "db69e59d-f426-4304-ad43-f69e78f99e25",
+        "resourceGuid": "[guid(subscription().subscriptionId)]",
         "ipAddress": "168.61.179.179",
         "publicIPAddressVersion": "IPv4",
         "publicIPAllocationMethod": "Dynamic",
@@ -388,14 +388,14 @@
     {
 
       "type": "Microsoft.Network/virtualNetworks",
-      "name": "[parameters('virtualNetworks_granaspark_vnet_name')]",
+      "name": "[parameters('virtualNetworks_grafana_vnet_name')]",
       "apiVersion": "2018-08-01",
-      "location": "centralus",
+      "location": "[variables('location')]",
       "tags": {},
       "scale": null,
       "properties": {
         "provisioningState": "Succeeded",
-        "resourceGuid": "e53dcf2b-d66a-434c-9804-bf6c8da34c57",
+        "resourceGuid": "[guid(subscription().subscriptionId)]",
         "addressSpace": {
           "addressPrefixes": [
             "172.19.2.0/24"
@@ -428,7 +428,7 @@
       "kind": "Storage",
       "name": "[parameters('storageAccounts_granasparkdiag_name')]",
       "apiVersion": "2018-07-01",
-      "location": "centralus",
+      "location": "[variables('location')]",
       "tags": {},
       "scale": null,
       "properties": {
@@ -506,7 +506,7 @@
     {
 
       "type": "Microsoft.Network/virtualNetworks/subnets",
-      "name": "[concat(parameters('virtualNetworks_granaspark_vnet_name'), '/', parameters('subnets_default_name'))]",
+      "name": "[concat(parameters('virtualNetworks_grafana_vnet_name'), '/', parameters('subnets_default_name'))]",
       "apiVersion": "2018-08-01",
       "scale": null,
       "properties": {
@@ -515,8 +515,33 @@
         "delegations": []
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_granaspark_vnet_name'))]"
+        "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_grafana_vnet_name'))]"
       ]
+    },
+    {
+      "name": "[concat(variables('grafanaVmName'),'/extension')]",
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2015-06-15",
+      "dependsOn": [
+        "[concat('Microsoft.Compute/virtualMachines/', variables('grafanaVmName'))]"
+      ],
+      "tags": {
+        "displayName": "[concat(variables('grafanaVmName'),'/extension')]"
+      },
+      "properties": {
+        "publisher": "Microsoft.Azure.Extensions",
+        "type": "CustomScript",
+        "typeHandlerVersion": "2.0",
+        "autoUpgradeMinorVersion": true,
+        "settings": {
+          "skipDos2Unix": false
+        },
+        "protectedSettings": {
+          "commandToExecute": "sudo sh AzureDataSource.sh",
+          "fileUris": [ "https://raw.githubusercontent.com/mspnp/spark-monitoring/carlos/perfanalysis/performance/deployment/grafana/GrafanaResource/GrafanaResource/AzureDataSource.sh" ]
+        }
+      }
     }
   ]
 }
