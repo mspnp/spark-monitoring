@@ -22,11 +22,10 @@ trait LogAnalytics {
   this: Logging =>
   protected val config: LogAnalyticsConfiguration
 
-  protected lazy val logAnalyticsClient = new LogAnalyticsClient(
-    config.workspaceId, config.secret)
 
   protected lazy val logAnalyticsBufferedClient = new LogAnalyticsBufferedClient(
-    logAnalyticsClient,
+    new LogAnalyticsClient(
+      config.workspaceId, config.secret),
     config.logType
   )
 
