@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import org.apache.spark.internal.Logging
-import org.apache.spark.listeners.microsoft.pnp.loganalytics.LogAnalyticsClient
+import org.apache.spark.listeners.microsoft.pnp.loganalytics.{LogAnalyticsBufferedClient, LogAnalyticsClient}
 import org.apache.spark.scheduler.SparkListenerEvent
 import org.apache.spark.streaming.scheduler.StreamingListenerEvent
 import org.apache.spark.util.JsonProtocol
@@ -24,6 +24,11 @@ trait LogAnalytics {
 
   protected lazy val logAnalyticsClient = new LogAnalyticsClient(
     config.workspaceId, config.secret)
+
+  protected lazy val logAnalyticsBufferedClient = new LogAnalyticsBufferedClient(
+    logAnalyticsClient,
+    config.logType
+  )
 
   private val mapper = new ObjectMapper().registerModule(DefaultScalaModule)
 
@@ -81,7 +86,7 @@ trait LogAnalytics {
         case Some(j) => {
           val jsonString = compact(j)
           logDebug(s"Sending event to Log Analytics: ${jsonString}")
-          logAnalyticsClient.send(jsonString, config.logType, "TimeGenerated")
+          logAnalyticsBufferedClient.sendMessage(jsonString, "TimeGenerated")
         }
         case None => {
           logWarning("json value was None")
