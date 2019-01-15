@@ -11,6 +11,7 @@
     <modules>
         <module>spark-metrics</module>
         <module>spark-listeners</module>
+        <module>spark-jobs</module>
     </modules>
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
