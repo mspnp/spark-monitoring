@@ -45,7 +45,7 @@ trait LogAnalytics {
       Some(
         parse(mapper.writeValueAsString(event))
           .merge(render(
-            "TimeGenerated" -> getTimestamp().toString
+            "SparkEventTime" -> getTimestamp().toString
           ))
       )
     } catch {
@@ -66,7 +66,7 @@ trait LogAnalytics {
       Some(
         JsonProtocol.sparkEventToJson(event)
           .merge(render(
-            "TimeGenerated" -> getTimestamp().toString
+            "SparkEventTime" -> getTimestamp().toString
           ))
       )
     } catch {
@@ -85,7 +85,7 @@ trait LogAnalytics {
         case Some(j) => {
           val jsonString = compact(j)
           logDebug(s"Sending event to Log Analytics: ${jsonString}")
-          logAnalyticsBufferedClient.sendMessage(jsonString, "TimeGenerated")
+          logAnalyticsBufferedClient.sendMessage(jsonString, "SparkEventTime")
         }
         case None => {
           logWarning("json value was None")

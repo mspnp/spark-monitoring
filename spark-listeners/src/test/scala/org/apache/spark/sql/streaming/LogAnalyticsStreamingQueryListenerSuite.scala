@@ -20,7 +20,7 @@ class LogAnalyticsStreamingQueryListenerSuite extends ListenerSuite[LogAnalytics
     this.onSparkListenerEvent(this.listener.onQueryProgress)
   }
 
-  test("onQueryProgress with  time  should populate expected TimeGenerated") {
+  test("onQueryProgress with  time  should populate expected SparkEventTime") {
 
     import scala.collection.JavaConversions.mapAsJavaMap
     val event = new QueryProgressEvent(new StreamingQueryProgress(
@@ -46,7 +46,7 @@ class LogAnalyticsStreamingQueryListenerSuite extends ListenerSuite[LogAnalytics
       new SinkProgress("sink")
     ))
 
-    this.assertTimeGenerated(
+    this.assertSparkEventTime(
       this.onSparkListenerEvent(this.listener.onQueryProgress, event),
       t => assert(t._2.extract[String] == EPOCH_TIME_AS_ISO8601)
     )

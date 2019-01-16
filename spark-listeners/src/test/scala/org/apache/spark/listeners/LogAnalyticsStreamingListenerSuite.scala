@@ -40,15 +40,15 @@ class LogAnalyticsStreamingListenerSuite extends ListenerSuite[LogAnalyticsStrea
     this.onStreamingListenerEvent(this.listener.onOutputOperationCompleted)
   }
 
-  test("onStreamingStarted with  time  should populate expected TimeGenerated") {
+  test("onStreamingStarted with  time  should populate expected SparkEventTime") {
     val event = StreamingListenerStreamingStarted(EPOCH_TIME)
-    this.assertTimeGenerated(
+    this.assertSparkEventTime(
       this.onStreamingListenerEvent(this.listener.onStreamingStarted, event),
       t => assert(t._2.extract[String] == EPOCH_TIME_AS_ISO8601)
     )
   }
 
-  test("onReceiverStarted with no time field should populate TimeGeneratedField") {
+  test("onReceiverStarted with no time field should populate SparkEventTime") {
     val event = StreamingListenerReceiverStarted(ReceiverInfo(
       streamId = 2,
       name = "test",
@@ -56,7 +56,7 @@ class LogAnalyticsStreamingListenerSuite extends ListenerSuite[LogAnalyticsStrea
       location = "localhost",
       executorId = "1"
     ))
-    this.assertTimeGenerated(
+    this.assertSparkEventTime(
       this.onStreamingListenerEvent(this.listener.onReceiverStarted, event),
       t => assert(!t._2.extract[String].isEmpty)
     )
