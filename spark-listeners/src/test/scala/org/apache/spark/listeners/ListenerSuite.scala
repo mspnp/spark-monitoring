@@ -67,14 +67,14 @@ class ListenerSuite[T <: LogAnalytics](implicit tag: ClassTag[T]) extends SparkF
     this.logEventCaptor.getValue
   }
 
-  protected def assertTimeGenerated(json: Option[JValue], assertion: (JField) => org.scalatest.Assertion) = {
+  protected def assertSparkEventTime(json: Option[JValue], assertion: (JField) => org.scalatest.Assertion) = {
     json match {
       case Some(jValue) => {
-        jValue.findField { case (n, _) => n == "TimeGenerated" } match {
+        jValue.findField { case (n, _) => n == "SparkEventTime" } match {
           case Some(jField) => {
             assertion(jField)
           }
-          case None => fail("TimeGenerated field not found")
+          case None => fail("SparkEventTime field not found")
         }
       }
       case None => fail("None passed to logEvent")

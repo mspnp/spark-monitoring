@@ -138,13 +138,13 @@ class LogAnalyticsListenerSuite extends ListenerSuite[LogAnalyticsListener]
       BlockManagerId.apply("driver", "localhost", 57967),
       278302556
     )
-    this.assertTimeGenerated(
+    this.assertSparkEventTime(
       this.onSparkListenerEvent(this.listener.onBlockManagerAdded, event),
       t => assert(t._2.extract[String] == EPOCH_TIME_AS_ISO8601)
     )
   }
 
-  test("onStageSubmitted with submission time optional empty should populate TimeGenerated") {
+  test("onStageSubmitted with submission time optional empty should populate SparkEventTime") {
 
     val event = SparkListenerStageSubmitted(
       new StageInfo(
@@ -157,13 +157,13 @@ class LogAnalyticsListenerSuite extends ListenerSuite[LogAnalyticsListener]
         "details")
     )
 
-    this.assertTimeGenerated(
+    this.assertSparkEventTime(
       this.onSparkListenerEvent(this.listener.onStageSubmitted, event),
       t => assert(!t._2.extract[String].isEmpty)
     )
   }
 
-  test("onStageSubmitted with submission time should populate expected TimeGenerated") {
+  test("onStageSubmitted with submission time should populate expected SparkEventTime") {
     val stageInfo = new StageInfo(
       0,
       0,
@@ -180,13 +180,13 @@ class LogAnalyticsListenerSuite extends ListenerSuite[LogAnalyticsListener]
       stageInfo
     )
 
-    this.assertTimeGenerated(
+    this.assertSparkEventTime(
       this.onSparkListenerEvent(this.listener.onStageSubmitted, event),
       t => assert(t._2.extract[String] == EPOCH_TIME_AS_ISO8601)
     )
   }
 
-  test("onEnvironmentUpdate should populate instant.now TimeGenerated field") {
+  test("onEnvironmentUpdate should populate instant.now SparkEventTime field") {
     val event = SparkListenerEnvironmentUpdate(
       Map[String, Seq[(String, String)]](
         "JVM Information" -> Seq(("", "")),
@@ -195,7 +195,7 @@ class LogAnalyticsListenerSuite extends ListenerSuite[LogAnalyticsListener]
         "Classpath Entries" -> Seq(("", "")))
     )
 
-    this.assertTimeGenerated(
+    this.assertSparkEventTime(
       this.onSparkListenerEvent(this.listener.onEnvironmentUpdate, event),
       t => assert(!t._2.extract[String].isEmpty)
     )
