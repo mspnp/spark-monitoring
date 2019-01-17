@@ -4,6 +4,7 @@ import java.time.Instant
 
 import org.apache.spark.internal.Logging
 import org.apache.spark.scheduler._
+import org.apache.spark.sql.streaming.StreamingQueryListener
 import org.apache.spark.util.Utils
 import org.apache.spark.{LogAnalytics, LogAnalyticsListenerConfiguration, SparkConf}
 
@@ -125,9 +126,17 @@ class LogAnalyticsListener(sparkConf: SparkConf)
   // No-op because logging every update would be overkill
   override def onExecutorMetricsUpdate(event: SparkListenerExecutorMetricsUpdate): Unit = {}
 
+  //Streaming query events extends spark listener events.We do have
+  //custom streaming query listeners implemented. in that case would
+  //not want to log them through this method.
+
   override def onOtherEvent(event: SparkListenerEvent): Unit = {
-    if (event.logEvent) {
-      logSparkListenerEvent(event)
+    event match {
+      case _: StreamingQueryListener.Event =>
+      case sparkListenerEvent: SparkListenerEvent => if (sparkListenerEvent.logEvent) {
+        logSparkListenerEvent(sparkListenerEvent)
+      }
+
     }
   }
 
