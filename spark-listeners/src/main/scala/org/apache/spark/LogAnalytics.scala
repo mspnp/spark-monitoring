@@ -3,7 +3,8 @@ package org.apache.spark
 import java.time.Instant
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo
-import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.annotation.JsonTypeIdResolver
+import com.fasterxml.jackson.databind.{DatabindContext, JavaType, ObjectMapper}
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import org.apache.spark.internal.Logging
 import org.apache.spark.listeners.microsoft.pnp.loganalytics.{LogAnalyticsBufferedClient, LogAnalyticsClient}
@@ -18,6 +19,27 @@ import scala.util.control.NonFatal
 
 case class TimeGenerated(TimeGenerated: String)
 
+private class StreamingListenerEventTypeIdResolver extends com.fasterxml.jackson.databind.jsontype.TypeIdResolver {
+  private var javaType: JavaType = _
+
+  override def init(javaType: JavaType): Unit = {
+    this.javaType = javaType
+  }
+
+  override def idFromValue(o: Any): String = this.idFromValueAndType(o, o.getClass)
+
+  override def idFromValueAndType(o: Any, aClass: Class[_]): String =
+    org.apache.spark.util.Utils.getFormattedClassName(o.asInstanceOf[AnyRef])
+
+  override def idFromBaseType(): String = throw new NotImplementedError()
+
+  override def typeFromId(s: String): JavaType = throw new NotImplementedError()
+
+  override def typeFromId(databindContext: DatabindContext, s: String): JavaType = throw new NotImplementedError()
+
+  override def getMechanism: JsonTypeInfo.Id = JsonTypeInfo.Id.CUSTOM
+}
+
 trait LogAnalytics {
   this: Logging =>
   protected val config: LogAnalyticsConfiguration
@@ -31,7 +53,8 @@ trait LogAnalytics {
 
   private val mapper = new ObjectMapper().registerModule(DefaultScalaModule)
 
-  @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "Event")
+  @JsonTypeInfo(use = JsonTypeInfo.Id.CUSTOM, include = JsonTypeInfo.As.PROPERTY, property = "Event")
+  @JsonTypeIdResolver(classOf[StreamingListenerEventTypeIdResolver])
   private class StreamingListenerEventMixIn {}
 
   // Add the Event field since the StreamingListenerEvents don't extend the SparkListenerEvent trait
