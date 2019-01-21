@@ -18,10 +18,10 @@ import org.apache.spark.{LogAnalytics, LogAnalyticsListenerConfiguration, SparkC
   *   spark.logAnalytics.timestampFieldName" - Optional field name for the event timestamp
   *   spark.logAnalytics.logBlockUpdates" - Optional setting specifying whether or not to log block updates
   */
-class LogAnalyticsListener(sparkConf: SparkConf)
+class LogAnalyticsListener(override val conf: SparkConf)
   extends SparkListener with Logging with LogAnalytics {
 
-  val config = new LogAnalyticsListenerConfiguration(sparkConf)
+  //val config = new LogAnalyticsListenerConfiguration(conf)
 
   override def onStageSubmitted(event: SparkListenerStageSubmitted): Unit = logSparkListenerEvent(
     event,
@@ -118,9 +118,9 @@ class LogAnalyticsListener(sparkConf: SparkConf)
   )
 
   override def onBlockUpdated(event: SparkListenerBlockUpdated): Unit = {
-    if (config.logBlockUpdates) {
-      logSparkListenerEvent(event)
-    }
+//    if (config.logBlockUpdates) {
+//      logSparkListenerEvent(event)
+//    }
   }
 
   // No-op because logging every update would be overkill
@@ -149,7 +149,7 @@ class LogAnalyticsListener(sparkConf: SparkConf)
     // where jvmInformation, sparkProperties, etc. are sequence of tuples.
     // We go through the various  of properties and redact sensitive information from them.
     val redactedProps = event.environmentDetails.map { case (name, props) =>
-      name -> Utils.redact(sparkConf, props)
+      name -> Utils.redact(conf, props)
     }
     SparkListenerEnvironmentUpdate(redactedProps)
   }

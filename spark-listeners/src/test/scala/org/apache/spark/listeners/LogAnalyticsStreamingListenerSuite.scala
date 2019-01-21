@@ -48,6 +48,15 @@ class LogAnalyticsStreamingListenerSuite extends ListenerSuite[LogAnalyticsStrea
     )
   }
 
+  test("onStreamingStarted should have Event with short name") {
+    val event = StreamingListenerStreamingStarted(EPOCH_TIME)
+    this.assertField(
+      this.onStreamingListenerEvent(this.listener.onStreamingStarted, event),
+      "Event",
+      t => assert(t._2.extract[String] == "StreamingListenerStreamingStarted")
+    )
+  }
+
   test("onReceiverStarted with no time field should populate SparkEventTime") {
     val event = StreamingListenerReceiverStarted(ReceiverInfo(
       streamId = 2,

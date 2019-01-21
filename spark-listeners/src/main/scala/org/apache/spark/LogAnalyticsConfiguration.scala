@@ -70,25 +70,13 @@ private[spark] class LogAnalyticsListenerConfiguration(sparkConf: SparkConf)
   import LogAnalyticsListenerConfiguration._
 
   override def getWorkspaceId: Option[String] = {
-
-    if (sys.env.contains(ENV_LOG_ANALYTICS_WORKSPACEID)) {
-      sys.env.get(ENV_LOG_ANALYTICS_WORKSPACEID)
-    }
-    else {
-      sparkConf.getOption(WORKSPACE_ID)
-    }
-
+    // Match spark priority order
+    sparkConf.getOption(WORKSPACE_ID).orElse(sys.env.get(ENV_LOG_ANALYTICS_WORKSPACEID))
   }
 
   override def getSecret: Option[String] = {
-
-    if (sys.env.contains(ENV_LOG_ANALYTICS_SECRET)) {
-      sys.env.get(ENV_LOG_ANALYTICS_SECRET)
-    }
-    else {
-      sparkConf.getOption(SECRET)
-    }
-
+    // Match spark priority order
+    sparkConf.getOption(SECRET).orElse(sys.env.get(ENV_LOG_ANALYTICS_SECRET))
   }
 
   override def getLogType: String = sparkConf.get(LOG_TYPE, DEFAULT_LOG_TYPE)

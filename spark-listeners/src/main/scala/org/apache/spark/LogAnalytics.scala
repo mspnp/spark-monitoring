@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.annotation.JsonTypeIdResolver
 import com.fasterxml.jackson.databind.{DatabindContext, JavaType, ObjectMapper}
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import org.apache.spark.internal.Logging
+import org.apache.spark.listeners.SparkListenerSink
 import org.apache.spark.listeners.microsoft.pnp.loganalytics.{LogAnalyticsBufferedClient, LogAnalyticsClient}
 import org.apache.spark.scheduler.SparkListenerEvent
 import org.apache.spark.streaming.scheduler.StreamingListenerEvent
@@ -42,14 +43,27 @@ private class StreamingListenerEventTypeIdResolver extends com.fasterxml.jackson
 
 trait LogAnalytics {
   this: Logging =>
-  protected val config: LogAnalyticsConfiguration
+  protected val conf: SparkConf
+  //protected val config: LogAnalyticsConfiguration
 
 
-  protected lazy val logAnalyticsBufferedClient = new LogAnalyticsBufferedClient(
-    new LogAnalyticsClient(
-      config.workspaceId, config.secret),
-    config.logType
-  )
+//  protected lazy val logAnalyticsBufferedClient = new LogAnalyticsBufferedClient(
+//    new LogAnalyticsClient(
+//      config.workspaceId, config.secret),
+//    config.logType
+//  )
+
+  private lazy val listenerSink = this.createSink(this.conf)
+
+  private def createSink(conf: SparkConf): SparkListenerSink = {
+    logError("createSink!!!!")
+    org.apache.spark.util.Utils.loadExtensions(
+      classOf[SparkListenerSink],
+    //Seq("org.apache.spark.listeners.LogAnalyticsListenerSink"),
+      //Seq(classOf[org.apache.spark.listeners.LogAnalyticsListenerSink].getName),
+      Seq("org.apache.spark.listeners.EventHubListenerSink"),
+      conf).head
+  }
 
   private val mapper = new ObjectMapper().registerModule(DefaultScalaModule)
 
@@ -107,8 +121,9 @@ trait LogAnalytics {
       json match {
         case Some(j) => {
           val jsonString = compact(j)
-          logDebug(s"Sending event to Log Analytics: ${jsonString}")
-          logAnalyticsBufferedClient.sendMessage(jsonString, "SparkEventTime")
+          logDebug(s"Sending event to listener sink: ${jsonString}")
+          //logAnalyticsBufferedClient.sendMessage(jsonString, "SparkEventTime")
+          this.listenerSink.logEvent(json)
         }
         case None => {
           logWarning("json value was None")
@@ -116,7 +131,7 @@ trait LogAnalytics {
       }
     } catch {
       case NonFatal(e) =>
-        logError(s"Error sending to Log Analytics: $e")
+        logError(s"Error sending to listener sink: $e")
     }
   }
 }

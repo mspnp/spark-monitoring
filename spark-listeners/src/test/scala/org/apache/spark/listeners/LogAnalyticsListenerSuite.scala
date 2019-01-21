@@ -4,6 +4,7 @@ import org.apache.spark.SparkConf
 import org.apache.spark.scheduler._
 import org.apache.spark.storage.BlockManagerId
 import org.json4s.JsonAST.JValue
+import org.mockito.ArgumentCaptor
 import org.mockito.Matchers.any
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
@@ -199,5 +200,34 @@ class LogAnalyticsListenerSuite extends ListenerSuite[LogAnalyticsListener]
       this.onSparkListenerEvent(this.listener.onEnvironmentUpdate, event),
       t => assert(!t._2.extract[String].isEmpty)
     )
+  }
+
+  private def createStageInfo(stageId: Int, attemptId: Int): StageInfo = {
+    new StageInfo(stageId = stageId,
+      attemptId = attemptId,
+      // The following fields are not used in tests
+      name = "",
+      numTasks = 0,
+      rddInfos = Nil,
+      parentIds = Nil,
+      details = "")
+  }
+
+  test("createSink should be called") {
+    val conf = new SparkConf()
+    conf.set("spark.logAnalytics.workspaceId", "id")
+    conf.set("spark.logAnalytics.secret", "secret")
+    //captor = ArgumentCaptor.forClass(classOf[Option[JValue]])
+    this.listener = new LogAnalyticsListener(conf)
+    val event = SparkListenerJobStart(
+      jobId = 0,
+      time = System.currentTimeMillis(),
+      stageInfos = Seq(
+        createStageInfo(0, 0),
+        createStageInfo(1, 0)
+      ))
+    this.listener.onJobStart(event)
+    Thread.sleep(15000);
+    //doNothing.when(this.listener).logEvent(any(classOf[Option[JValue]]))
   }
 }
