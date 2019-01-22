@@ -28,12 +28,12 @@ class LogAnalyticsStreamingListener(sparkConf: SparkConf) extends StreamingListe
 
   override def onBatchSubmitted(batchSubmitted: StreamingListenerBatchSubmitted): Unit = logStreamingListenerEvent(
     batchSubmitted,
-    () => Instant.ofEpochMilli(batchSubmitted.batchInfo.batchTime.milliseconds)
+    () => Instant.ofEpochMilli(batchSubmitted.batchInfo.submissionTime)
   )
 
   override def onBatchStarted(batchStarted: StreamingListenerBatchStarted): Unit = logStreamingListenerEvent(
     batchStarted,
-    () => Instant.ofEpochMilli(batchStarted.batchInfo.batchTime.milliseconds)
+    () => Instant.ofEpochMilli(batchStarted.batchInfo.processingStartTime.getOrElse(Instant.now().toEpochMilli))
   )
 
   override def onBatchCompleted(batchCompleted: StreamingListenerBatchCompleted): Unit = logStreamingListenerEvent(

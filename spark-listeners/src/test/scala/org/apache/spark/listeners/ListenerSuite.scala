@@ -1,12 +1,13 @@
 package org.apache.spark.listeners
 
-import org.apache.spark.scheduler.SparkListenerEvent
+import org.apache.spark.scheduler.{SparkListenerApplicationEnd, SparkListenerEvent, SparkListenerExecutorRemoved, SparkListenerUnpersistRDD}
 import org.apache.spark.streaming.scheduler.StreamingListenerEvent
 import org.apache.spark.{LogAnalytics, SparkConf, SparkFunSuite}
 import org.json4s.JsonAST.{JField, JValue}
 import org.mockito.ArgumentCaptor
 import org.mockito.Matchers.any
 import org.mockito.Mockito.{doNothing, mock, spy, verify}
+import org.mockito.internal.util.MockUtil
 import org.scalatest.BeforeAndAfterEach
 
 import scala.reflect.ClassTag
@@ -50,10 +51,25 @@ class ListenerSuite[T <: LogAnalytics](implicit tag: ClassTag[T]) extends SparkF
     this.onSparkListenerEvent(onEvent, event)
   }
 
+  val mockUtil = new MockUtil();
+
+  // for mocked Spark listener events , serialization fails except  for the mocks of SparkListenerUnpersistRDD,
+  //SparkListenerApplicationEnd,SparkListenerExecutorRemoved . in these failure cases , log event is invoked with None.
   protected def onSparkListenerEvent[T <: SparkListenerEvent](onEvent: T => Unit, event: T): Option[JValue] = {
     onEvent(event)
     verify(this.listener).logEvent(this.logEventCaptor.capture)
-    this.logEventCaptor.getValue
+
+    val capturedValue = this.logEventCaptor.getValue
+    if (mockUtil.isMock(event)
+      && !event.isInstanceOf[SparkListenerUnpersistRDD]
+      && !event.isInstanceOf[SparkListenerApplicationEnd]
+      && !event.isInstanceOf[SparkListenerExecutorRemoved]) {
+      assert(capturedValue.isEmpty)
+    }
+    else {
+      assert(capturedValue.isDefined)
+    }
+    capturedValue
   }
 
   protected def onStreamingListenerEvent[T <: StreamingListenerEvent](onEvent: T => Unit)(implicit tag: ClassTag[T]): Unit = {
@@ -61,10 +77,18 @@ class ListenerSuite[T <: LogAnalytics](implicit tag: ClassTag[T]) extends SparkF
     this.onStreamingListenerEvent(onEvent, event)
   }
 
+  // for mocked Streaming listener events, serialization fails. In that case log event is invoked with none
   protected def onStreamingListenerEvent[T <: StreamingListenerEvent](onEvent: T => Unit, event: T): Option[JValue] = {
     onEvent(event)
     verify(this.listener).logEvent(this.logEventCaptor.capture)
-    this.logEventCaptor.getValue
+    val capturedValue = this.logEventCaptor.getValue
+    if (mockUtil.isMock(event)) {
+      assert(capturedValue.isEmpty)
+    }
+    else {
+      assert(capturedValue.isDefined)
+    }
+    capturedValue
   }
 
   protected def assertSparkEventTime(json: Option[JValue], assertion: (JField) => org.scalatest.Assertion) = {
