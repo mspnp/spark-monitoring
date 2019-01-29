@@ -665,7 +665,7 @@
             "yaxis": ""
           },
           "azureLogAnalytics": {
-            "query": "SparkListenerEvent_CL\n| where $__timeFilter(progress_timestamp_t)\n| where Event_s contains \"queryprogressevent\"\n| extend sname=strcat(progress_name_s,\"-\",\"triggerexecution\") \n| summarize percentile(progress_durationMs_triggerExecution_d,90)  by bin(progress_timestamp_t, 1m), sname\n| order by  progress_timestamp_t  asc  nulls last ",
+            "query": "SparkListenerEvent_CL\n| where $__timeFilter(TimeGenerated)\n| where Event_s contains \"queryprogressevent\"\n| extend sname=strcat(progress_name_s,\"-\",\"triggerexecution\") \n| summarize percentile(progress_durationMs_triggerExecution_d,90)  by bin(TimeGenerated, 1m), sname\n| order by  progress_timestamp_t  asc  nulls last ",
             "resultFormat": "time_series",
             "workspace": "6cdabfff-ca67-46d4-a18c-8e5b2d81b6bf"
           },
@@ -742,7 +742,7 @@
             "yaxis": ""
           },
           "azureLogAnalytics": {
-            "query": "SparkListenerEvent_CL\n| where  $__timeFilter(progress_timestamp_t )\n| where Event_s   contains \"progress\"\n| extend sname=strcat(progress_name_s,\"-inputRowsPerSecond\") \n| extend status = todouble(extractjson(\"$.[0].inputRowsPerSecond\", progress_sources_s))\n| summarize percentile(status,90) by bin(progress_timestamp_t,  1m) , sname\n| order by progress_timestamp_t asc ",
+            "query": "SparkListenerEvent_CL\n| where  $__timeFilter(TimeGenerated)\n| where Event_s   contains \"progress\"\n| extend sname=strcat(progress_name_s,\"-inputRowsPerSecond\") \n| extend status = todouble(extractjson(\"$.[0].inputRowsPerSecond\", progress_sources_s))\n| summarize percentile(status,90) by bin(TimeGenerated,  1m) , sname\n| order by progress_timestamp_t asc ",
             "resultFormat": "time_series",
             "workspace": "6cdabfff-ca67-46d4-a18c-8e5b2d81b6bf"
           },
@@ -769,7 +769,7 @@
             "yaxis": ""
           },
           "azureLogAnalytics": {
-            "query": "SparkListenerEvent_CL\n| where  $__timeFilter(progress_timestamp_t )\n| where Event_s   contains \"progress\"\n| extend sname=strcat(progress_name_s,\"-ProcRowsPerSecond\") \n| extend status = todouble(extractjson(\"$.[0].processedRowsPerSecond\", progress_sources_s))\n| summarize percentile(status,90) by bin(progress_timestamp_t,  1m) , sname\n| order by progress_timestamp_t asc ",
+            "query": "SparkListenerEvent_CL\n| where  $__timeFilter(TimeGenerated)\n| where Event_s   contains \"progress\"\n| extend sname=strcat(progress_name_s,\"-ProcRowsPerSecond\") \n| extend status = todouble(extractjson(\"$.[0].processedRowsPerSecond\", progress_sources_s))\n| summarize percentile(status,90) by bin(TimeGenerated,  1m) , sname\n| order by progress_timestamp_t asc ",
             "resultFormat": "time_series",
             "workspace": "6cdabfff-ca67-46d4-a18c-8e5b2d81b6bf"
           },
@@ -3791,5 +3791,5 @@
   "timezone": "",
   "title": "Spark Metrics",
   "uid": "SP3yfcBmz",
-  "version": 354
+  "version": 355
 }
