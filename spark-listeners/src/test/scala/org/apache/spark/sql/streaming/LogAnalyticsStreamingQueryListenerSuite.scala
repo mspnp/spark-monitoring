@@ -1,33 +1,22 @@
 package org.apache.spark.sql.streaming
 
 import java.util.UUID
-import org.apache.spark.listeners.{ListenerSuite, LogAnalyticsStreamingQueryListener}
-import org.apache.spark.sql.streaming.StreamingQueryListener.QueryProgressEvent
+
+import org.apache.spark.listeners.ListenerSuite
+import org.apache.spark.sql.streaming.StreamingQueryListener.{QueryProgressEvent, QueryStartedEvent, QueryTerminatedEvent}
 import org.scalatest.BeforeAndAfterEach
 
-class LogAnalyticsStreamingQueryListenerSuite extends ListenerSuite[LogAnalyticsStreamingQueryListener] ///SparkFunSuite
-  with BeforeAndAfterEach {
+import scala.collection.JavaConversions.mapAsJavaMap
 
-  test("should invoke onQueryStarted ") {
-    this.onSparkListenerEvent(this.listener.onQueryStarted)
-  }
-
-  test("should invoke onQueryTerminated ") {
-    this.onSparkListenerEvent(this.listener.onQueryTerminated)
-  }
-
-  test("should invoke QueryProgressEvent ") {
-    this.onSparkListenerEvent(this.listener.onQueryProgress)
-  }
-
-  test("onQueryProgress with  time  should populate expected SparkEventTime") {
-
-    import scala.collection.JavaConversions.mapAsJavaMap
-    val event = new QueryProgressEvent(new StreamingQueryProgress(
+object LogAnalyticsStreamingQueryListenerSuite {
+  val queryStartedEvent = new QueryStartedEvent(UUID.randomUUID, UUID.randomUUID, "name")
+  val queryTerminatedEvent = new QueryTerminatedEvent(UUID.randomUUID, UUID.randomUUID, None)
+  val queryProgressEvent = new QueryProgressEvent(
+    new StreamingQueryProgress(
       UUID.randomUUID,
       UUID.randomUUID,
       null,
-      EPOCH_TIME_AS_ISO8601,
+      ListenerSuite.EPOCH_TIME_AS_ISO8601,
       2L,
       mapAsJavaMap(Map("total" -> 0L)),
       mapAsJavaMap(Map.empty[String, String]),
@@ -44,11 +33,65 @@ class LogAnalyticsStreamingQueryListenerSuite extends ListenerSuite[LogAnalytics
         )
       ),
       new SinkProgress("sink")
-    ))
+    )
+  )
+}
+
+class LogAnalyticsStreamingQueryListenerSuite extends ListenerSuite
+  with BeforeAndAfterEach {
+
+  test("should invoke sendToSink for QueryStartedEvent with full class name") {
+    val (json, event) = this.onStreamingQueryListenerEvent(
+      LogAnalyticsStreamingQueryListenerSuite.queryStartedEvent
+    )
+
+    this.assertEvent(json, event)
+  }
+
+  test("should invoke sendToSink for QueryTerminatedEvent with full class name") {
+    val (json, event) = this.onStreamingQueryListenerEvent(
+      LogAnalyticsStreamingQueryListenerSuite.queryTerminatedEvent
+    )
+
+    this.assertEvent(json, event)
+  }
+
+  test("should invoke sendToSink for QueryProgressEvent with full class name") {
+    val (json, event) = this.onStreamingQueryListenerEvent(
+      LogAnalyticsStreamingQueryListenerSuite.queryProgressEvent
+    )
+
+    this.assertEvent(json, event)
+  }
+
+  test("QueryProgressEvent should have expected SparkEventTime") {
+    val (json, _) = this.onStreamingQueryListenerEvent(
+      LogAnalyticsStreamingQueryListenerSuite.queryProgressEvent
+    )
 
     this.assertSparkEventTime(
-      this.onSparkListenerEvent(this.listener.onQueryProgress, event),
-      t => assert(t._2.extract[String] == EPOCH_TIME_AS_ISO8601)
+      json,
+      (_, value) => assert(value.extract[String] === ListenerSuite.EPOCH_TIME_AS_ISO8601)
+    )
+  }
+
+  test("QueryStartedEvent should have SparkEventTime") {
+    val (json, _) = this.onStreamingQueryListenerEvent(
+      LogAnalyticsStreamingQueryListenerSuite.queryStartedEvent
+    )
+    this.assertSparkEventTime(
+      json,
+      (_, value) => assert(!value.extract[String].isEmpty)
+    )
+  }
+
+  test("QueryTerminatedEvent should have SparkEventTime") {
+    val (json, _) = this.onStreamingQueryListenerEvent(
+      LogAnalyticsStreamingQueryListenerSuite.queryTerminatedEvent
+    )
+    this.assertSparkEventTime(
+      json,
+      (_, value) => assert(!value.extract[String].isEmpty)
     )
   }
 }

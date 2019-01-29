@@ -54,7 +54,7 @@ public class LogAnalyticsSendBufferTask extends GenericSendBufferTask<String> {
         try {
             logger.debug("LogAnalyticsSendBufferTask.process()");
             logger.debug(sb.toString());
-            //client.send(sb.toString(), logType, timeGeneratedField);
+            client.send(sb.toString(), logType, timeGeneratedField);
         } catch (Exception ioe) {
             logger.error(ioe.getMessage(), ioe);
         }

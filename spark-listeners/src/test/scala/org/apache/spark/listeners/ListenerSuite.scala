@@ -1,128 +1,140 @@
 package org.apache.spark.listeners
 
-import org.apache.spark.scheduler.{SparkListenerApplicationEnd, SparkListenerEvent, SparkListenerExecutorRemoved, SparkListenerUnpersistRDD}
+import org.apache.spark.internal.Logging
+import org.apache.spark.scheduler.SparkListenerEvent
+import org.apache.spark.sql.streaming.StreamingQueryListener
 import org.apache.spark.streaming.scheduler.StreamingListenerEvent
-import org.apache.spark.{LogAnalytics, SparkConf, SparkFunSuite}
-import org.json4s.JsonAST.{JField, JValue}
+import org.apache.spark.{SparkConf, SparkFunSuite}
+import org.json4s.JsonAST.JValue
 import org.mockito.ArgumentCaptor
-import org.mockito.Matchers.any
-import org.mockito.Mockito.{doNothing, mock, spy, verify}
-import org.mockito.internal.util.MockUtil
+import org.mockito.Mockito.{spy, times, verify}
 import org.scalatest.BeforeAndAfterEach
 
 import scala.reflect.ClassTag
+import scala.reflect.runtime.{universe => ru}
 
-class ListenerSuite[T <: LogAnalytics](implicit tag: ClassTag[T]) extends SparkFunSuite
+class TestSparkListenerSink extends SparkListenerSink with Logging {
+  override def logEvent(event: Option[JValue]): Unit = {
+    logInfo(s"sendToSink called: ${event}")
+  }
+}
+
+object ListenerSuite {
+  val EPOCH_TIME = 1422981759407L
+  val EPOCH_TIME_AS_ISO8601 = "2015-02-03T16:42:39.407Z"
+}
+
+class ListenerSuite extends SparkFunSuite
   with BeforeAndAfterEach {
 
   protected implicit val defaultFormats = org.json4s.DefaultFormats
-
-  protected var listener: T = null.asInstanceOf[T]
+  protected var listener: UnifiedSparkListener = null
   private var logEventCaptor: ArgumentCaptor[Option[JValue]] = null
-
-  val EPOCH_TIME = 1422981759407L
-  val EPOCH_TIME_AS_ISO8601 = "2015-02-03T16:42:39.407Z"
-
-  private val listenerFactory: (SparkConf) => T = conf => {
-    tag.runtimeClass
-      .getConstructor(classOf[SparkConf])
-      .newInstance(conf)
-      .asInstanceOf[T]
-  }
 
   override def beforeEach(): Unit = {
     super.beforeEach()
+    // We will use a mock sink
     val conf = new SparkConf()
-    conf.set("spark.logAnalytics.workspaceId", "id")
-    conf.set("spark.logAnalytics.secret", "secret")
+    conf.set("spark.unifiedListener.sink", classOf[TestSparkListenerSink].getName)
     this.logEventCaptor = ArgumentCaptor.forClass(classOf[Option[JValue]])
-    this.listener = spy(this.listenerFactory(conf))
-    doNothing.when(this.listener).logEvent(any(classOf[Option[JValue]]))
+    this.listener = spy(new UnifiedSparkListener(conf))
   }
 
   override def afterEach(): Unit = {
     super.afterEach()
-    this.listener = null.asInstanceOf[T]
+    this.listener = null
     this.logEventCaptor = null
   }
 
-  protected def onSparkListenerEvent[T <: SparkListenerEvent](onEvent: T => Unit)(implicit tag: ClassTag[T]): Unit = {
-    val event = mock(tag.runtimeClass).asInstanceOf[T]
-    this.onSparkListenerEvent(onEvent, event)
-  }
-
-  val mockUtil = new MockUtil();
-
-  // for mocked Spark listener events , serialization fails except  for the mocks of SparkListenerUnpersistRDD,
-  //SparkListenerApplicationEnd,SparkListenerExecutorRemoved . in these failure cases , log event is invoked with None.
-  protected def onSparkListenerEvent[T <: SparkListenerEvent](onEvent: T => Unit, event: T): Option[JValue] = {
+  protected def onSparkListenerEvent[T <: SparkListenerEvent](
+                                                               onEvent: T => Unit,
+                                                               event: T): (Option[JValue], T) = {
     onEvent(event)
-    verify(this.listener).logEvent(this.logEventCaptor.capture)
-
-    val capturedValue = this.logEventCaptor.getValue
-    if (mockUtil.isMock(event)
-      && !event.isInstanceOf[SparkListenerUnpersistRDD]
-      && !event.isInstanceOf[SparkListenerApplicationEnd]
-      && !event.isInstanceOf[SparkListenerExecutorRemoved]) {
-      assert(capturedValue.isEmpty)
-    }
-    else {
-      assert(capturedValue.isDefined)
-    }
-    capturedValue
+    verify(this.listener, times(1)).sendToSink(this.logEventCaptor.capture)
+    (
+      this.logEventCaptor.getValue,
+      event
+    )
   }
 
-  protected def onStreamingListenerEvent[T <: StreamingListenerEvent](onEvent: T => Unit)(implicit tag: ClassTag[T]): Unit = {
-    val event = mock(tag.runtimeClass).asInstanceOf[T]
-    this.onStreamingListenerEvent(onEvent, event)
+  private val wrapperCtor: ru.MethodMirror = {
+    // We need to get the wrapper class so we can wrap this the way Spark does
+    val mirror = ru.runtimeMirror(getClass.getClassLoader)
+    val streamingListenerBusClassSymbol = mirror.classSymbol(
+      Class.forName("org.apache.spark.streaming.scheduler.StreamingListenerBus")
+    )
+
+    val streamingListenerBusClassMirror = mirror.reflectClass(streamingListenerBusClassSymbol)
+    val streamingListenerBusCtor = streamingListenerBusClassMirror
+      .reflectConstructor(
+        streamingListenerBusClassSymbol.typeSignature.members.filter(_.isConstructor).head.asMethod
+      )
+    val streamingListenerBus = streamingListenerBusCtor(null)
+    val streamingListenerBusInstanceMirror = mirror.reflect(streamingListenerBus)
+
+    val wrappedStreamingListenerEventClassSymbol = mirror.classSymbol(
+      Class.forName(
+        StreamingListenerHandlers.WrappedStreamingListenerEventClassName
+      )
+    )
+
+    val wrappedStreamingListenerEventClassSymbolCtor = wrappedStreamingListenerEventClassSymbol
+      .typeSignature.members.filter(_.isConstructor).head.asMethod
+    streamingListenerBusInstanceMirror.reflectClass(
+      wrappedStreamingListenerEventClassSymbol
+    ).reflectConstructor(wrappedStreamingListenerEventClassSymbolCtor)
   }
 
-  // for mocked Streaming listener events, serialization fails. In that case log event is invoked with none
-  protected def onStreamingListenerEvent[T <: StreamingListenerEvent](onEvent: T => Unit, event: T): Option[JValue] = {
-    onEvent(event)
-    verify(this.listener).logEvent(this.logEventCaptor.capture)
-    val capturedValue = this.logEventCaptor.getValue
-    if (mockUtil.isMock(event)) {
-      assert(capturedValue.isEmpty)
-    }
-    else {
-      assert(capturedValue.isDefined)
-    }
-    capturedValue
+  // All StreamingListenerEvents go through the onOtherEvent method, so we will call directly here.
+  protected def onStreamingListenerEvent[T <: StreamingListenerEvent](event: T): (Option[JValue], T) = {
+    // This one is the odd one.
+    val (json, _) = onSparkListenerEvent(
+      this.listener.onOtherEvent,
+      this.wrapperCtor.apply(event).asInstanceOf[SparkListenerEvent]
+    )
+    (
+      json,
+      event
+    )
+  }
+
+  protected def onStreamingQueryListenerEvent[T <: StreamingQueryListener.Event](
+                                                                                  event: T): (Option[JValue], T) = {
+    onSparkListenerEvent(
+      this.listener.onOtherEvent,
+      event
+    )
+  }
+
+  protected def assertEvent[T <: AnyRef](
+                                          json: Option[JValue],
+                                          event: T)(implicit classTag: ClassTag[T]): org.scalatest.Assertion = {
+    this.assertField(
+      json,
+      "Event",
+      (_, value) => assert(value.extract[String] === classTag.runtimeClass.getName)
+    )
   }
 
   protected def assertSparkEventTime(
                                       json: Option[JValue],
-                                      assertion: (JField) => org.scalatest.Assertion): org.scalatest.Assertion =
+                                      assertion: (String, JValue) => org.scalatest.Assertion): org.scalatest.Assertion =
     this.assertField(json, "SparkEventTime", assertion)
-//  protected def assertSparkEventTime(json: Option[JValue], assertion: (JField) => org.scalatest.Assertion) = {
-//    json match {
-//      case Some(jValue) => {
-//        jValue.findField { case (n, _) => n == "SparkEventTime" } match {
-//          case Some(jField) => {
-//            assertion(jField)
-//          }
-//          case None => fail("SparkEventTime field not found")
-//        }
-//      }
-//      case None => fail("None passed to logEvent")
-//    }
-//  }
 
   protected def assertField(
                              json: Option[JValue],
                              fieldName: String,
-                             assertion: (JField) => org.scalatest.Assertion): org.scalatest.Assertion = {
+                             assertion: (String, JValue) => org.scalatest.Assertion): org.scalatest.Assertion = {
     json match {
       case Some(jValue) => {
         jValue.findField { case (n, _) => n == fieldName } match {
           case Some(jField) => {
-            assertion(jField)
+            assertion.tupled(jField)
           }
           case None => fail(s"${fieldName} field not found")
         }
       }
-      case None => fail("None passed to logEvent")
+      case None => fail("None passed to assertField")
     }
   }
 }

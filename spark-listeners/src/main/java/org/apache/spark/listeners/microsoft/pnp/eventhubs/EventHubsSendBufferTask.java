@@ -49,7 +49,7 @@ public class EventHubsSendBufferTask extends GenericSendBufferTask<String> {
                     sendEvent = EventData.create(bytes);
                 } while (events.tryAdd(sendEvent));
 
-                //this.client.sendSync(events);
+                this.client.sendSync(events);
             }
         } catch (Exception e) {
             logger.error(e.getMessage(), e);

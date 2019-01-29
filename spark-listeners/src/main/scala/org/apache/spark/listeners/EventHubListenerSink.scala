@@ -1,14 +1,13 @@
 package org.apache.spark.listeners
 
-import org.apache.spark.SparkConf
-import org.apache.spark.internal.Logging
-import org.json4s.JsonAST
-import org.json4s.jackson.JsonMethods.compact
-import com.microsoft.azure.eventhubs.ConnectionStringBuilder
-import com.microsoft.azure.eventhubs.EventHubClient
 import java.util.concurrent.Executors
 
+import com.microsoft.azure.eventhubs.ConnectionStringBuilder
+import org.apache.spark.SparkConf
+import org.apache.spark.internal.Logging
 import org.apache.spark.listeners.microsoft.pnp.eventhubs.EventHubsSendBufferClient
+import org.json4s.JsonAST
+import org.json4s.jackson.JsonMethods.compact
 
 import scala.util.control.NonFatal
 
