@@ -18,8 +18,7 @@ After the ARM template deploys the bitnami image of grafana a temporary grafana 
 ### Step 2: Change Grafana Administrator Password
 1. Open the browser at http://grafanapublicipaddress:3000 and login in as admin and password from previous step
 2. Move the mouse on the settings icon located to the left then click on **Server Admin**
-![change user Logo](./images/UserChange
-  .png)
+![change user Logo](./images/UserChange.png)
 3. Click on admin then on the text box **Change Password** enter new password the click **Update**
 
 ### Step 3: Create Service Principal for Azure Monitor Data Source Using Azure Cli
@@ -56,12 +55,10 @@ az ad sp create-for-rbac --name http://NameOfSp --role "Log Analytics Reader"
 
 
 1. On grafana move mouse on the settings icon located to the left then click on **Data Sources** then **Add data Source**. Select **Azure Monitor**.
-![change user Logo](./images/AddSource
-  .png)
+![change user Logo](./images/AddSource.png)
 
 2. Enter **ALA** in name, SubscriptionId, TenantId(tenant in previous step), Client id(appId in previous step), Client secret (password in previous step). Click on check box **Same Details as Azure Monitor api** then click on **Save & test**
-![change user Logo](./images/DataSource
-  .png)
+![change user Logo](./images/DataSource.png)
 
 ### Step 5: Import Spark Metrics Dashboard
 
@@ -84,5 +81,5 @@ export LOGTYPE=SparkListenerEvent_CL
 sh DashGen.sh
 ```
 
-2. On grafana move mouse on the settings icon located to the left then click on **Manage** then **Import**, browse to directory /spark-monitoring/performance/dashboards/grafana click on  open SparkMonitoringDash.json. The select your azure monitor data source that was create before
+2. On grafana move mouse on the settings icon located to the left then click on **Manage** then **Import**, browse to directory /spark-monitoring/performance/dashboards/grafana click on  open SparkMonitoringDash.json. Then select your azure monitor data source that was create before
 ![change user Logo](./images/Import.png)
