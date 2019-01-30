@@ -65,10 +65,24 @@ az ad sp create-for-rbac --name http://NameOfSp --role "Log Analytics Reader"
 
 ### Step 5: Import Spark Metrics Dashboard
 
-1. Open a bash shell command prompt and execute command, replacing yourworkspaceid with the workspace id of Log Analytics.
+1. Open a bash shell command prompt, move to the directory containing sparkMetricsDashboard.json file and execute commands below, replacing YOUR_WORKSPACEID with the workspace id of Log Analytics and SparkListenerEvent_CL with the log type if a non default logtype is used for spark monitoring.
 
 
 ```
-sed  '/workspace/c\   \t\t\t\"workspace\" : \"yourworkspaceid\",' "sparkMetricsDashboard.json"  | sed  's/SparkListenerEvent_CL/SparkListenerEvent_CL/g' "sparkMetricsDashboard.json"   > sparkMetricsImport.json
+export WORKSPACE=YOUR_WORKSPACEID
+export LOGTYPE=SparkListenerEvent_CL
+
+sed  "/workspace/c\   \t\t\t\"workspace\" : \"${WORKSPACE}\"" "sparkMetricsDashboard.json"  | sed  "s/SparkListenerEvent_CL/${LOGTYPE}/g"    > sparkMetricsImport.json
+```
+
+or execute below script from same directory location
 
 ```
+export WORKSPACE=YOUR_WORKSPACEID
+export LOGTYPE=SparkListenerEvent_CL
+
+sh DashGen.sh
+```
+
+2. On grafana move mouse on the settings icon located to the left then click on **Manage** then **Import**, browse to directory /spark-monitoring/performance/dashboards/grafana click on  open SparkMonitoringDash.json. The select your azure monitor data source that was create before
+![change user Logo](./images/Import.png)
