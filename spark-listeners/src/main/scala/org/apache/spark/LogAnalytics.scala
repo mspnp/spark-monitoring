@@ -5,8 +5,8 @@ import java.time.Instant
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
+import com.microsoft.pnp.loganalytics.{LogAnalyticsBufferedClient, LogAnalyticsClient}
 import org.apache.spark.internal.Logging
-import org.apache.spark.listeners.microsoft.pnp.loganalytics.{LogAnalyticsBufferedClient, LogAnalyticsClient}
 import org.apache.spark.scheduler.SparkListenerEvent
 import org.apache.spark.streaming.scheduler.StreamingListenerEvent
 import org.apache.spark.util.JsonProtocol
