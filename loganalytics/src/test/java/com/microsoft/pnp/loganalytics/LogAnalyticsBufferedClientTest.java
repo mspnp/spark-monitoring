@@ -1,17 +1,12 @@
-package org.apache.spark.listeners.microsoft.pnp.loganalytics;
+package com.microsoft.pnp.loganalytics;
 
-import static org.mockito.Mockito.*;
-
-import org.junit.*;
+import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.TimeZone;
+
+import static org.mockito.Mockito.*;
 
 public class LogAnalyticsBufferedClientTest {
 
