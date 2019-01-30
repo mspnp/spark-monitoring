@@ -59,7 +59,16 @@
         "Standard_D3_v2",
         "Standard_D4_v2"
       ]
+    },
+    "grafanaVersion": {
+      "defaultValue": "5.4.1812132007",
+      "type": "string",
+      "allowedValues": [
+        "5.4.1812132007",
+        "latest"
+           ]
     }
+
   },
  
   "variables": {
@@ -91,7 +100,7 @@
             "publisher": "bitnami",
             "offer": "grafana",
             "sku": "default",
-            "version": "5.4.1812132007"
+            "version": "[parameters('grafanaVersion')]"
           },
           "osDisk": {
             "osType": "Linux",
