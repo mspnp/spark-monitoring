@@ -1,0 +1,1382 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "workspaces_sparkmonitoring_test_name": {
+            "defaultValue": "sparkmonitoring-test",
+            "type": "String"
+        },
+        "savedSearches_0dc46213_a48a_43e5_8083_546ff15c90b2_name": {
+            "defaultValue": "0dc46213-a48a-43e5-8083-546ff15c90b2",
+            "type": "String"
+        },
+        "savedSearches_12f20b1b_12c4_436c_8ce9_46700cdca464_name": {
+            "defaultValue": "12f20b1b-12c4-436c-8ce9-46700cdca464",
+            "type": "String"
+        },
+        "savedSearches_147ee0bf_647d_4e31_ab29_36b8373cd44a_name": {
+            "defaultValue": "147ee0bf-647d-4e31-ab29-36b8373cd44a",
+            "type": "String"
+        },
+        "savedSearches_156ded2b_3813_4305_8d9d_065dc569a27c_name": {
+            "defaultValue": "156ded2b-3813-4305-8d9d-065dc569a27c",
+            "type": "String"
+        },
+        "savedSearches_3eb18c34_c090_4793_b86b_8bac052e151d_name": {
+            "defaultValue": "3eb18c34-c090-4793-b86b-8bac052e151d",
+            "type": "String"
+        },
+        "savedSearches_44950365_7bd4_4d3b_944b_fe083b245f76_name": {
+            "defaultValue": "44950365-7bd4-4d3b-944b-fe083b245f76",
+            "type": "String"
+        },
+        "savedSearches_4d47fc69_7426_442d_a87c_ce4585e05737_name": {
+            "defaultValue": "4d47fc69-7426-442d-a87c-ce4585e05737",
+            "type": "String"
+        },
+        "savedSearches_5a3402d4_7bf2_46c4_a8d5_6ffbc747bb30_name": {
+            "defaultValue": "5a3402d4-7bf2-46c4-a8d5-6ffbc747bb30",
+            "type": "String"
+        },
+        "savedSearches_625c031d_51e4_4389_925f_0ee6f6b2f510_name": {
+            "defaultValue": "625c031d-51e4-4389-925f-0ee6f6b2f510",
+            "type": "String"
+        },
+        "savedSearches_66d24f3f_3c79_4e34_935c_fdeef975501d_name": {
+            "defaultValue": "66d24f3f-3c79-4e34-935c-fdeef975501d",
+            "type": "String"
+        },
+        "savedSearches_6b5f40d7_c48f_48b7_9774_89ac5bb68a9d_name": {
+            "defaultValue": "6b5f40d7-c48f-48b7-9774-89ac5bb68a9d",
+            "type": "String"
+        },
+        "savedSearches_72ce237f_8685_4ef1_82fc_c8f6d3c56b45_name": {
+            "defaultValue": "72ce237f-8685-4ef1-82fc-c8f6d3c56b45",
+            "type": "String"
+        },
+        "savedSearches_783c575f_59df_4125_b096_ac6c1ac7fcb9_name": {
+            "defaultValue": "783c575f-59df-4125-b096-ac6c1ac7fcb9",
+            "type": "String"
+        },
+        "savedSearches_807a7e36_8ed6_41be_80f8_cc1bf9104503_name": {
+            "defaultValue": "807a7e36-8ed6-41be-80f8-cc1bf9104503",
+            "type": "String"
+        },
+        "savedSearches_818df9bd_30c6_4bdd_83d9_2c3017223010_name": {
+            "defaultValue": "818df9bd-30c6-4bdd-83d9-2c3017223010",
+            "type": "String"
+        },
+        "savedSearches_8cc3173d_d8f6_4205_a227_f20c905da265_name": {
+            "defaultValue": "8cc3173d-d8f6-4205-a227-f20c905da265",
+            "type": "String"
+        },
+        "savedSearches_8e508c21_f562_4a8e_b98e_1f90dc5cac89_name": {
+            "defaultValue": "8e508c21-f562-4a8e-b98e-1f90dc5cac89",
+            "type": "String"
+        },
+        "savedSearches_928d2ab7_3585_460c_b2fd_6ad23892a0dc_name": {
+            "defaultValue": "928d2ab7-3585-460c-b2fd-6ad23892a0dc",
+            "type": "String"
+        },
+        "savedSearches_94b0d6bb_8676_4810_87a2_4cfb976be544_name": {
+            "defaultValue": "94b0d6bb-8676-4810-87a2-4cfb976be544",
+            "type": "String"
+        },
+        "savedSearches_95cdb933_0e87_4376_8f43_1b8e7bac05f8_name": {
+            "defaultValue": "95cdb933-0e87-4376-8f43-1b8e7bac05f8",
+            "type": "String"
+        },
+        "savedSearches_9690c516_b3dc_44e2_9a07_2f589d767cfe_name": {
+            "defaultValue": "9690c516-b3dc-44e2-9a07-2f589d767cfe",
+            "type": "String"
+        },
+        "savedSearches_a526eb75_558b_49c7_b2e2_3794fd1798cb_name": {
+            "defaultValue": "a526eb75-558b-49c7-b2e2-3794fd1798cb",
+            "type": "String"
+        },
+        "savedSearches_a7e462c8_cb50_479e_b4e9_c0ca1f74f7b0_name": {
+            "defaultValue": "a7e462c8-cb50-479e-b4e9-c0ca1f74f7b0",
+            "type": "String"
+        },
+        "savedSearches_b640af5f_03c6_4522_ba4b_357f61fc6ba9_name": {
+            "defaultValue": "b640af5f-03c6-4522-ba4b-357f61fc6ba9",
+            "type": "String"
+        },
+        "savedSearches_b6fa92ec_458d_4954_832b_036444a2f9b4_name": {
+            "defaultValue": "b6fa92ec-458d-4954-832b-036444a2f9b4",
+            "type": "String"
+        },
+        "savedSearches_b74edddc_8e9c_4bb2_b7ab_9db890e94790_name": {
+            "defaultValue": "b74edddc-8e9c-4bb2-b7ab-9db890e94790",
+            "type": "String"
+        },
+        "savedSearches_b7dcedde_2600_4fb4_92d9_aafa1ade4a2a_name": {
+            "defaultValue": "b7dcedde-2600-4fb4-92d9-aafa1ade4a2a",
+            "type": "String"
+        },
+        "savedSearches_b9a595af_407d_40b0_829e_de856997f37e_name": {
+            "defaultValue": "b9a595af-407d-40b0-829e-de856997f37e",
+            "type": "String"
+        },
+        "savedSearches_b9e663e2_530c_4126_9a50_e44a6dad2e7b_name": {
+            "defaultValue": "b9e663e2-530c-4126-9a50-e44a6dad2e7b",
+            "type": "String"
+        },
+        "savedSearches_bcdd2165_d9db_492b_aaab_08025f7546c7_name": {
+            "defaultValue": "bcdd2165-d9db-492b-aaab-08025f7546c7",
+            "type": "String"
+        },
+        "savedSearches_cba0374b_26bd_480e_9063_700705942bfd_name": {
+            "defaultValue": "cba0374b-26bd-480e-9063-700705942bfd",
+            "type": "String"
+        },
+        "savedSearches_d064d9c8_375a_4cbf_a7bb_bb17743c75b7_name": {
+            "defaultValue": "d064d9c8-375a-4cbf-a7bb-bb17743c75b7",
+            "type": "String"
+        },
+        "savedSearches_e4821394_7ef5_4168_8b7d_83201650427f_name": {
+            "defaultValue": "e4821394-7ef5-4168-8b7d-83201650427f",
+            "type": "String"
+        },
+        "savedSearches_ec8ca555_d75a_42ea_b5d8_df62e5b19528_name": {
+            "defaultValue": "ec8ca555-d75a-42ea-b5d8-df62e5b19528",
+            "type": "String"
+        },
+        "savedSearches_f0f8a1de_c75c_4d46_b6ce_f3b0e30cac0b_name": {
+            "defaultValue": "f0f8a1de-c75c-4d46-b6ce-f3b0e30cac0b",
+            "type": "String"
+        },
+        "savedSearches_fe2fe58d_4488_46f9_8c37_55b154b4225d_name": {
+            "defaultValue": "fe2fe58d-4488-46f9-8c37-55b154b4225d",
+            "type": "String"
+        },
+        "savedSearches_LogManagement(sparkmonitoring_test)_General|StaleComputers_name": {
+            "defaultValue": "LogManagement(sparkmonitoring-test)_General|StaleComputers",
+            "type": "String"
+        },
+        "savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|AllEvents_name": {
+            "defaultValue": "LogManagement(sparkmonitoring-test)_LogManagement|AllEvents",
+            "type": "String"
+        },
+        "savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|AllSyslog_name": {
+            "defaultValue": "LogManagement(sparkmonitoring-test)_LogManagement|AllSyslog",
+            "type": "String"
+        },
+        "savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|WarningEvents_name": {
+            "defaultValue": "LogManagement(sparkmonitoring-test)_LogManagement|WarningEvents",
+            "type": "String"
+        },
+        "savedSearches_LogManagement(sparkmonitoring_test)_General|dataTypeDistribution_name": {
+            "defaultValue": "LogManagement(sparkmonitoring-test)_General|dataTypeDistribution",
+            "type": "String"
+        },
+        "savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|EventsByEventLog_name": {
+            "defaultValue": "LogManagement(sparkmonitoring-test)_LogManagement|EventsByEventLog",
+            "type": "String"
+        },
+        "savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|EventsByEventsID_name": {
+            "defaultValue": "LogManagement(sparkmonitoring-test)_LogManagement|EventsByEventsID",
+            "type": "String"
+        },
+        "savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|Show404PagesList_name": {
+            "defaultValue": "LogManagement(sparkmonitoring-test)_LogManagement|Show404PagesList",
+            "type": "String"
+        },
+        "savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|ServerRestartTime_name": {
+            "defaultValue": "LogManagement(sparkmonitoring-test)_LogManagement|ServerRestartTime",
+            "type": "String"
+        },
+        "savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|EventsByEventSource_name": {
+            "defaultValue": "LogManagement(sparkmonitoring-test)_LogManagement|EventsByEventSource",
+            "type": "String"
+        },
+        "savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|AllSyslogByFacility_name": {
+            "defaultValue": "LogManagement(sparkmonitoring-test)_LogManagement|AllSyslogByFacility",
+            "type": "String"
+        },
+        "savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|CountOfWarningEvents_name": {
+            "defaultValue": "LogManagement(sparkmonitoring-test)_LogManagement|CountOfWarningEvents",
+            "type": "String"
+        },
+        "savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|ListAllIISLogEntries_name": {
+            "defaultValue": "LogManagement(sparkmonitoring-test)_LogManagement|ListAllIISLogEntries",
+            "type": "String"
+        },
+        "savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|AllSyslogsWithErrors_name": {
+            "defaultValue": "LogManagement(sparkmonitoring-test)_LogManagement|AllSyslogsWithErrors",
+            "type": "String"
+        },
+        "savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|AllSyslogByProcessName_name": {
+            "defaultValue": "LogManagement(sparkmonitoring-test)_LogManagement|AllSyslogByProcessName",
+            "type": "String"
+        },
+        "savedSearches_LogManagement(sparkmonitoring_test)_General|dataPointsPerManagementGroup_name": {
+            "defaultValue": "LogManagement(sparkmonitoring-test)_General|dataPointsPerManagementGroup",
+            "type": "String"
+        },
+        "savedSearches_LogManagement(sparkmonitoring_test)_General|AlphabeticallySortedComputers_name": {
+            "defaultValue": "LogManagement(sparkmonitoring-test)_General|AlphabeticallySortedComputers",
+            "type": "String"
+        },
+        "savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|IISLogEntriesForClientIP_name": {
+            "defaultValue": "LogManagement(sparkmonitoring-test)_LogManagement|IISLogEntriesForClientIP",
+            "type": "String"
+        },
+        "savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|EventsWithStartedinEventID_name": {
+            "defaultValue": "LogManagement(sparkmonitoring-test)_LogManagement|EventsWithStartedinEventID",
+            "type": "String"
+        },
+        "savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|EventsInOMBetween2000to3000_name": {
+            "defaultValue": "LogManagement(sparkmonitoring-test)_LogManagement|EventsInOMBetween2000to3000",
+            "type": "String"
+        },
+        "savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|DisplayBreakdownRespondCodes_name": {
+            "defaultValue": "LogManagement(sparkmonitoring-test)_LogManagement|DisplayBreakdownRespondCodes",
+            "type": "String"
+        },
+        "savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|NoOfConnectionsToOMSDKService_name": {
+            "defaultValue": "LogManagement(sparkmonitoring-test)_LogManagement|NoOfConnectionsToOMSDKService",
+            "type": "String"
+        },
+      "savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|FindMaximumTimeTakenForEachPage_name": {
+        "defaultValue": "LogManagement(sparkmonitoring-test)_LogManagement|FindMaximumTimeTakenForEachPage",
+        "type": "String"
+      },
+        "savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|CountIISLogEntriesHTTPUserAgent_name": {
+            "defaultValue": "LogManagement(sparkmonitoring-test)_LogManagement|CountIISLogEntriesHTTPUserAgent",
+            "type": "String"
+        },
+        "savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|TotalBytesSentByClientIPAddress_name": {
+            "defaultValue": "LogManagement(sparkmonitoring-test)_LogManagement|TotalBytesSentByClientIPAddress",
+            "type": "String"
+        },
+        "savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|AverageHTTPRequestTimeHTTPMethod_name": {
+            "defaultValue": "LogManagement(sparkmonitoring-test)_LogManagement|AverageHTTPRequestTimeHTTPMethod",
+            "type": "String"
+        },
+        "savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|CountOfIISLogEntriesByURLForHost_name": {
+            "defaultValue": "LogManagement(sparkmonitoring-test)_LogManagement|CountOfIISLogEntriesByURLForHost",
+            "type": "String"
+        },
+        "savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|CountIISLogEntriesClientIPAddress_name": {
+            "defaultValue": "LogManagement(sparkmonitoring-test)_LogManagement|CountIISLogEntriesClientIPAddress",
+            "type": "String"
+        },
+        "savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|CountIISLogEntriesHTTPRequestMethod_name": {
+            "defaultValue": "LogManagement(sparkmonitoring-test)_LogManagement|CountIISLogEntriesHTTPRequestMethod",
+            "type": "String"
+        },
+        "savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|TotalBytesReceivedByEachIISComputer_name": {
+            "defaultValue": "LogManagement(sparkmonitoring-test)_LogManagement|TotalBytesReceivedByEachIISComputer",
+            "type": "String"
+        },
+        "savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|WindowsFireawallPolicySettingsChanged_name": {
+            "defaultValue": "LogManagement(sparkmonitoring-test)_LogManagement|WindowsFireawallPolicySettingsChanged",
+            "type": "String"
+        },
+        "savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|ShowServersThrowingInternalServerError_name": {
+            "defaultValue": "LogManagement(sparkmonitoring-test)_LogManagement|ShowServersThrowingInternalServerError",
+            "type": "String"
+        },
+        "savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|AverageHTTPRequestTimeByClientIPAddress_name": {
+            "defaultValue": "LogManagement(sparkmonitoring-test)_LogManagement|AverageHTTPRequestTimeByClientIPAddress",
+            "type": "String"
+        },
+        "savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|TotalBytesReceivedByEachAzureRoleInstance_name": {
+            "defaultValue": "LogManagement(sparkmonitoring-test)_LogManagement|TotalBytesReceivedByEachAzureRoleInstance",
+            "type": "String"
+        },
+        "savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|CountOfIISLogEntriesByURLRequestedByClient_name": {
+            "defaultValue": "LogManagement(sparkmonitoring-test)_LogManagement|CountOfIISLogEntriesByURLRequestedByClient",
+            "type": "String"
+        },
+        "savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|CountOfIISLogEntriesByHostRequestedByClient_name": {
+            "defaultValue": "LogManagement(sparkmonitoring-test)_LogManagement|CountOfIISLogEntriesByHostRequestedByClient",
+            "type": "String"
+        },
+        "savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|TotalBytesRespondedToClientsByClientIPAddress_name": {
+            "defaultValue": "LogManagement(sparkmonitoring-test)_LogManagement|TotalBytesRespondedToClientsByClientIPAddress",
+            "type": "String"
+        },
+        "savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|WindowsFireawallPolicySettingsChangedByMachines_name": {
+            "defaultValue": "LogManagement(sparkmonitoring-test)_LogManagement|WindowsFireawallPolicySettingsChangedByMachines",
+            "type": "String"
+        },
+        "savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|TotalBytesRespondedToClientsByEachIISServerIPAddress_name": {
+            "defaultValue": "LogManagement(sparkmonitoring-test)_LogManagement|TotalBytesRespondedToClientsByEachIISServerIPAddress",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "comments": "Generalized from resource: '/subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourcegroups/sparkmonitoring-test/providers/microsoft.operationalinsights/workspaces/sparkmonitoring-test'.",
+            "type": "microsoft.operationalinsights/workspaces",
+            "name": "[parameters('workspaces_sparkmonitoring_test_name')]",
+            "apiVersion": "2015-11-01-preview",
+            "location": "eastus",
+            "scale": null,
+            "properties": {
+                "source": "Azure",
+                "customerId": "d3db08dd-6932-4e70-9a3a-9a495a39b08d",
+                "portalUrl": "[concat('https://eus.mms.microsoft.com/Account?tenant=72f988bf-86f1-41af-91ab-2d7cd011db47&resource=%2fsubscriptions%2fd0d422cd-e446-42aa-a2e2-e88806508d3b%2fresourcegroups%2f', parameters('workspaces_sparkmonitoring_test_name'),'%2fproviders%2fmicrosoft.operationalinsights%2fworkspaces%2f', parameters('workspaces_sparkmonitoring_test_name'))]",
+                "provisioningState": "Succeeded",
+                "sku": {
+                    "name": "standalone"
+                },
+                "retentionInDays": 31
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/0dc46213-a48a-43e5-8083-546ff15c90b2'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_0dc46213_a48a_43e5_8083_546ff15c90b2_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "Category": "spark metrics",
+                "DisplayName": "stage latency per stage",
+                "Query": "SparkListenerEvent_CL\r\n| where Event_s contains \"SparkListenerStageCompleted\" \r\n| extend stage_query = strcat(Stage_Info_Stage_Name_s) \r\n| extend stageDuration=Stage_Info_Completion_Time_d - Stage_Info_Submission_Time_d \r\n| summarize percentiles(stageDuration,10,30,50,90)  by bin(TimeGenerated,  1m), stage_query\r\n| order by TimeGenerated asc nulls last\r\n\r\n",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/12f20b1b-12c4-436c-8ce9-46700cdca464'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_12f20b1b_12c4_436c_8ce9_46700cdca464_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "Category": "spark metrics",
+                "DisplayName": "stage  throughput per stage",
+                "Query": "SparkListenerEvent_CL\r\n| where  $__timeFilter(TimeGenerated)\r\n| where Event_s contains \"SparkListenerStageCompleted\"\r\n| extend slice = strcat(\"# StagesCompleted \",Stage_Info_Stage_Name_s)  \r\n| summarize StagesCompleted=count(Event_s) by bin(TimeGenerated,1m), slice\r\n| order by TimeGenerated asc nulls last",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/147ee0bf-647d-4e31-ab29-36b8373cd44a'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_147ee0bf_647d_4e31_ab29_36b8373cd44a_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "Category": "spark metrics",
+                "DisplayName": "Tasks Per Stage",
+                "Query": "SparkListenerEvent_CL\r\n| where Event_s contains \"SparkListenerStageCompleted\"\r\n| project Stage_Info_Number_of_Tasks_d,Stage_Info_Stage_Name_s,TimeGenerated \r\n| order by TimeGenerated asc nulls last",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/156ded2b-3813-4305-8d9d-065dc569a27c'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_156ded2b_3813_4305_8d9d_065dc569a27c_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "Category": "spark metrics",
+                "DisplayName": "% serialize time per executor",
+                "Query": "let results = SparkMetric_CL\r\n| where name_s contains \"executor.resultserializationtime\" \r\n| extend sname=split(name_s, \".\") \r\n| extend executor=strcat(\"executorid:\",sname[1])\r\n| project TimeGenerated , setime=count_d , executor ,name_s\r\n| join kind= inner (\r\nSparkMetric_CL\r\n| where name_s contains \"executor.RunTime\"\r\n| extend sname=split(name_s, \".\") \r\n| extend executor=strcat(\"executorid:\",sname[1])\r\n| project TimeGenerated , runTime=count_d , executor ,name_s\r\n) on executor, TimeGenerated;\r\nresults\r\n| extend serUsage=(setime/runTime)*100\r\n| summarize SerializationCpuTime=percentile(serUsage,90) by bin(TimeGenerated, 1m), executor\r\n| order by TimeGenerated asc nulls last\r\n",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/3eb18c34-c090-4793-b86b-8bac052e151d'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_3eb18c34_c090_4793_b86b_8bac052e151d_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "Category": "spark metrics",
+                "DisplayName": "shuffle bytes read per executor",
+                "Query": "let results=SparkMetric_CL\r\n| where  name_s  contains \"executor.shuffleTotalBytesRead\"\r\n| extend sname=split(name_s, \".\") \r\n| extend executor=strcat(\"executorid:\",sname[1])\r\n| summarize MaxShuffleWrites=max(count_d)  by bin(TimeGenerated,  1m), executor \r\n| order by TimeGenerated asc  nulls last \r\n| join kind= inner (\r\n    SparkMetric_CL\r\n    | where name_s contains \"executor.shuffleTotalBytesRead\"\r\n    | extend sname=split(name_s, \".\") \r\n    | extend executor=strcat(\"executorid:\",sname[1])\r\n| summarize MinShuffleWrites=min(count_d)  by bin(TimeGenerated,  1m), executor\r\n) on executor, TimeGenerated;\r\nresults\r\n| extend ShuffleBytesWritten=MaxShuffleWrites-MinShuffleWrites \r\n| summarize max(ShuffleBytesWritten)   by bin(TimeGenerated,  1m), executor\r\n| order by TimeGenerated asc nulls last\r\n",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/44950365-7bd4-4d3b-944b-fe083b245f76'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_44950365_7bd4_4d3b_944b_fe083b245f76_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "Category": "spark metrics",
+                "DisplayName": "error traces",
+                "Query": "SparkListenerEvent_CL\r\n| where Level contains \"Error\"\r\n| project TimeGenerated , Message  \r\n",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/4d47fc69-7426-442d-a87c-ce4585e05737'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_4d47fc69_7426_442d_a87c_ce4585e05737_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "Category": "spark metrics",
+                "DisplayName": "Task Shuffle Bytes Written",
+                "Query": "let result=SparkListenerEvent_CL\r\n| where  Event_s  contains \"SparkListenerStageCompleted\"\r\n| project Stage_Info_Stage_ID_d,Stage_Info_Stage_Name_s,Stage_Info_Submission_Time_d,Event_s,TimeGenerated\r\n| order by TimeGenerated asc  nulls last \r\n| join kind= inner (\r\n    SparkListenerEvent_CL\r\n    | where Event_s contains \"SparkListenerTaskEnd\"\r\n    | where Task_End_Reason_Reason_s contains \"Success\"\r\n    | project Task_Info_Launch_Time_d,Stage_ID_d,Task_Info_Task_ID_d,Event_s,\r\n              Task_Metrics_Executor_Deserialize_Time_d,Task_Metrics_Shuffle_Read_Metrics_Fetch_Wait_Time_d,\r\n              Task_Metrics_Executor_Run_Time_d,Task_Metrics_Shuffle_Write_Metrics_Shuffle_Write_Time_d,\r\n              Task_Metrics_Result_Serialization_Time_d,Task_Info_Getting_Result_Time_d,\r\n              Task_Metrics_Shuffle_Read_Metrics_Remote_Bytes_Read_d,Task_Metrics_Shuffle_Write_Metrics_Shuffle_Bytes_Written_d,\r\n              Task_Metrics_JVM_GC_Time_d,TimeGenerated\r\n) on $left.Stage_Info_Stage_ID_d == $right.Stage_ID_d;\r\nresult\r\n| extend schedulerdelay = Task_Info_Launch_Time_d - Stage_Info_Submission_Time_d\r\n| extend name=strcat(\"ShuffleBytesWritten \",Stage_Info_Stage_Name_s)\r\n| summarize percentile(Task_Metrics_Shuffle_Write_Metrics_Shuffle_Bytes_Written_d,90) by bin(TimeGenerated,1m),name\r\n| order by TimeGenerated asc nulls last;\r\n\r\n",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/5a3402d4-7bf2-46c4-a8d5-6ffbc747bb30'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_5a3402d4_7bf2_46c4_a8d5_6ffbc747bb30_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "Category": "spark metrics",
+                "DisplayName": "Task Input Bytes Read",
+                "Query": "let result=SparkListenerEvent_CL\r\n| where  Event_s  contains \"SparkListenerStageCompleted\"\r\n| project Stage_Info_Stage_ID_d,Stage_Info_Stage_Name_s,Stage_Info_Submission_Time_d,Event_s,TimeGenerated\r\n| order by TimeGenerated asc  nulls last \r\n| join kind= inner (\r\n    SparkListenerEvent_CL\r\n    | where Event_s contains \"SparkListenerTaskEnd\"\r\n    | where Task_End_Reason_Reason_s contains \"Success\"\r\n    | project Task_Info_Launch_Time_d,Stage_ID_d,Task_Info_Task_ID_d,Event_s,\r\n              Task_Metrics_Executor_Deserialize_Time_d,Task_Metrics_Shuffle_Read_Metrics_Fetch_Wait_Time_d,\r\n              Task_Metrics_Executor_Run_Time_d,Task_Metrics_Shuffle_Write_Metrics_Shuffle_Write_Time_d,\r\n              Task_Metrics_Result_Serialization_Time_d,Task_Info_Getting_Result_Time_d,\r\n              Task_Metrics_Shuffle_Read_Metrics_Remote_Bytes_Read_d,Task_Metrics_Shuffle_Write_Metrics_Shuffle_Bytes_Written_d,\r\n              Task_Metrics_JVM_GC_Time_d,Task_Metrics_Input_Metrics_Bytes_Read_d,TimeGenerated\r\n) on $left.Stage_Info_Stage_ID_d == $right.Stage_ID_d;\r\nresult\r\n| extend name=strcat(\"InputBytesRead \",Stage_Info_Stage_Name_s)\r\n| summarize percentile(Task_Metrics_Input_Metrics_Bytes_Read_d,90) by bin(TimeGenerated,1m),name\r\n| order by TimeGenerated asc nulls last;\r\n\r\n",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/625c031d-51e4-4389-925f-0ee6f6b2f510'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_625c031d_51e4_4389_925f_0ee6f6b2f510_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "Category": "spark metrics",
+                "DisplayName": "Sum Task Execution Per Host",
+                "Query": "SparkListenerEvent_CL\r\n| where Event_s contains \"taskend\" \r\n| extend taskDuration=Task_Info_Finish_Time_d-Task_Info_Launch_Time_d \r\n| summarize sum(taskDuration) by bin(TimeGenerated,  1m), Task_Info_Host_s\r\n| order by TimeGenerated asc nulls last ",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/66d24f3f-3c79-4e34-935c-fdeef975501d'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_66d24f3f_3c79_4e34_935c_fdeef975501d_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "Category": "spark metrics",
+                "DisplayName": "% cput time per executor",
+                "Query": "let results = SparkMetric_CL \r\n| where name_s contains \"executor.cpuTime\" \r\n| extend sname=split(name_s, \".\")\r\n| extend executor=strcat(\"executorid:\",sname[1])\r\n| project TimeGenerated , cpuTime=count_d/1000000  ,  executor ,name_s\r\n| join kind= inner (\r\n    SparkMetric_CL\r\n| where name_s contains \"executor.RunTime\"\r\n| extend sname=split(name_s, \".\") \r\n| extend executor=strcat(\"executorid:\",sname[1])\r\n| project TimeGenerated , runTime=count_d  ,  executor ,name_s\r\n) on executor, TimeGenerated;\r\nresults\r\n| extend cpuUsage=(cpuTime/runTime)*100\r\n| summarize ExecutorCpuTime = percentile(cpuUsage,90) by bin(TimeGenerated, 1m), executor\r\n| order by TimeGenerated asc nulls last   \r\n",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/6b5f40d7-c48f-48b7-9774-89ac5bb68a9d'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_6b5f40d7_c48f_48b7_9774_89ac5bb68a9d_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "Category": "spark metrics",
+                "DisplayName": "job throughput per job",
+                "Query": "let results=SparkListenerEvent_CL\r\n| where  Event_s  contains \"SparkListenerJobStart\"\r\n| project Job_ID_d,Properties_callSite_short_s,TimeGenerated\r\n| order by TimeGenerated asc  nulls last \r\n| join kind= inner (\r\n    SparkListenerEvent_CL\r\n    | where Event_s contains \"SparkListenerJobEnd\"\r\n    | where Job_Result_Result_s contains \"JobSucceeded\"\r\n    | project Event_s,Job_ID_d,TimeGenerated\r\n) on Job_ID_d;\r\nresults\r\n| extend slice=strcat(\"#JobsCompleted \",Properties_callSite_short_s)\r\n| summarize count(Event_s)   by bin(TimeGenerated,  1m),slice\r\n| order by TimeGenerated asc nulls last\r\n\r\n\r\nlet result=SparkListenerEvent_CL\r\n| where  Event_s  contains \"SparkListenerStageCompleted\"\r\n| project Stage_Info_Stage_ID_d,Stage_Info_Stage_Name_s,Event_s,TimeGenerated\r\n| order by TimeGenerated asc  nulls last \r\n| join kind= inner (\r\n    SparkListenerEvent_CL\r\n    | where Event_s contains \"SparkListenerTaskEnd\"\r\n    | where Task_End_Reason_Reason_s contains \"Success\"\r\n    | project Stage_ID_d,Task_Info_Task_ID_d,\r\n              TaskEvent=Event_s,TimeGenerated\r\n) on $left.Stage_Info_Stage_ID_d == $right.Stage_ID_d;\r\nresult\r\n| extend slice=strcat(\"#TasksCompleted \",Stage_Info_Stage_Name_s)\r\n| summarize count(TaskEvent)  by bin(TimeGenerated,1m),slice\r\n| order by TimeGenerated asc nulls last\r\n\r\n\r\nSparkListenerEvent_CL\r\n| where  $__timeFilter(TimeGenerated)\r\n| where Event_s contains \"SparkListenerStageCompleted\"\r\n| extend slice = strcat(\"# StagesCompleted \",Stage_Info_Stage_Name_s)  \r\n| summarize StagesCompleted=count(Event_s) by bin(TimeGenerated,1m), slice\r\n| order by TimeGenerated asc nulls last",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/72ce237f-8685-4ef1-82fc-c8f6d3c56b45'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_72ce237f_8685_4ef1_82fc_c8f6d3c56b45_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "Category": "spark metrics",
+                "DisplayName": "shuffle bytes written per executor",
+                "Query": "let results=SparkMetric_CL\r\n| where  name_s  contains \"executor.shuffleBytesWritten\"\r\n| extend sname=split(name_s, \".\") \r\n| extend executor=strcat(\"executorid:\",sname[1])\r\n| summarize MaxShuffleWrites=max(count_d)  by bin(TimeGenerated,  1m), executor \r\n| order by TimeGenerated asc  nulls last \r\n| join kind= inner (\r\n    SparkMetric_CL\r\n    | where name_s contains \"executor.shuffleBytesWritten\"\r\n    | extend sname=split(name_s, \".\") \r\n    | extend executor=strcat(\"executorid:\",sname[1])\r\n| summarize MinShuffleWrites=min(count_d)  by bin(TimeGenerated,  1m), executor\r\n) on executor, TimeGenerated;\r\nresults\r\n| extend ShuffleBytesWritten=MaxShuffleWrites-MinShuffleWrites \r\n| summarize max(ShuffleBytesWritten)   by bin(TimeGenerated,  1m), executor\r\n| order by TimeGenerated asc nulls last\r\n",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/783c575f-59df-4125-b096-ac6c1ac7fcb9'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_783c575f_59df_4125_b096_ac6c1ac7fcb9_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "Category": "spark metrics",
+                "DisplayName": "shuffle disk bytes spilled per executor",
+                "Query": "let results=SparkMetric_CL\r\n| where  name_s  contains \"executor.diskBytesSpilled\"\r\n| extend sname=split(name_s, \".\") \r\n| extend executor=strcat(\"executorid:\",sname[1])\r\n| summarize MaxShuffleWrites=max(count_d)  by bin(TimeGenerated,  1m), executor \r\n| order by TimeGenerated asc  nulls last \r\n| join kind= inner (\r\n    SparkMetric_CL\r\n    | where name_s contains \"executor.diskBytesSpilled\"\r\n    | extend sname=split(name_s, \".\") \r\n    | extend executor=strcat(\"executorid:\",sname[1])\r\n| summarize MinShuffleWrites=min(count_d)  by bin(TimeGenerated,  1m), executor\r\n) on executor, TimeGenerated;\r\nresults\r\n| extend ShuffleBytesWritten=MaxShuffleWrites-MinShuffleWrites \r\n| summarize any(ShuffleBytesWritten)   by bin(TimeGenerated,  1m), executor\r\n| order by TimeGenerated asc nulls last\r\n",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/807a7e36-8ed6-41be-80f8-cc1bf9104503'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_807a7e36_8ed6_41be_80f8_cc1bf9104503_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "Category": "spark metrics",
+                "DisplayName": "Task Shuffle Read Time",
+                "Query": "let result=SparkListenerEvent_CL\r\n| where  Event_s  contains \"SparkListenerStageCompleted\"\r\n| project Stage_Info_Stage_ID_d,Stage_Info_Stage_Name_s,Stage_Info_Submission_Time_d,Event_s,TimeGenerated\r\n| order by TimeGenerated asc  nulls last \r\n| join kind= inner (\r\n    SparkListenerEvent_CL\r\n    | where Event_s contains \"SparkListenerTaskEnd\"\r\n    | where Task_End_Reason_Reason_s contains \"Success\"\r\n    | project Task_Info_Launch_Time_d,Stage_ID_d,Task_Info_Task_ID_d,Event_s,\r\n              Task_Metrics_Executor_Deserialize_Time_d,Task_Metrics_Shuffle_Read_Metrics_Fetch_Wait_Time_d,\r\n              Task_Metrics_Executor_Run_Time_d,Task_Metrics_Shuffle_Write_Metrics_Shuffle_Write_Time_d,\r\n              Task_Metrics_Result_Serialization_Time_d,Task_Info_Getting_Result_Time_d,\r\n              Task_Metrics_Shuffle_Read_Metrics_Remote_Bytes_Read_d,Task_Metrics_Shuffle_Write_Metrics_Shuffle_Bytes_Written_d,\r\n              Task_Metrics_JVM_GC_Time_d,TimeGenerated\r\n) on $left.Stage_Info_Stage_ID_d == $right.Stage_ID_d;\r\nresult\r\n| extend name=strcat(\"TaskShuffleReadTime \",Stage_Info_Stage_Name_s)\r\n| summarize percentile(Task_Metrics_Shuffle_Read_Metrics_Fetch_Wait_Time_d,90) by bin(TimeGenerated,1m),name\r\n| order by TimeGenerated asc nulls last;\r\n\r\n",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/818df9bd-30c6-4bdd-83d9-2c3017223010'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_818df9bd_30c6_4bdd_83d9_2c3017223010_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "Category": "spark metrics",
+                "DisplayName": "shuffle heap memory per executor",
+                "Query": "SparkMetric_CL\r\n| where  name_s  contains \"shuffle-client.usedHeapMemory\"\r\n| extend sname=split(name_s, \".\")\r\n| extend executor=strcat(\"executorid:\",sname[1])\r\n| summarize percentile(value_d,90)  by bin(TimeGenerated,  1m), executor\r\n| order by TimeGenerated asc  nulls last",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/8cc3173d-d8f6-4205-a227-f20c905da265'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_8cc3173d_d8f6_4205_a227_f20c905da265_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "Category": "spark metrics",
+                "DisplayName": "job errors per job",
+                "Query": "let results=SparkListenerEvent_CL\r\n| where  Event_s  contains \"SparkListenerJobStart\"\r\n| project Job_ID_d,Properties_callSite_short_s,TimeGenerated\r\n| order by TimeGenerated asc  nulls last \r\n| join kind= inner (\r\n    SparkListenerEvent_CL\r\n    | where Event_s contains \"SparkListenerJobEnd\"\r\n    | where Job_Result_Result_s !contains \"JobSucceeded\"\r\n    | project Event_s,Job_ID_d,TimeGenerated\r\n) on Job_ID_d;\r\nresults\r\n| extend slice=strcat(\"JobErrors \",Properties_callSite_short_s)\r\n| summarize count(Event_s)   by bin(TimeGenerated,  1m),slice\r\n| order by TimeGenerated asc nulls last",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/8e508c21-f562-4a8e-b98e-1f90dc5cac89'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_8e508c21_f562_4a8e_b98e_1f90dc5cac89_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "Category": "spark metrics",
+                "DisplayName": "Task errors per stage",
+                "Query": "let result=SparkListenerEvent_CL\n| where  Event_s  contains \"SparkListenerStageCompleted\"\n| project Stage_Info_Stage_ID_d,Stage_Info_Stage_Name_s,Event_s,TimeGenerated\n| order by TimeGenerated asc  nulls last \n| join kind= inner (\n    SparkListenerEvent_CL\n    | where Event_s contains \"SparkListenerTaskEnd\"\n    | where Task_End_Reason_Reason_s !contains \"Success\"\n    | project Stage_ID_d,Task_Info_Task_ID_d,Task_End_Reason_Reason_s,\n              TaskEvent=Event_s,TimeGenerated\n) on $left.Stage_Info_Stage_ID_d == $right.Stage_ID_d;\nresult\n| extend slice=strcat(\"#TaskErrors \",Stage_Info_Stage_Name_s)\n| summarize count(TaskEvent)  by bin(TimeGenerated,1m),slice\n| order by TimeGenerated asc nulls last\n",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/928d2ab7-3585-460c-b2fd-6ad23892a0dc'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_928d2ab7_3585_460c_b2fd_6ad23892a0dc_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "Category": "spark metrics",
+                "DisplayName": "streaming latency per stream",
+                "Query": "\r\n\r\nSparkListenerEvent_CL\r\n| where Event_s contains \"queryprogressevent\"\r\n| extend sname=strcat(progress_name_s,\"-\",\"triggerexecution\") \r\n| summarize percentile(progress_durationMs_triggerExecution_d,90)  by bin(TimeGenerated, 1m), sname\r\n| order by  TimeGenerated   asc  nulls last \r\n",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/94b0d6bb-8676-4810-87a2-4cfb976be544'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_94b0d6bb_8676_4810_87a2_4cfb976be544_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "Category": "spark metrics",
+                "DisplayName": "Task Shuffle Write Time",
+                "Query": "let result=SparkListenerEvent_CL\r\n| where  Event_s  contains \"SparkListenerStageCompleted\"\r\n| project Stage_Info_Stage_ID_d,Stage_Info_Stage_Name_s,Stage_Info_Submission_Time_d,Event_s,TimeGenerated\r\n| order by TimeGenerated asc  nulls last \r\n| join kind= inner (\r\n    SparkListenerEvent_CL\r\n    | where Event_s contains \"SparkListenerTaskEnd\"\r\n    | where Task_End_Reason_Reason_s contains \"Success\"\r\n    | project Task_Info_Launch_Time_d,Stage_ID_d,Task_Info_Task_ID_d,Event_s,\r\n              Task_Metrics_Executor_Deserialize_Time_d,Task_Metrics_Shuffle_Read_Metrics_Fetch_Wait_Time_d,\r\n              Task_Metrics_Executor_Run_Time_d,Task_Metrics_Shuffle_Write_Metrics_Shuffle_Write_Time_d,\r\n              Task_Metrics_Result_Serialization_Time_d,Task_Info_Getting_Result_Time_d,\r\n              Task_Metrics_Shuffle_Read_Metrics_Remote_Bytes_Read_d,Task_Metrics_Shuffle_Write_Metrics_Shuffle_Bytes_Written_d,\r\n              Task_Metrics_JVM_GC_Time_d,TimeGenerated\r\n) on $left.Stage_Info_Stage_ID_d == $right.Stage_ID_d;\r\nresult\r\n| extend ShuffleWriteTime=Task_Metrics_Shuffle_Write_Metrics_Shuffle_Write_Time_d/1000000\r\n| extend name=strcat(\"TaskShuffleWriteTime \",Stage_Info_Stage_Name_s)\r\n| summarize percentile(ShuffleWriteTime,90) by bin(TimeGenerated,1m),name\r\n| order by TimeGenerated asc nulls last;\r\n\r\n",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/95cdb933-0e87-4376-8f43-1b8e7bac05f8'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_95cdb933_0e87_4376_8f43_1b8e7bac05f8_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "Category": "spark metrics",
+                "DisplayName": "Task Deserializtion Time",
+                "Query": "let result=SparkListenerEvent_CL\r\n| where  Event_s  contains \"SparkListenerStageCompleted\"\r\n| project Stage_Info_Stage_ID_d,Stage_Info_Stage_Name_s,Stage_Info_Submission_Time_d,Event_s,TimeGenerated\r\n| order by TimeGenerated asc  nulls last \r\n| join kind= inner (\r\n    SparkListenerEvent_CL\r\n    | where Event_s contains \"SparkListenerTaskEnd\"\r\n    | where Task_End_Reason_Reason_s contains \"Success\"\r\n    | project Task_Info_Launch_Time_d,Stage_ID_d,Task_Info_Task_ID_d,Event_s,\r\n              Task_Metrics_Executor_Deserialize_Time_d,Task_Metrics_Shuffle_Read_Metrics_Fetch_Wait_Time_d,\r\n              Task_Metrics_Executor_Run_Time_d,Task_Metrics_Shuffle_Write_Metrics_Shuffle_Write_Time_d,\r\n              Task_Metrics_Result_Serialization_Time_d,Task_Info_Getting_Result_Time_d,\r\n              Task_Metrics_Shuffle_Read_Metrics_Remote_Bytes_Read_d,Task_Metrics_Shuffle_Write_Metrics_Shuffle_Bytes_Written_d,\r\n              Task_Metrics_JVM_GC_Time_d,Task_Metrics_Input_Metrics_Bytes_Read_d,TimeGenerated\r\n) on $left.Stage_Info_Stage_ID_d == $right.Stage_ID_d;\r\nresult\r\n| extend name=strcat(\"TaskDeserializationTime \",Stage_Info_Stage_Name_s)\r\n| summarize percentile(Task_Metrics_Executor_Deserialize_Time_d,90) by bin(TimeGenerated,1m),name\r\n| order by TimeGenerated asc nulls last;\r\n\r\n",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/9690c516-b3dc-44e2-9a07-2f589d767cfe'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_9690c516_b3dc_44e2_9a07_2f589d767cfe_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "Category": "spark metrics",
+                "DisplayName": "Task Result Serialization Time",
+                "Query": "let result=SparkListenerEvent_CL\r\n| where  Event_s  contains \"SparkListenerStageCompleted\"\r\n| project Stage_Info_Stage_ID_d,Stage_Info_Stage_Name_s,Stage_Info_Submission_Time_d,Event_s,TimeGenerated\r\n| order by TimeGenerated asc  nulls last \r\n| join kind= inner (\r\n    SparkListenerEvent_CL\r\n    | where Event_s contains \"SparkListenerTaskEnd\"\r\n    | where Task_End_Reason_Reason_s contains \"Success\"\r\n    | project Task_Info_Launch_Time_d,Stage_ID_d,Task_Info_Task_ID_d,Event_s,\r\n              Task_Metrics_Executor_Deserialize_Time_d,Task_Metrics_Shuffle_Read_Metrics_Fetch_Wait_Time_d,\r\n              Task_Metrics_Executor_Run_Time_d,Task_Metrics_Shuffle_Write_Metrics_Shuffle_Write_Time_d,\r\n              Task_Metrics_Result_Serialization_Time_d,Task_Info_Getting_Result_Time_d,\r\n              Task_Metrics_Shuffle_Read_Metrics_Remote_Bytes_Read_d,Task_Metrics_Shuffle_Write_Metrics_Shuffle_Bytes_Written_d,\r\n              Task_Metrics_JVM_GC_Time_d,TimeGenerated\r\n) on $left.Stage_Info_Stage_ID_d == $right.Stage_ID_d;\r\nresult\r\n| extend name=strcat(\"TaskResultSerializationTime \",Stage_Info_Stage_Name_s)\r\n| summarize percentile(Task_Metrics_Result_Serialization_Time_d,90) by bin(TimeGenerated,1m),name\r\n| order by TimeGenerated asc nulls last;\r\n\r\n",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/a526eb75-558b-49c7-b2e2-3794fd1798cb'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_a526eb75_558b_49c7_b2e2_3794fd1798cb_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "Category": "spark metrics",
+                "DisplayName": "file system bytes read per executor",
+                "Query": "SparkMetric_CL\r\n| where $__timeFilter(TimeGenerated)\r\n| extend sname=split(name_s, \".\")\r\n| extend executor=strcat(\"executorid:\",sname[1])\r\n| where  name_s  contains \"executor.filesystem.file.read_bytes\" \r\n| summarize FileSystemWriteBytes=any(value_d)  by bin(TimeGenerated,  1m), executor\r\n| order by TimeGenerated asc  nulls last \r\n| render timechart",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/a7e462c8-cb50-479e-b4e9-c0ca1f74f7b0'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_a7e462c8_cb50_479e_b4e9_c0ca1f74f7b0_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "Category": "spark metrics",
+                "DisplayName": "streaming throughput processedrowsSec",
+                "Query": "SparkListenerEvent_CL\r\n| where Event_s   contains \"progress\"\r\n| extend sname=strcat(progress_name_s,\"-ProcRowsPerSecond\") \r\n| extend status = todouble(extractjson(\"$.[0].processedRowsPerSecond\", progress_sources_s))\r\n| summarize percentile(status,90) by bin(TimeGenerated,  1m) , sname\r\n| order by  TimeGenerated   asc  nulls last ",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/b640af5f-03c6-4522-ba4b-357f61fc6ba9'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_b640af5f_03c6_4522_ba4b_357f61fc6ba9_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "Category": "spark metrics",
+                "DisplayName": "% deserialize time per executor",
+                "Query": "let results = SparkMetric_CL \r\n| where name_s contains \"executor.deserializetime\" \r\n| extend sname=split(name_s, \".\") \r\n| extend executor=strcat(\"executorid:\",sname[1])\r\n| project TimeGenerated , desetime=count_d , executor ,name_s\r\n| join kind= inner (\r\nSparkMetric_CL\r\n| where name_s contains \"executor.RunTime\"\r\n| extend sname=split(name_s, \".\") \r\n| extend executor=strcat(\"executorid:\",sname[1])\r\n| project TimeGenerated , runTime=count_d , executor ,name_s\r\n) on executor, TimeGenerated;\r\nresults\r\n| extend deseUsage=(desetime/runTime)*100\r\n| summarize deSerializationCpuTime=percentiles(deseUsage,90) by bin(TimeGenerated, 1m), executor\r\n| order by TimeGenerated asc nulls last ",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/b6fa92ec-458d-4954-832b-036444a2f9b4'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_b6fa92ec_458d_4954_832b_036444a2f9b4_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "Category": "spark metrics",
+                "DisplayName": "Tasks Per Executor",
+                "Query": "SparkMetric_CL\r\n| extend sname=split(name_s, \".\")\r\n| extend executor=strcat(\"executorid:\",sname[1]) \r\n| where name_s contains \"threadpool.activeTasks\" \r\n| summarize percentile(value_d,90)  by bin(TimeGenerated, 1m),executor\r\n| order by TimeGenerated asc  nulls last ",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/b74edddc-8e9c-4bb2-b7ab-9db890e94790'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_b74edddc_8e9c_4bb2_b7ab_9db890e94790_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "Category": "spark metrics",
+                "DisplayName": "file system bytes write per executor",
+                "Query": "SparkMetric_CL\r\n| extend sname=split(name_s, \".\")\r\n| extend executor=strcat(\"executorid:\",sname[1])\r\n| where  name_s  contains \"executor.filesystem.file.write_bytes\" \r\n| summarize FileSystemWriteBytes=any(value_d)  by bin(TimeGenerated,  1m), executor\r\n| order by TimeGenerated asc  nulls last \r\n| render timechart",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/b7dcedde-2600-4fb4-92d9-aafa1ade4a2a'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_b7dcedde_2600_4fb4_92d9_aafa1ade4a2a_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "Category": "spark metrics",
+                "DisplayName": "Task Scheduler Delay Latency",
+                "Query": "let result=SparkListenerEvent_CL\n| where  Event_s  contains \"SparkListenerStageCompleted\"\n| project Stage_Info_Stage_ID_d,Stage_Info_Stage_Name_s,Stage_Info_Submission_Time_d,Event_s,TimeGenerated\n| order by TimeGenerated asc  nulls last \n| join kind= inner (\n    SparkListenerEvent_CL\n    | where Event_s contains \"SparkListenerTaskEnd\"\n    | where Task_End_Reason_Reason_s contains \"Success\"\n    | project Task_Info_Launch_Time_d,Stage_ID_d,Task_Info_Task_ID_d,Event_s,\n              Task_Metrics_Executor_Deserialize_Time_d,Task_Metrics_Shuffle_Read_Metrics_Fetch_Wait_Time_d,\n              Task_Metrics_Executor_Run_Time_d,Task_Metrics_Shuffle_Write_Metrics_Shuffle_Write_Time_d,\n              Task_Metrics_Result_Serialization_Time_d,Task_Info_Getting_Result_Time_d,\n              Task_Metrics_Shuffle_Read_Metrics_Remote_Bytes_Read_d,Task_Metrics_Shuffle_Write_Metrics_Shuffle_Bytes_Written_d,\n              Task_Metrics_JVM_GC_Time_d,TimeGenerated\n) on $left.Stage_Info_Stage_ID_d == $right.Stage_ID_d;\nresult\n| extend schedulerdelay = Task_Info_Launch_Time_d - Stage_Info_Submission_Time_d\n| extend name=strcat(\"SchedulerDelayTime \",Stage_Info_Stage_Name_s)\n| summarize percentile(schedulerdelay,90) , percentile(Task_Metrics_Executor_Run_Time_d,90) by bin(TimeGenerated,1m),name\n| order by TimeGenerated asc nulls last;\n\n",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/b9a595af-407d-40b0-829e-de856997f37e'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_b9a595af_407d_40b0_829e_de856997f37e_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "Category": "spark metrics",
+                "DisplayName": "streaming errors per stream",
+                "Query": "SparkListenerEvent_CL\r\n| extend slice = strcat(\"CountExceptions\",progress_name_s) \r\n| where Level contains \"Error\"\r\n| summarize count(Level) by bin(TimeGenerated, 1m), slice \r\n",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/b9e663e2-530c-4126-9a50-e44a6dad2e7b'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_b9e663e2_530c_4126_9a50_e44a6dad2e7b_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "Category": "spark metrics",
+                "DisplayName": "shuffle client memory per executor",
+                "Query": "SparkMetric_CL\r\n| where  name_s  contains \"shuffle-client.usedDirectMemory\"\r\n| extend sname=split(name_s, \".\")\r\n| extend executor=strcat(\"executorid:\",sname[1])\r\n| summarize percentile(value_d,90)  by bin(TimeGenerated,  1m), executor\r\n| order by TimeGenerated asc  nulls last",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/bcdd2165-d9db-492b-aaab-08025f7546c7'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_bcdd2165_d9db_492b_aaab_08025f7546c7_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "Category": "spark metrics",
+                "DisplayName": "job latency per job",
+                "Query": "let results=SparkListenerEvent_CL\r\n| where  Event_s  contains \"SparkListenerJobStart\"\r\n| project Job_ID_d,Properties_callSite_short_s,Submission_Time_d,TimeGenerated\r\n| order by TimeGenerated asc  nulls last \r\n| join kind= inner (\r\n    SparkListenerEvent_CL\r\n    | where Event_s contains \"SparkListenerJobEnd\"\r\n    | where Job_Result_Result_s contains \"JobSucceeded\"\r\n    | project Event_s,Job_ID_d,Completion_Time_d,TimeGenerated\r\n) on Job_ID_d;\r\nresults\r\n| extend slice=strcat(Properties_callSite_short_s)\r\n| extend jobDuration=Completion_Time_d - Submission_Time_d \r\n| summarize percentiles(jobDuration,10,30,50,90)  by bin(TimeGenerated,  1m), slice\r\n| order by TimeGenerated asc nulls last\r\n",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/cba0374b-26bd-480e-9063-700705942bfd'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_cba0374b_26bd_480e_9063_700705942bfd_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "Category": "spark metrics",
+                "DisplayName": "Task Executor Compute Time",
+                "Query": "let result=SparkListenerEvent_CL\r\n| where  Event_s  contains \"SparkListenerStageCompleted\"\r\n| project Stage_Info_Stage_ID_d,Stage_Info_Stage_Name_s,Stage_Info_Submission_Time_d,Event_s,TimeGenerated\r\n| order by TimeGenerated asc  nulls last \r\n| join kind= inner (\r\n    SparkListenerEvent_CL\r\n    | where Event_s contains \"SparkListenerTaskEnd\"\r\n    | where Task_End_Reason_Reason_s contains \"Success\"\r\n    | project Task_Info_Launch_Time_d,Stage_ID_d,Task_Info_Task_ID_d,Event_s,\r\n              Task_Metrics_Executor_Deserialize_Time_d,Task_Metrics_Shuffle_Read_Metrics_Fetch_Wait_Time_d,\r\n              Task_Metrics_Executor_Run_Time_d,Task_Metrics_Shuffle_Write_Metrics_Shuffle_Write_Time_d,\r\n              Task_Metrics_Result_Serialization_Time_d,Task_Info_Getting_Result_Time_d,\r\n              Task_Metrics_Shuffle_Read_Metrics_Remote_Bytes_Read_d,Task_Metrics_Shuffle_Write_Metrics_Shuffle_Bytes_Written_d,\r\n              Task_Metrics_JVM_GC_Time_d,TimeGenerated\r\n) on $left.Stage_Info_Stage_ID_d == $right.Stage_ID_d;\r\nresult\r\n| extend name=strcat(\"ExecutorComputeTime \",Stage_Info_Stage_Name_s)\r\n| summarize percentile(Task_Metrics_Executor_Run_Time_d,90) by bin(TimeGenerated,1m),name\r\n| order by TimeGenerated asc nulls last;\r\n\r\n",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/d064d9c8-375a-4cbf-a7bb-bb17743c75b7'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_d064d9c8_375a_4cbf_a7bb_bb17743c75b7_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "Category": "spark metrics",
+                "DisplayName": "streaming throughput inputrowssec",
+                "Query": "SparkListenerEvent_CL\r\n| where Event_s   contains \"progress\"\r\n| extend sname=strcat(progress_name_s,\"-inputRowsPerSecond\") \r\n| extend status = todouble(extractjson(\"$.[0].inputRowsPerSecond\", progress_sources_s))\r\n| summarize percentile(status,90) by bin(TimeGenerated,  1m) , sname\r\n| order by  TimeGenerated   asc  nulls last \r\n\r\n\r\n\r\n\r\nSparkListenerEvent_CL\r\n| where Event_s contains \"queryprogressevent\"\r\n| extend sname=strcat(progress_name_s,\"-\",\"triggerexecution\") \r\n| summarize percentile(progress_durationMs_triggerExecution_d,90)  by bin(TimeGenerated, 1m), sname\r\n| order by  TimeGenerated   asc  nulls last \r\n\r\nSparkListenerEvent_CL\r\n| where Event_s   contains \"progress\"\r\n| extend sname=strcat(progress_name_s,\"-ProcRowsPerSecond\") \r\n| extend status = todouble(extractjson(\"$.[0].processedRowsPerSecond\", progress_sources_s))\r\n| summarize percentile(status,90) by bin(TimeGenerated,  1m) , sname\r\n| order by  TimeGenerated   asc  nulls last ",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/e4821394-7ef5-4168-8b7d-83201650427f'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_e4821394_7ef5_4168_8b7d_83201650427f_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "Category": "spark metrics",
+                "DisplayName": "Task Shuffle Bytes Read",
+                "Query": "let result=SparkListenerEvent_CL\r\n| where  Event_s  contains \"SparkListenerStageCompleted\"\r\n| project Stage_Info_Stage_ID_d,Stage_Info_Stage_Name_s,Stage_Info_Submission_Time_d,Event_s,TimeGenerated\r\n| order by TimeGenerated asc  nulls last \r\n| join kind= inner (\r\n    SparkListenerEvent_CL\r\n    | where Event_s contains \"SparkListenerTaskEnd\"\r\n    | where Task_End_Reason_Reason_s contains \"Success\"\r\n    | project Task_Info_Launch_Time_d,Stage_ID_d,Task_Info_Task_ID_d,Event_s,\r\n              Task_Metrics_Executor_Deserialize_Time_d,Task_Metrics_Shuffle_Read_Metrics_Fetch_Wait_Time_d,\r\n              Task_Metrics_Executor_Run_Time_d,Task_Metrics_Shuffle_Write_Metrics_Shuffle_Write_Time_d,\r\n              Task_Metrics_Result_Serialization_Time_d,Task_Info_Getting_Result_Time_d,\r\n              Task_Metrics_Shuffle_Read_Metrics_Remote_Bytes_Read_d,Task_Metrics_Shuffle_Write_Metrics_Shuffle_Bytes_Written_d,\r\n              Task_Metrics_JVM_GC_Time_d,TimeGenerated\r\n) on $left.Stage_Info_Stage_ID_d == $right.Stage_ID_d;\r\nresult\r\n| extend name=strcat(\"ShuffleBytesRead \",Stage_Info_Stage_Name_s)\r\n| summarize percentile(Task_Metrics_Shuffle_Read_Metrics_Remote_Bytes_Read_d,90) by bin(TimeGenerated,1m),name\r\n| order by TimeGenerated asc nulls last;\r\n\r\n",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/ec8ca555-d75a-42ea-b5d8-df62e5b19528'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_ec8ca555_d75a_42ea_b5d8_df62e5b19528_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "Category": "spark metrics",
+                "DisplayName": "shuffle memory bytes spilled per executor",
+                "Query": "let results=SparkMetric_CL\r\n| where  name_s  contains \"executor.memoryBytesSpilled\"\r\n| extend sname=split(name_s, \".\") \r\n| extend executor=strcat(\"executorid:\",sname[1])\r\n| summarize MaxShuffleWrites=max(count_d)  by bin(TimeGenerated,  1m), executor \r\n| order by TimeGenerated asc  nulls last \r\n| join kind= inner (\r\n    SparkMetric_CL\r\n    | where name_s contains \"executor.memoryBytesSpilled\"\r\n    | extend sname=split(name_s, \".\") \r\n    | extend executor=strcat(\"executorid:\",sname[1])\r\n| summarize MinShuffleWrites=min(count_d)  by bin(TimeGenerated,  1m), executor\r\n) on executor, TimeGenerated;\r\nresults\r\n| extend ShuffleBytesWritten=MaxShuffleWrites-MinShuffleWrites \r\n| summarize any(ShuffleBytesWritten)   by bin(TimeGenerated,  1m), executor\r\n| order by TimeGenerated asc nulls last\r\n",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/f0f8a1de-c75c-4d46-b6ce-f3b0e30cac0b'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_f0f8a1de_c75c_4d46_b6ce_f3b0e30cac0b_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "Category": "spark metrics",
+                "DisplayName": "% jvm time per executor",
+                "Query": "let results = SparkMetric_CL\r\n| where name_s contains \"executor.jvmGCTime\" \r\n| extend sname=split(name_s, \".\")\r\n| extend executor=strcat(\"executorid:\",sname[1])\r\n| project TimeGenerated , jvmgcTime=count_d , executor ,name_s\r\n| join kind= inner (\r\nSparkMetric_CL\r\n| where name_s contains \"executor.RunTime\"\r\n| extend sname=split(name_s, \".\")\r\n| extend executor=strcat(\"executorid:\",sname[1]) \r\n| project TimeGenerated , runTime=count_d , executor ,name_s\r\n) on executor, TimeGenerated;\r\nresults\r\n| extend JvmcpuUsage=(jvmgcTime/runTime)*100\r\n| summarize JvmCpuTime = percentile(JvmcpuUsage,90) by bin(TimeGenerated, 1m), executor\r\n| order by TimeGenerated asc nulls last\r\n",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/fe2fe58d-4488-46f9-8c37-55b154b4225d'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_fe2fe58d_4488_46f9_8c37_55b154b4225d_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "Category": "spark metrics",
+                "DisplayName": "Running Executors",
+                "Query": "SparkMetric_CL\r\n| where name_s !contains \"driver\" \r\n| where name_s contains \"executor\"\r\n| extend sname=split(name_s, \".\")\r\n| extend executor=strcat(sname[0],sname[1]) \r\n| summarize NumExecutors=dcount(executor)  by bin(TimeGenerated,  1m)\r\n| order by TimeGenerated asc  nulls last ",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/LogManagement(sparkmonitoring-test)_LogManagement|AllEvents'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|AllEvents_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "DisplayName": "All Events",
+                "Category": "Log Management",
+                "Query": "Event | sort by TimeGenerated desc\r\n// Oql: Type=Event // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PTT: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/LogManagement(sparkmonitoring-test)_LogManagement|EventsWithStartedinEventID'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|EventsWithStartedinEventID_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "DisplayName": "Count of Events containing the word \"started\" grouped by EventID",
+                "Category": "Log Management",
+                "Query": "search in (Event) \"started\" | summarize AggregatedValue = count() by EventID\r\n// Oql: Type=Event \"started\" | Measure count() by EventID // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PTT: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/LogManagement(sparkmonitoring-test)_LogManagement|EventsByEventLog'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|EventsByEventLog_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "DisplayName": "Count of Events grouped by Event Log",
+                "Category": "Log Management",
+                "Query": "Event | summarize AggregatedValue = count() by EventLog\r\n// Oql: Type=Event | Measure count() by EventLog // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PTT: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/LogManagement(sparkmonitoring-test)_LogManagement|EventsByEventSource'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|EventsByEventSource_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "DisplayName": "Count of Events grouped by Event Source",
+                "Category": "Log Management",
+                "Query": "Event | summarize AggregatedValue = count() by Source\r\n// Oql: Type=Event | Measure count() by Source // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PTT: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/LogManagement(sparkmonitoring-test)_LogManagement|EventsByEventsID'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|EventsByEventsID_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "DisplayName": "Count of Events grouped by Event ID",
+                "Category": "Log Management",
+                "Query": "Event | summarize AggregatedValue = count() by EventID\r\n// Oql: Type=Event | Measure count() by EventID // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PTT: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/LogManagement(sparkmonitoring-test)_LogManagement|WarningEvents'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|WarningEvents_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "DisplayName": "All Events with level \"Warning\"",
+                "Category": "Log Management",
+                "Query": "Event | where EventLevelName == \"warning\" | sort by TimeGenerated desc\r\n// Oql: Type=Event EventLevelName=warning // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PTT: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/LogManagement(sparkmonitoring-test)_LogManagement|CountOfWarningEvents'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|CountOfWarningEvents_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "DisplayName": "Count of Events with level \"Warning\" grouped by Event ID",
+                "Category": "Log Management",
+                "Query": "Event | where EventLevelName == \"warning\" | summarize AggregatedValue = count() by EventID\r\n// Oql: Type=Event EventLevelName=warning | Measure count() by EventID // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PTT: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/LogManagement(sparkmonitoring-test)_LogManagement|NoOfConnectionsToOMSDKService'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|NoOfConnectionsToOMSDKService_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "DisplayName": "How many connections to Operations Manager's SDK service by day",
+                "Category": "Log Management",
+                "Query": "Event | where EventID == 26328 and EventLog == \"Operations Manager\" | summarize AggregatedValue = count() by bin(TimeGenerated, 1d) | sort by TimeGenerated desc\r\n// Oql: Type=Event EventID=26328 EventLog=\"Operations Manager\" | Measure count() interval 1DAY // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PTT: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/LogManagement(sparkmonitoring-test)_LogManagement|EventsInOMBetween2000to3000'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|EventsInOMBetween2000to3000_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "DisplayName": "Events in the Operations Manager Event Log whose Event ID is in the range between 2000 and 3000",
+                "Category": "Log Management",
+                "Query": "Event | where EventLog == \"Operations Manager\" and EventID >= 2000 and EventID <= 3000 | sort by TimeGenerated desc\r\n// Oql: Type=Event EventLog=\"Operations Manager\" EventID:[2000..3000] // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PTT: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/LogManagement(sparkmonitoring-test)_LogManagement|ServerRestartTime'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|ServerRestartTime_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "DisplayName": "When did my servers initiate restart?",
+                "Category": "Log Management",
+                "Query": "search in (Event) \"shutdown\" and EventLog == \"System\" and Source == \"User32\" and EventID == 1074 | sort by TimeGenerated desc | project TimeGenerated, Computer\r\n// Oql: shutdown Type=Event EventLog=System Source=User32 EventID=1074 | Select TimeGenerated,Computer // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PTT: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/LogManagement(sparkmonitoring-test)_LogManagement|WindowsFireawallPolicySettingsChanged'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|WindowsFireawallPolicySettingsChanged_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "DisplayName": "Windows Firewall Policy settings have changed",
+                "Category": "Log Management",
+                "Query": "Event | where EventLog == \"Microsoft-Windows-Windows Firewall With Advanced Security/Firewall\" and EventID == 2008 | sort by TimeGenerated desc\r\n// Oql: Type=Event EventLog=\"Microsoft-Windows-Windows Firewall With Advanced Security/Firewall\" EventID=2008 // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PTT: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/LogManagement(sparkmonitoring-test)_LogManagement|WindowsFireawallPolicySettingsChangedByMachines'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|WindowsFireawallPolicySettingsChangedByMachines_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "DisplayName": "On which machines and how many times have Windows Firewall Policy settings changed",
+                "Category": "Log Management",
+                "Query": "Event | where EventLog == \"Microsoft-Windows-Windows Firewall With Advanced Security/Firewall\" and EventID == 2008 | summarize AggregatedValue = count() by Computer | limit 500000\r\n// Oql: Type=Event EventLog=\"Microsoft-Windows-Windows Firewall With Advanced Security/Firewall\" EventID=2008 | measure count() by Computer | top 500000 // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PTT: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/LogManagement(sparkmonitoring-test)_LogManagement|ListAllIISLogEntries'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|ListAllIISLogEntries_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "DisplayName": "All IIS Log Entries",
+                "Category": "Log Management",
+                "Query": "search * | extend Type = $table | where Type == W3CIISLog | sort by TimeGenerated desc\r\n// Oql: Type=W3CIISLog // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PEF: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/LogManagement(sparkmonitoring-test)_LogManagement|DisplayBreakdownRespondCodes'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|DisplayBreakdownRespondCodes_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "DisplayName": "Shows breakdown of response codes",
+                "Category": "Log Management",
+                "Query": "search * | extend Type = $table | where Type == W3CIISLog | summarize AggregatedValue = count() by scStatus\r\n// Oql: Type=W3CIISLog | Measure count() by scStatus // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PEF: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/LogManagement(sparkmonitoring-test)_LogManagement|FindMaximumTimeTakenForEachPage'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|FindMaximumTimeTakenForEachPage_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "DisplayName": "Find the maximum time taken for each page",
+                "Category": "Log Management",
+                "Query": "search * | extend Type = $table | where Type == W3CIISLog | summarize AggregatedValue = max(TimeTaken) by csUriStem\r\n// Oql: Type=W3CIISLog | Measure Max(TimeTaken) by csUriStem // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PEF: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/LogManagement(sparkmonitoring-test)_LogManagement|Show404PagesList'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|Show404PagesList_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "DisplayName": "Shows which pages people are getting a 404 for",
+                "Category": "Log Management",
+                "Query": "search scStatus == 404 | extend Type = $table | where Type == W3CIISLog | summarize AggregatedValue = count() by csUriStem\r\n// Oql: Type=W3CIISLog scStatus=404 | Measure count() by csUriStem // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PEF: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/LogManagement(sparkmonitoring-test)_LogManagement|AverageHTTPRequestTimeHTTPMethod'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|AverageHTTPRequestTimeHTTPMethod_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "DisplayName": "Average HTTP Request time by HTTP Method",
+                "Category": "Log Management",
+                "Query": "search * | extend Type = $table | where Type == W3CIISLog | summarize AggregatedValue = avg(TimeTaken) by csMethod\r\n// Oql: Type=W3CIISLog | Measure Avg(TimeTaken) by csMethod // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PEF: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/LogManagement(sparkmonitoring-test)_LogManagement|ShowServersThrowingInternalServerError'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|ShowServersThrowingInternalServerError_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "DisplayName": "Shows servers that are throwing internal server error",
+                "Category": "Log Management",
+                "Query": "search scStatus == 500 | extend Type = $table | where Type == W3CIISLog | summarize AggregatedValue = count() by sComputerName\r\n// Oql: Type=W3CIISLog scStatus=500 | Measure count() by sComputerName // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PEF: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/LogManagement(sparkmonitoring-test)_LogManagement|CountIISLogEntriesHTTPRequestMethod'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|CountIISLogEntriesHTTPRequestMethod_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "DisplayName": "Count of IIS Log Entries by HTTP Request Method",
+                "Category": "Log Management",
+                "Query": "search * | extend Type = $table | where Type == W3CIISLog | summarize AggregatedValue = count() by csMethod\r\n// Oql: Type=W3CIISLog | Measure count() by csMethod // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PEF: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/LogManagement(sparkmonitoring-test)_LogManagement|CountIISLogEntriesHTTPUserAgent'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|CountIISLogEntriesHTTPUserAgent_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "DisplayName": "Count of IIS Log Entries by HTTP User Agent",
+                "Category": "Log Management",
+                "Query": "search * | extend Type = $table | where Type == W3CIISLog | summarize AggregatedValue = count() by csUserAgent\r\n// Oql: Type=W3CIISLog | Measure count() by csUserAgent // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PEF: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/LogManagement(sparkmonitoring-test)_LogManagement|CountIISLogEntriesClientIPAddress'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|CountIISLogEntriesClientIPAddress_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "DisplayName": "Count of IIS Log Entries by Client IP Address",
+                "Category": "Log Management",
+                "Query": "search * | extend Type = $table | where Type == W3CIISLog | summarize AggregatedValue = count() by cIP\r\n// Oql: Type=W3CIISLog | Measure count() by cIP // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PEF: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/LogManagement(sparkmonitoring-test)_LogManagement|IISLogEntriesForClientIP'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|IISLogEntriesForClientIP_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "DisplayName": "IIS Log Entries for a specific client IP Address (replace with your own)",
+                "Category": "Log Management",
+                "Query": "search cIP == \"192.168.0.1\" | extend Type = $table | where Type == W3CIISLog | sort by TimeGenerated desc | project csUriStem, scBytes, csBytes, TimeTaken, scStatus\r\n// Oql: Type=W3CIISLog cIP=\"192.168.0.1\" | Select csUriStem,scBytes,csBytes,TimeTaken,scStatus // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PEF: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/LogManagement(sparkmonitoring-test)_LogManagement|CountOfIISLogEntriesByURLRequestedByClient'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|CountOfIISLogEntriesByURLRequestedByClient_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "DisplayName": "Count of IIS Log Entries by URL requested by client (without query strings)",
+                "Category": "Log Management",
+                "Query": "search * | extend Type = $table | where Type == W3CIISLog | summarize AggregatedValue = count() by csUriStem\r\n// Oql: Type=W3CIISLog | Measure count() by csUriStem // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PEF: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/LogManagement(sparkmonitoring-test)_LogManagement|CountOfIISLogEntriesByHostRequestedByClient'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|CountOfIISLogEntriesByHostRequestedByClient_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "DisplayName": "Count of IIS Log Entries by Host requested by client",
+                "Category": "Log Management",
+                "Query": "search * | extend Type = $table | where Type == W3CIISLog | summarize AggregatedValue = count() by csHost\r\n// Oql: Type=W3CIISLog | Measure count() by csHost // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PEF: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/LogManagement(sparkmonitoring-test)_LogManagement|CountOfIISLogEntriesByURLForHost'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|CountOfIISLogEntriesByURLForHost_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "DisplayName": "Count of IIS Log Entries by URL for the host \"www.contoso.com\" (replace with your own)",
+                "Category": "Log Management",
+                "Query": "search csHost == \"www.contoso.com\" | extend Type = $table | where Type == W3CIISLog | summarize AggregatedValue = count() by csUriStem\r\n// Oql: Type=W3CIISLog csHost=\"www.contoso.com\" | Measure count() by csUriStem // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PEF: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/LogManagement(sparkmonitoring-test)_LogManagement|TotalBytesSentByClientIPAddress'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|TotalBytesSentByClientIPAddress_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "DisplayName": "Total Bytes sent by Client IP Address",
+                "Category": "Log Management",
+                "Query": "search * | extend Type = $table | where Type == W3CIISLog | summarize AggregatedValue = sum(csBytes) by cIP\r\n// Oql: Type=W3CIISLog | Measure Sum(csBytes) by cIP // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PEF: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/LogManagement(sparkmonitoring-test)_LogManagement|TotalBytesReceivedByEachAzureRoleInstance'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|TotalBytesReceivedByEachAzureRoleInstance_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "DisplayName": "Total Bytes received by each Azure Role Instance",
+                "Category": "Log Management",
+                "Query": "search * | extend Type = $table | where Type == W3CIISLog | summarize AggregatedValue = sum(csBytes) by RoleInstance\r\n// Oql: Type=W3CIISLog | Measure Sum(csBytes) by RoleInstance // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PEF: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/LogManagement(sparkmonitoring-test)_LogManagement|TotalBytesReceivedByEachIISComputer'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|TotalBytesReceivedByEachIISComputer_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "DisplayName": "Total Bytes received by each IIS Computer",
+                "Category": "Log Management",
+                "Query": "search * | extend Type = $table | where Type == W3CIISLog | summarize AggregatedValue = sum(csBytes) by Computer | limit 500000\r\n// Oql: Type=W3CIISLog | Measure Sum(csBytes) by Computer | top 500000 // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PEF: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/LogManagement(sparkmonitoring-test)_LogManagement|TotalBytesRespondedToClientsByEachIISServerIPAddress'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|TotalBytesRespondedToClientsByEachIISServerIPAddress_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "DisplayName": "Total Bytes responded back to clients by each IIS ServerIP Address",
+                "Category": "Log Management",
+                "Query": "search * | extend Type = $table | where Type == W3CIISLog | summarize AggregatedValue = sum(scBytes) by sIP\r\n// Oql: Type=W3CIISLog | Measure Sum(scBytes) by sIP // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PEF: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/LogManagement(sparkmonitoring-test)_LogManagement|TotalBytesRespondedToClientsByClientIPAddress'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|TotalBytesRespondedToClientsByClientIPAddress_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "DisplayName": "Total Bytes responded back to clients by Client IP Address",
+                "Category": "Log Management",
+                "Query": "search * | extend Type = $table | where Type == W3CIISLog | summarize AggregatedValue = sum(scBytes) by cIP\r\n// Oql: Type=W3CIISLog | Measure Sum(scBytes) by cIP // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PEF: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/LogManagement(sparkmonitoring-test)_LogManagement|AverageHTTPRequestTimeByClientIPAddress'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|AverageHTTPRequestTimeByClientIPAddress_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "DisplayName": "Average HTTP Request time by Client IP Address",
+                "Category": "Log Management",
+                "Query": "search * | extend Type = $table | where Type == W3CIISLog | summarize AggregatedValue = avg(TimeTaken) by cIP\r\n// Oql: Type=W3CIISLog | Measure Avg(TimeTaken) by cIP // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PEF: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/LogManagement(sparkmonitoring-test)_LogManagement|AllSyslog'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|AllSyslog_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "DisplayName": "All Syslogs",
+                "Category": "Log Management",
+                "Query": "Syslog | sort by TimeGenerated desc\r\n// Oql: Type=Syslog // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PTT: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/LogManagement(sparkmonitoring-test)_LogManagement|AllSyslogsWithErrors'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|AllSyslogsWithErrors_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "DisplayName": "All Syslog Records with Errors",
+                "Category": "Log Management",
+                "Query": "Syslog | where SeverityLevel == \"error\" | sort by TimeGenerated desc\r\n// Oql: Type=Syslog SeverityLevel=error // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PTT: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/LogManagement(sparkmonitoring-test)_LogManagement|AllSyslogByFacility'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|AllSyslogByFacility_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "DisplayName": "All Syslog Records grouped by Facility",
+                "Category": "Log Management",
+                "Query": "Syslog | summarize AggregatedValue = count() by Facility\r\n// Oql: Type=Syslog | Measure count() by Facility // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PTT: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/LogManagement(sparkmonitoring-test)_LogManagement|AllSyslogByProcessName'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_LogManagement(sparkmonitoring_test)_LogManagement|AllSyslogByProcessName_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "DisplayName": "All Syslog Records grouped by ProcessName",
+                "Category": "Log Management",
+                "Query": "Syslog | summarize AggregatedValue = count() by ProcessName\r\n// Oql: Type=Syslog | Measure count() by ProcessName // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PTT: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/LogManagement(sparkmonitoring-test)_General|dataPointsPerManagementGroup'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_LogManagement(sparkmonitoring_test)_General|dataPointsPerManagementGroup_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "DisplayName": "Which Management Group is generating the most data points?",
+                "Category": "General Exploration",
+                "Query": "search * | summarize AggregatedValue = count() by ManagementGroupName\r\n// Oql: * | Measure count() by ManagementGroupName // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PTT: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/LogManagement(sparkmonitoring-test)_General|dataTypeDistribution'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_LogManagement(sparkmonitoring_test)_General|dataTypeDistribution_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "DisplayName": "Distribution of data Types",
+                "Category": "General Exploration",
+                "Query": "search * | extend Type = $table | summarize AggregatedValue = count() by Type\r\n// Oql: * | Measure count() by Type // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PTT: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/LogManagement(sparkmonitoring-test)_General|AlphabeticallySortedComputers'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_LogManagement(sparkmonitoring_test)_General|AlphabeticallySortedComputers_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "DisplayName": "All Computers with their most recent data",
+                "Category": "General Exploration",
+                "Query": "search not(ObjectName == \"Advisor Metrics\" or ObjectName == \"ManagedSpace\") | summarize AggregatedValue = max(TimeGenerated) by Computer | limit 500000 | sort by Computer asc\r\n// Oql: NOT(ObjectName=\"Advisor Metrics\" OR ObjectName=ManagedSpace) | measure max(TimeGenerated) by Computer | top 500000 | Sort Computer // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PTT: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "Version": 2
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: 'subscriptions/d0d422cd-e446-42aa-a2e2-e88806508d3b/resourceGroups/SparkMonitoring-test/providers/Microsoft.OperationalInsights/workspaces/sparkmonitoring-test/savedSearches/LogManagement(sparkmonitoring-test)_General|StaleComputers'.",
+            "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+            "name": "[concat(parameters('workspaces_sparkmonitoring_test_name'), '/', parameters('savedSearches_LogManagement(sparkmonitoring_test)_General|StaleComputers_name'))]",
+            "apiVersion": "2015-03-20",
+            "scale": null,
+            "properties": {
+                "DisplayName": "Stale Computers (data older than 24 hours)",
+                "Category": "General Exploration",
+                "Query": "search not(ObjectName == \"Advisor Metrics\" or ObjectName == \"ManagedSpace\") | summarize lastdata = max(TimeGenerated) by Computer | limit 500000 | where lastdata < ago(24h)\r\n// Oql: NOT(ObjectName=\"Advisor Metrics\" OR ObjectName=ManagedSpace) | measure max(TimeGenerated) as lastdata by Computer | top 500000 | where lastdata < NOW-24HOURS // Args: {OQ: True; WorkspaceId: 00000000-0000-0000-0000-000000000000} // Settings: {PTT: True; SortI: True; SortF: True} // Version: 0.1.122",
+                "Version": 2
+            },
+            "dependsOn": []
+        }
+    ]
+}
