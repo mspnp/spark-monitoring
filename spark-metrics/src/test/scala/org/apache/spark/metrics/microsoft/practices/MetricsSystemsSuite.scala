@@ -5,16 +5,16 @@ import org.apache.spark._
 import org.mockito.Mockito.mock
 import org.scalatest.BeforeAndAfterEach
 
-object MetricsSystemsSuite {
-  val MetricNamespace = "testmetrics"
-  val CounterName = "testcounter"
-  val HistogramName = "testhistogram"
-  val MeterName = "testmeter"
-  val TimerName = "testtimer"
-  val SettableGaugeName = "testsettablegauge"
-  val GaugeName = "testrandomgauge"
-  val InvalidCounterName = "invalidcounter"
-}
+//object MetricsSystemsSuite {
+//  val MetricNamespace = "testmetrics"
+//  val CounterName = "testcounter"
+//  val HistogramName = "testhistogram"
+//  val MeterName = "testmeter"
+//  val TimerName = "testtimer"
+//  val SettableGaugeName = "testsettablegauge"
+//  val GaugeName = "testrandomgauge"
+//  val InvalidCounterName = "invalidcounter"
+//}
 
 class LocalMetricsSystemsSuite extends SparkFunSuite
   with BeforeAndAfterEach {

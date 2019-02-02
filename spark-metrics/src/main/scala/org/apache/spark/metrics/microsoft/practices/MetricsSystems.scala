@@ -9,7 +9,7 @@ import com.github.dwickern.macros.NameOf._
 // These will only be created on executors
 private[metrics] class RpcMetricsSystem(
                                          private val metricsSource: MetricsSource
-                                       ) extends MetricsSystem with Logging {
+                                       ) extends UserMetricsSystem with Logging {
 
   require(metricsSource != null, s"${nameOf(metricsSource)} cannot be null")
 
@@ -49,7 +49,7 @@ private[metrics] class RpcMetricsSystem(
 // These can be created on the driver and the executors.
 class LocalMetricsSystem(
                           metricsSource: MetricsSource
-                        ) extends MetricsSystem {
+                        ) extends UserMetricsSystem {
 
   require(metricsSource != null, s"${nameOf(metricsSource)} cannot be null")
 

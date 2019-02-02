@@ -10,7 +10,7 @@ import org.mockito.AdditionalAnswers
 
 import scala.reflect.ClassTag
 
-object CustomMetricsSystemSuite {
+object MetricsSystemsSuite {
   val MetricNamespace = "testmetrics"
   val DriverMetricNamespace = "testdrivermetrics"
   val ExecutorMetricNamespace = "testexecutormetrics"
@@ -23,9 +23,12 @@ object CustomMetricsSystemSuite {
 
   val NamespaceFieldName = "namespace"
   val EndpointNameFieldName = "endpointName"
+
+  val GaugeName = "testrandomgauge"
+  val InvalidCounterName = "invalidcounter"
 }
 
-class CustomMetricsSystemSuite extends SparkFunSuite
+class MetricsSystemsSuite extends SparkFunSuite
   with BeforeAndAfterEach
   with LocalSparkContext {
 
@@ -57,10 +60,10 @@ class CustomMetricsSystemSuite extends SparkFunSuite
     val envMetricsSystem = mock(classOf[org.apache.spark.metrics.MetricsSystem])
     when(env.metricsSystem).thenReturn(envMetricsSystem)
     when(env.executorId).thenReturn(SparkContext.DRIVER_IDENTIFIER)
-    val metricsSystem = CustomMetricsSystem.getMetricSystem(
-      CustomMetricsSystemSuite.DriverMetricNamespace,
+    val metricsSystem = MetricsSystems.getMetricSystem(
+      MetricsSystemsSuite.DriverMetricNamespace,
       (builder) => {
-        builder.registerCounter(CustomMetricsSystemSuite.CounterName)
+        builder.registerCounter(MetricsSystemsSuite.CounterName)
       }
     )
 
@@ -68,7 +71,7 @@ class CustomMetricsSystemSuite extends SparkFunSuite
     import TestImplicits.matcher
     verify(envMetricsSystem, times(1)).registerSource(
       argThat((source: org.apache.spark.metrics.source.Source) => source.metricRegistry.counter(
-        CustomMetricsSystemSuite.CounterName
+        MetricsSystemsSuite.CounterName
       ) != null))
   }
 
@@ -76,10 +79,10 @@ class CustomMetricsSystemSuite extends SparkFunSuite
     val envMetricsSystem = mock(classOf[org.apache.spark.metrics.MetricsSystem])
     when(env.metricsSystem).thenReturn(envMetricsSystem)
     when(env.executorId).thenReturn("0")
-    val metricsSystem = CustomMetricsSystem.getMetricSystem(
-      CustomMetricsSystemSuite.ExecutorMetricNamespace,
+    val metricsSystem = MetricsSystems.getMetricSystem(
+      MetricsSystemsSuite.ExecutorMetricNamespace,
       (builder) => {
-        builder.registerCounter(CustomMetricsSystemSuite.CounterName)
+        builder.registerCounter(MetricsSystemsSuite.CounterName)
       }
     )
 
@@ -87,7 +90,7 @@ class CustomMetricsSystemSuite extends SparkFunSuite
     import TestImplicits.matcher
     verify(envMetricsSystem, times(1)).registerSource(
       argThat((source: org.apache.spark.metrics.source.Source) => source.metricRegistry.counter(
-        CustomMetricsSystemSuite.CounterName
+        MetricsSystemsSuite.CounterName
       ) != null))
   }
 
@@ -98,7 +101,7 @@ class CustomMetricsSystemSuite extends SparkFunSuite
   test("buildReceiverMetricsSystem succeeds when invoked on a driver") {
     val lambda = spyLambda((builder: ReceiverMetricSystemBuilder) => {})
     when(env.executorId).thenReturn(SparkContext.DRIVER_IDENTIFIER)
-    CustomMetricsSystem.buildReceiverMetricSystem(
+    MetricsSystems.buildReceiverMetricSystem(
       env,
       lambda
     )
@@ -109,7 +112,7 @@ class CustomMetricsSystemSuite extends SparkFunSuite
   test("buildReceiverMetricsSystem throws an IllegalStateException when invoked on an executor") {
     when(env.executorId).thenReturn("0")
     val caught = intercept[IllegalStateException] {
-      CustomMetricsSystem.buildReceiverMetricSystem(
+      MetricsSystems.buildReceiverMetricSystem(
         env,
         (builder) => {}
       )
@@ -122,8 +125,8 @@ class CustomMetricsSystemSuite extends SparkFunSuite
   test("getRemoteMetricsSystem throws an IllegalStateException when invoked on a driver") {
     when(env.executorId).thenReturn(SparkContext.DRIVER_IDENTIFIER)
     val caught = intercept[IllegalStateException] {
-      CustomMetricsSystem.getRemoteMetricSystem(
-        CustomMetricsSystemSuite.MetricNamespace,
+      MetricsSystems.getRemoteMetricSystem(
+        MetricsSystemsSuite.MetricNamespace,
         (builder) => {}
       )
     }
@@ -135,8 +138,8 @@ class CustomMetricsSystemSuite extends SparkFunSuite
   test("getRemoteMetricsSystem succeeds when invoked on an executor") {
     val lambda = spyLambda((builder: RemoteMetricsSourceBuilder) => {})
     when(env.executorId).thenReturn("0")
-    val metricSystem = CustomMetricsSystem.getRemoteMetricSystem(
-      CustomMetricsSystemSuite.MetricNamespace,
+    val metricSystem = MetricsSystems.getRemoteMetricSystem(
+      MetricsSystemsSuite.MetricNamespace,
       lambda
     )
 

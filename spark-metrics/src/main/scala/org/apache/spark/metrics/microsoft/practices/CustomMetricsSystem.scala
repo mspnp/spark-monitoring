@@ -17,7 +17,7 @@ import scala.reflect.{ClassTag, classTag}
 import com.github.dwickern.macros.NameOf._
 import Implicits.StringExtensions
 
-trait MetricsSystem {
+trait UserMetricsSystem {
   def counter(metricName: String): Counter
 
   def histogram(metricName: String): Histogram
@@ -29,10 +29,10 @@ trait MetricsSystem {
   def gauge[T](metricName: String): SettableGauge[T]
 }
 
-object CustomMetricsSystem extends Logging {
+object MetricsSystems extends Logging {
   // This is for registries local to our current environment (i.e. driver or executor)
   @transient private lazy val metricsSystems =
-    new ConcurrentHashMap[String, MetricsSystem].asScala
+    new ConcurrentHashMap[String, UserMetricsSystem].asScala
 
   // This method is only for "local" (i.e. driver OR executor) metrics.
   // These systems can be queried and used by name.
