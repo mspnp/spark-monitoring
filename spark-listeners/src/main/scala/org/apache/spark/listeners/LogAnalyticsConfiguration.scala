@@ -1,5 +1,6 @@
-package org.apache.spark
+package org.apache.spark.listeners
 
+import org.apache.spark.SparkConf
 import org.apache.spark.internal.Logging
 
 private[spark] trait LogAnalyticsConfiguration extends Logging {

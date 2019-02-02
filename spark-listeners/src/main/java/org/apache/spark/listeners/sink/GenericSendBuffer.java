@@ -1,4 +1,4 @@
-package org.apache.spark.listeners.microsoft.pnp;
+package org.apache.spark.listeners.sink;
 
 import java.util.concurrent.*;
 import org.slf4j.Logger;

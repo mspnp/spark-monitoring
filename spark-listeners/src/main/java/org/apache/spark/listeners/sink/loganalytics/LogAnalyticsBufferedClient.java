@@ -1,4 +1,4 @@
-package org.apache.spark.listeners.microsoft.pnp.loganalytics;
+package org.apache.spark.listeners.sink.loganalytics;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

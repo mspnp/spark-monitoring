@@ -1,8 +1,8 @@
-package org.apache.spark.listeners.microsoft.pnp.eventhubs;
+package org.apache.spark.listeners.sink.eventhubs;
 
 import com.microsoft.azure.eventhubs.EventHubClient;
-import org.apache.spark.listeners.microsoft.pnp.GenericSendBuffer;
-import org.apache.spark.listeners.microsoft.pnp.GenericSendBufferTask;
+import org.apache.spark.listeners.sink.GenericSendBuffer;
+import org.apache.spark.listeners.sink.GenericSendBufferTask;
 
 public class EventHubsSendBuffer extends GenericSendBuffer<String> {
     // We will leave this at 25MB, since the Log Analytics limit is 30MB.

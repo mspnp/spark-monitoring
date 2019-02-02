@@ -1,4 +1,4 @@
-package org.apache.spark.listeners.microsoft.pnp.eventhubs;
+package org.apache.spark.listeners.sink.eventhubs;
 
 import com.microsoft.azure.eventhubs.EventHubClient;
 import org.slf4j.Logger;

@@ -1,4 +1,4 @@
-package org.apache.spark.listeners.microsoft.pnp.loganalytics;
+package com.microsoft.pnp.loganalytics;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;

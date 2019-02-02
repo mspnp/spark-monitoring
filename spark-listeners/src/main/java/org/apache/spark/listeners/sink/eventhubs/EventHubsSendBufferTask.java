@@ -1,10 +1,9 @@
-package org.apache.spark.listeners.microsoft.pnp.eventhubs;
+package org.apache.spark.listeners.sink.eventhubs;
 
 import com.microsoft.azure.eventhubs.EventData;
 import com.microsoft.azure.eventhubs.EventDataBatch;
 import com.microsoft.azure.eventhubs.EventHubClient;
-import com.microsoft.azure.eventhubs.EventHubException;
-import org.apache.spark.listeners.microsoft.pnp.GenericSendBufferTask;
+import org.apache.spark.listeners.sink.GenericSendBufferTask;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

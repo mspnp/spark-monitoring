@@ -1,4 +1,4 @@
-package org.apache.spark.listeners.microsoft.pnp.loganalytics;
+package com.microsoft.pnp.loganalytics;
 
 import java.io.IOException;
 import java.util.ArrayList;

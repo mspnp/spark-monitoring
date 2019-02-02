@@ -1,8 +1,8 @@
 package org.apache.spark.listeners
 
 import org.apache.spark.internal.Logging
-import org.apache.spark.listeners.microsoft.pnp.loganalytics.{LogAnalyticsClient, LogAnalyticsSendBufferClient}
-import org.apache.spark.{LogAnalyticsListenerConfiguration, SparkConf}
+import org.apache.spark.listeners.sink.loganalytics.{LogAnalyticsClient, LogAnalyticsSendBufferClient}
+import org.apache.spark.SparkConf
 import org.json4s.JsonAST
 import org.json4s.jackson.JsonMethods.compact
 

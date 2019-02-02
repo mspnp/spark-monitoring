@@ -1,4 +1,4 @@
-package org.apache.spark.listeners.microsoft.pnp.loganalytics;
+package com.microsoft.pnp.loganalytics;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpHeaders;
@@ -35,7 +35,7 @@ public class LogAnalyticsClient implements Closeable {
     @Override
     public void close() throws IOException {
         if (this.httpClient instanceof Closeable) {
-            ((Closeable)this.httpClient).close();
+            ((Closeable) this.httpClient).close();
         }
     }
 
@@ -59,17 +59,17 @@ public class LogAnalyticsClient implements Closeable {
     }
 
     public LogAnalyticsClient(String workspaceId, String workspaceKey,
-                               HttpClient httpClient) {
+                              HttpClient httpClient) {
         this(workspaceId, workspaceKey, httpClient, DEFAULT_URL_SUFFIX);
     }
 
     public LogAnalyticsClient(String workspaceId, String workspaceKey,
-                               HttpClient httpClient, String urlSuffix) {
+                              HttpClient httpClient, String urlSuffix) {
         this(workspaceId, workspaceKey, httpClient, urlSuffix, DEFAULT_API_VERSION);
     }
 
     public LogAnalyticsClient(String workspaceId, String workspaceKey,
-                               HttpClient httpClient, String urlSuffix, String apiVersion) {
+                              HttpClient httpClient, String urlSuffix, String apiVersion) {
         if (isNullOrWhitespace(workspaceId)) {
             throw new IllegalArgumentException("workspaceId cannot be null, empty, or only whitespace");
         }
@@ -147,7 +147,7 @@ public class LogAnalyticsClient implements Closeable {
                 }
             } finally {
                 if (httpResponse instanceof Closeable) {
-                    ((Closeable)httpResponse).close();
+                    ((Closeable) httpResponse).close();
                 }
             }
         } catch (Exception ex) {
