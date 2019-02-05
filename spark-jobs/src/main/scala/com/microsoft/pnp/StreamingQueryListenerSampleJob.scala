@@ -1,6 +1,5 @@
 package com.microsoft.pnp
 
-import org.apache.spark.listeners.LogAnalyticsStreamingQueryListener
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.functions.window
 import org.apache.spark.sql.types.{StringType, StructType, TimestampType}
@@ -14,8 +13,6 @@ object StreamingQueryListenerSampleJob {
       .getOrCreate
 
     import spark.implicits._
-
-    spark.streams.addListener(new LogAnalyticsStreamingQueryListener(spark.sparkContext.getConf))
 
     // this path has sample files provided by databricks for trying out purpose
     val inputPath = "/databricks-datasets/structured-streaming/events/"
