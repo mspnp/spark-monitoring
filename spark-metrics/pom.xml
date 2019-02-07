@@ -55,31 +55,31 @@
                 <!-- see http://davidb.github.com/scala-maven-plugin -->
                 <groupId>net.alchim31.maven</groupId>
                 <artifactId>scala-maven-plugin</artifactId>
-                <version>3.4.2</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>compile</goal>
-                            <goal>testCompile</goal>
-                        </goals>
-                        <configuration>
-                            <scalaVersion>${scala.version}</scalaVersion>
-                            <scalaCompatVersion>${scala.compat.version}</scalaCompatVersion>
-                            <args>
-                                <arg>-target:jvm-${maven.compiler.target}</arg>
-                                <arg>-dependencyfile</arg>
-                                <arg>${project.build.directory}/.scala_dependencies</arg>
-                            </args>
-                            <javacArgs>
-                                <javacArg>-source</javacArg>
-                                <javacArg>${maven.compiler.source}</javacArg>
-                                <javacArg>-target</javacArg>
-                                <javacArg>${maven.compiler.target}</javacArg>
-                                <javacArg>-Xcheckinit</javacArg>
-                            </javacArgs>
-                        </configuration>
-                    </execution>
-                </executions>
+                <!--<version>3.4.2</version>-->
+                <!--<executions>-->
+                    <!--<execution>-->
+                        <!--<goals>-->
+                            <!--<goal>compile</goal>-->
+                            <!--<goal>testCompile</goal>-->
+                        <!--</goals>-->
+                        <!--<configuration>-->
+                            <!--<scalaVersion>${scala.version}</scalaVersion>-->
+                            <!--<scalaCompatVersion>${scala.compat.version}</scalaCompatVersion>-->
+                            <!--<args>-->
+                                <!--<arg>-target:jvm-${maven.compiler.target}</arg>-->
+                                <!--<arg>-dependencyfile</arg>-->
+                                <!--<arg>${project.build.directory}/.scala_dependencies</arg>-->
+                            <!--</args>-->
+                            <!--<javacArgs>-->
+                                <!--<javacArg>-source</javacArg>-->
+                                <!--<javacArg>${maven.compiler.source}</javacArg>-->
+                                <!--<javacArg>-target</javacArg>-->
+                                <!--<javacArg>${maven.compiler.target}</javacArg>-->
+                                <!--<javacArg>-Xcheckinit</javacArg>-->
+                            <!--</javacArgs>-->
+                        <!--</configuration>-->
+                    <!--</execution>-->
+                <!--</executions>-->
             </plugin>
             <plugin>
                 <groupId>org.scoverage</groupId>

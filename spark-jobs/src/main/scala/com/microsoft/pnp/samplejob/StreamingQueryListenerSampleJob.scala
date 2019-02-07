@@ -1,12 +1,28 @@
-package com.microsoft.pnp
+package com.microsoft.pnp.samplejob
 
+import com.microsoft.pnp.logging.Log4jConfiguration
+import com.microsoft.pnp.util.TryWith
+import org.apache.spark.internal.Logging
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.functions.window
 import org.apache.spark.sql.types.{StringType, StructType, TimestampType}
 
-object StreamingQueryListenerSampleJob {
+object StreamingQueryListenerSampleJob extends Logging {
 
   def main(args: Array[String]): Unit = {
+
+    // Configure our logging
+    TryWith(getClass.getResourceAsStream("/com/microsoft/pnp/samplejob/log4j.properties")) {
+      stream => {
+        Log4jConfiguration.configure(stream)
+      }
+    }
+
+    logTrace("Trace message from StreamingQueryListenerSampleJob")
+    logDebug("Debug message from StreamingQueryListenerSampleJob")
+    logInfo("Info message from StreamingQueryListenerSampleJob")
+    logWarning("Warning message from StreamingQueryListenerSampleJob")
+    logError("Error message from StreamingQueryListenerSampleJob")
 
     val spark = SparkSession
       .builder

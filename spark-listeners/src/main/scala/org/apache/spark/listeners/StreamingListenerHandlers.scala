@@ -49,6 +49,8 @@ trait StreamingListenerHandlers {
   protected val streamingListenerEventClassTag: ClassTag[SparkListenerEvent] =
     ClassTag[SparkListenerEvent](this.wrappedStreamingListenerEventClass)
 
+  import scala.language.implicitConversions
+
   // Unwrap the StreamingListenerEvent from the Spark-owned private, inner class
   protected implicit def wrappedStreamingListenerEventToStreamingListenerEvent(event: SparkListenerEvent): Option[StreamingListenerEvent] = {
     val instanceMirror: ru.InstanceMirror = ru.runtimeMirror(

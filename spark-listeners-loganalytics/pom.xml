@@ -20,6 +20,10 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.microsoft.pnp</groupId>
             <artifactId>spark-listeners</artifactId>
             <version>1.0-SNAPSHOT</version>

@@ -5,6 +5,8 @@ import org.mockito.ArgumentMatcher
 import scala.reflect.ClassTag
 
 object TestImplicits {
+  import scala.language.implicitConversions
+
   implicit def matcher[T](f: (T) => Boolean): ArgumentMatcher[T] =
     new ArgumentMatcher[T]() {
       def matches(o: Any): Boolean = f(o.asInstanceOf[T])

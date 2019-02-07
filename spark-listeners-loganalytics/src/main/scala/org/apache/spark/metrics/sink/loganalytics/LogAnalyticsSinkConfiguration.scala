@@ -3,6 +3,7 @@ package org.apache.spark.metrics.sink.loganalytics
 import java.util.Properties
 import java.util.concurrent.TimeUnit
 
+import com.microsoft.pnp.LogAnalyticsEnvironment
 import org.apache.spark.LogAnalyticsConfiguration
 
 private[spark] object LogAnalyticsSinkConfiguration {
@@ -24,11 +25,11 @@ private[spark] class LogAnalyticsSinkConfiguration(properties: Properties)
   import LogAnalyticsSinkConfiguration._
 
   override def getWorkspaceId: Option[String] = {
-    Option(properties.getProperty(LOGANALYTICS_KEY_WORKSPACEID))
+    Option(properties.getProperty(LOGANALYTICS_KEY_WORKSPACEID, LogAnalyticsEnvironment.getWorkspaceId))
   }
 
   override def getSecret: Option[String] = {
-    Option(properties.getProperty(LOGANALYTICS_KEY_SECRET))
+    Option(properties.getProperty(LOGANALYTICS_KEY_SECRET, LogAnalyticsEnvironment.getWorkspaceKey))
   }
 
   override protected def getLogType: String =

@@ -10,7 +10,7 @@ import org.json4s.jackson.JsonMethods.compact
 import scala.util.control.NonFatal
 
 class LogAnalyticsListenerSink(conf: SparkConf) extends SparkListenerSink with Logging {
-  private val config = new LogAnalyticsListenerConfiguration(conf)
+  private val config = new LogAnalyticsListenerSinkConfiguration(conf)
 
 
   protected lazy val logAnalyticsBufferedClient = new LogAnalyticsSendBufferClient(

@@ -65,6 +65,12 @@
                 <scope>provided</scope>
             </dependency>
             <dependency>
+                <groupId>log4j</groupId>
+                <artifactId>log4j</artifactId>
+                <version>1.2.17</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
                 <groupId>commons-codec</groupId>
                 <artifactId>commons-codec</artifactId>
                 <version>1.10</version>
@@ -160,6 +166,7 @@
                                 <scalaCompatVersion>${scala.compat.version}</scalaCompatVersion>
                                 <args>
                                     <arg>-target:jvm-${maven.compiler.target}</arg>
+                                    <arg>-feature</arg>
                                     <arg>-dependencyfile</arg>
                                     <arg>${project.build.directory}/.scala_dependencies</arg>
                                 </args>

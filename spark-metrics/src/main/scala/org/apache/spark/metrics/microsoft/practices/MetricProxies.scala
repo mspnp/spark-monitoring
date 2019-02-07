@@ -8,6 +8,8 @@ import org.apache.spark.rpc.RpcEndpointRef
 import scala.reflect.ClassTag
 
 object MetricsProxiesImplicits {
+  import scala.language.implicitConversions
+
   implicit def callable[T](f: () => T): Callable[T] =
     new Callable[T]() { def call() = f() }
 }

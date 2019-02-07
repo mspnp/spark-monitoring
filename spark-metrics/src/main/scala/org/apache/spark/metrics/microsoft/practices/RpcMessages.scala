@@ -22,6 +22,8 @@ private[metrics] case class SettableGaugeMessage[T](
                                                                    override val value: T
                                                                    ) extends MetricMessage[T]
 
+import scala.language.existentials
+
 private[metrics] case class HistogramMessage(
                                             override val namespace: String,
                                             override val metricName: String,
