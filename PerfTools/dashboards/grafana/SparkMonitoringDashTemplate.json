@@ -102,7 +102,7 @@
             "yaxis": ""
           },
           "azureLogAnalytics": {
-            "query": "let results=SparkListenerEvent_CL\n| where $__timeFilter(TimeGenerated)\n| where  Event_s  contains \"SparkListenerJobStart\"\n| project Job_ID_d,Properties_callSite_short_s,Submission_Time_d,TimeGenerated\n| order by TimeGenerated asc  nulls last \n| join kind= inner (\n    SparkListenerEvent_CL\n    | where $__timeFilter(TimeGenerated)\n    | where Event_s contains \"SparkListenerJobEnd\"\n    | where Job_Result_Result_s contains \"JobSucceeded\"\n    | project Event_s,Job_ID_d,Completion_Time_d,TimeGenerated\n) on Job_ID_d;\nresults\n| extend slice=strcat(Properties_callSite_short_s,\"_90%\")\n| extend jobDuration=Completion_Time_d - Submission_Time_d \n| summarize percentile(jobDuration,90)  by bin(TimeGenerated,  1m), slice\n| order by TimeGenerated asc nulls last",
+            "query": "let results=SparkListenerEvent_CL\r\n| where $__timeFilter(TimeGenerated)\r\n| where  Event_s  contains \"SparkListenerJobStart\"\r\n| project Job_ID_d,Properties_spark_app_id_s,Properties_spark_databricks_clusterUsageTags_clusterName_s,\r\nSubmission_Time_d,TimeGenerated\r\n| order by TimeGenerated asc  nulls last \r\n| join kind= inner (\r\n    SparkListenerEvent_CL\r\n    | where $__timeFilter(TimeGenerated)\r\n    | where Event_s contains \"SparkListenerJobEnd\"\r\n    | where Job_Result_Result_s contains \"JobSucceeded\"\r\n    | project Event_s,Job_ID_d,Completion_Time_d,TimeGenerated\r\n) on Job_ID_d;\r\nresults\r\n| extend slice=strcat(Properties_spark_databricks_clusterUsageTags_clusterName_s,\"-\",Properties_spark_app_id_s,\"_90%\")\r\n| extend jobDuration=Completion_Time_d - Submission_Time_d \r\n| summarize percentile(jobDuration,90)  by bin(TimeGenerated,  1m), slice\r\n| order by TimeGenerated asc nulls last",
             "resultFormat": "time_series",
    			"workspace" : "YOUR_WORKSPACEID"
           },
@@ -129,7 +129,7 @@
             "yaxis": ""
           },
           "azureLogAnalytics": {
-            "query": "let results=SparkListenerEvent_CL\n| where $__timeFilter(TimeGenerated)\n| where  Event_s  contains \"SparkListenerJobStart\"\n| project Job_ID_d,Properties_callSite_short_s,Submission_Time_d,TimeGenerated\n| order by TimeGenerated asc  nulls last \n| join kind= inner (\n    SparkListenerEvent_CL\n    | where $__timeFilter(TimeGenerated)\n    | where Event_s contains \"SparkListenerJobEnd\"\n    | where Job_Result_Result_s contains \"JobSucceeded\"\n    | project Event_s,Job_ID_d,Completion_Time_d,TimeGenerated\n) on Job_ID_d;\nresults\n| extend slice=strcat(Properties_callSite_short_s,\"_50%\")\n| extend jobDuration=Completion_Time_d - Submission_Time_d \n| summarize percentile(jobDuration,50)  by bin(TimeGenerated,  1m), slice\n| order by TimeGenerated asc nulls last",
+            "query": "let results=SparkListenerEvent_CL\n| where $__timeFilter(TimeGenerated)\n| where  Event_s  contains \"SparkListenerJobStart\"\n| project Job_ID_d,Properties_spark_app_id_s,Properties_spark_databricks_clusterUsageTags_clusterName_s,\nSubmission_Time_d,TimeGenerated\n| order by TimeGenerated asc  nulls last \n| join kind= inner (\n    SparkListenerEvent_CL\n    | where $__timeFilter(TimeGenerated)\n    | where Event_s contains \"SparkListenerJobEnd\"\n    | where Job_Result_Result_s contains \"JobSucceeded\"\n    | project Event_s,Job_ID_d,Completion_Time_d,TimeGenerated\n) on Job_ID_d;\nresults\n| extend slice=strcat(Properties_spark_databricks_clusterUsageTags_clusterName_s,\"-\",Properties_spark_app_id_s,\"_50%\")\n| extend jobDuration=Completion_Time_d - Submission_Time_d \n| summarize percentile(jobDuration,50)  by bin(TimeGenerated,  1m), slice\n| order by TimeGenerated asc nulls last",
             "resultFormat": "time_series",
    			"workspace" : "YOUR_WORKSPACEID"
           },
@@ -156,7 +156,7 @@
             "yaxis": ""
           },
           "azureLogAnalytics": {
-            "query": "let results=SparkListenerEvent_CL\n| where $__timeFilter(TimeGenerated)\n| where  Event_s  contains \"SparkListenerJobStart\"\n| project Job_ID_d,Properties_callSite_short_s,Submission_Time_d,TimeGenerated\n| order by TimeGenerated asc  nulls last \n| join kind= inner (\n    SparkListenerEvent_CL\n    | where $__timeFilter(TimeGenerated)\n    | where Event_s contains \"SparkListenerJobEnd\"\n    | where Job_Result_Result_s contains \"JobSucceeded\"\n    | project Event_s,Job_ID_d,Completion_Time_d,TimeGenerated\n) on Job_ID_d;\nresults\n| extend slice=strcat(Properties_callSite_short_s,\"_30%\")\n| extend jobDuration=Completion_Time_d - Submission_Time_d \n| summarize percentile(jobDuration,30)  by bin(TimeGenerated,  1m), slice\n| order by TimeGenerated asc nulls last",
+            "query": "let results=SparkListenerEvent_CL\n| where $__timeFilter(TimeGenerated)\n| where  Event_s  contains \"SparkListenerJobStart\"\n| project Job_ID_d,Properties_spark_app_id_s,Properties_spark_databricks_clusterUsageTags_clusterName_s,\nSubmission_Time_d,TimeGenerated\n| order by TimeGenerated asc  nulls last \n| join kind= inner (\n    SparkListenerEvent_CL\n    | where $__timeFilter(TimeGenerated)\n    | where Event_s contains \"SparkListenerJobEnd\"\n    | where Job_Result_Result_s contains \"JobSucceeded\"\n    | project Event_s,Job_ID_d,Completion_Time_d,TimeGenerated\n) on Job_ID_d;\nresults\n| extend slice=strcat(Properties_spark_databricks_clusterUsageTags_clusterName_s,\"-\",Properties_spark_app_id_s,\"_30%\")\n| extend jobDuration=Completion_Time_d - Submission_Time_d \n| summarize percentile(jobDuration,30)  by bin(TimeGenerated,  1m), slice\n| order by TimeGenerated asc nulls last",
             "resultFormat": "time_series",
    			"workspace" : "YOUR_WORKSPACEID"
           },
@@ -183,7 +183,7 @@
             "yaxis": ""
           },
           "azureLogAnalytics": {
-            "query": "let results=SparkListenerEvent_CL\n| where $__timeFilter(TimeGenerated)\n| where  Event_s  contains \"SparkListenerJobStart\"\n| project Job_ID_d,Properties_callSite_short_s,Submission_Time_d,TimeGenerated\n| order by TimeGenerated asc  nulls last \n| join kind= inner (\n    SparkListenerEvent_CL\n    | where $__timeFilter(TimeGenerated)\n    | where Event_s contains \"SparkListenerJobEnd\"\n    | where Job_Result_Result_s contains \"JobSucceeded\"\n    | project Event_s,Job_ID_d,Completion_Time_d,TimeGenerated\n) on Job_ID_d;\nresults\n| extend slice=strcat(Properties_callSite_short_s,\"_10%\")\n| extend jobDuration=Completion_Time_d - Submission_Time_d \n| summarize percentile(jobDuration,10)  by bin(TimeGenerated,  1m), slice\n| order by TimeGenerated asc nulls last",
+            "query": "let results=SparkListenerEvent_CL\n| where $__timeFilter(TimeGenerated)\n| where  Event_s  contains \"SparkListenerJobStart\"\n| project Job_ID_d,Properties_spark_app_id_s,Properties_spark_databricks_clusterUsageTags_clusterName_s,\nSubmission_Time_d,TimeGenerated\n| order by TimeGenerated asc  nulls last \n| join kind= inner (\n    SparkListenerEvent_CL\n    | where $__timeFilter(TimeGenerated)\n    | where Event_s contains \"SparkListenerJobEnd\"\n    | where Job_Result_Result_s contains \"JobSucceeded\"\n    | project Event_s,Job_ID_d,Completion_Time_d,TimeGenerated\n) on Job_ID_d;\nresults\n| extend slice=strcat(Properties_spark_databricks_clusterUsageTags_clusterName_s,\"-\",Properties_spark_app_id_s,\"_10%\")\n| extend jobDuration=Completion_Time_d - Submission_Time_d \n| summarize percentile(jobDuration,10)  by bin(TimeGenerated,  1m), slice\n| order by TimeGenerated asc nulls last",
             "resultFormat": "time_series",
    			"workspace" : "YOUR_WORKSPACEID"
           },
@@ -287,7 +287,7 @@
             "yaxis": ""
           },
           "azureLogAnalytics": {
-            "query": "SparkListenerEvent_CL\n| where $__timeFilter(TimeGenerated)\n| where Event_s contains \"SparkListenerStageCompleted\" \n| extend stage_query = strcat(Stage_Info_Stage_Name_s,\"_90%\") \n| extend stageDuration=Stage_Info_Completion_Time_d - Stage_Info_Submission_Time_d \n| summarize percentile(stageDuration,90)  by bin(TimeGenerated,  1m), stage_query\n| order by TimeGenerated asc nulls last\n\n",
+            "query": "let results=SparkListenerEvent_CL\n| where $__timeFilter(TimeGenerated)\n| where  Event_s  contains \"SparkListenerStageSubmitted\"\n| project \nStage_Info_Stage_ID_d,Properties_spark_app_id_s,TimeGenerated,Properties_spark_databricks_clusterUsageTags_clusterName_s\n| order by TimeGenerated asc  nulls last \n| join kind= inner (\n    SparkListenerEvent_CL\n    | where $__timeFilter(TimeGenerated)\n    | where Event_s contains \"SparkListenerStageCompleted\"  \n    | extend stageDuration=Stage_Info_Completion_Time_d - Stage_Info_Submission_Time_d\n) on Stage_Info_Stage_ID_d;\nresults\n | extend slice = strcat(Properties_spark_databricks_clusterUsageTags_clusterName_s,\"-\",\nProperties_spark_app_id_s,\" \",Stage_Info_Stage_Name_s,\"_90%\") \n| extend stageDuration=Stage_Info_Completion_Time_d - Stage_Info_Submission_Time_d \n| summarize percentile(stageDuration,90)  by bin(TimeGenerated,  1m), slice\n| order by TimeGenerated asc nulls last\n\n",
             "resultFormat": "time_series",
    			"workspace" : "YOUR_WORKSPACEID"
           },
@@ -314,7 +314,7 @@
             "yaxis": ""
           },
           "azureLogAnalytics": {
-            "query": "SparkListenerEvent_CL\n| where $__timeFilter(TimeGenerated)\n| where Event_s contains \"SparkListenerStageCompleted\" \n| extend stage_query = strcat(Stage_Info_Stage_Name_s,\"_50%\") \n| extend stageDuration=Stage_Info_Completion_Time_d - Stage_Info_Submission_Time_d \n| summarize percentile(stageDuration,50)  by bin(TimeGenerated,  1m), stage_query\n| order by TimeGenerated asc nulls last\n\n",
+            "query": "let results=SparkListenerEvent_CL\n| where $__timeFilter(TimeGenerated)\n| where  Event_s  contains \"SparkListenerStageSubmitted\"\n| project \nStage_Info_Stage_ID_d,Properties_spark_app_id_s,TimeGenerated,Properties_spark_databricks_clusterUsageTags_clusterName_s\n| order by TimeGenerated asc  nulls last \n| join kind= inner (\n    SparkListenerEvent_CL\n    | where $__timeFilter(TimeGenerated)\n    | where Event_s contains \"SparkListenerStageCompleted\"  \n    | extend stageDuration=Stage_Info_Completion_Time_d - Stage_Info_Submission_Time_d\n) on Stage_Info_Stage_ID_d;\nresults\n | extend slice = strcat(Properties_spark_databricks_clusterUsageTags_clusterName_s,\"-\",\nProperties_spark_app_id_s,\" \",Stage_Info_Stage_Name_s,\"_50%\") \n| extend stageDuration=Stage_Info_Completion_Time_d - Stage_Info_Submission_Time_d \n| summarize percentile(stageDuration,50)  by bin(TimeGenerated,  1m), slice\n| order by TimeGenerated asc nulls last\n\n",
             "resultFormat": "time_series",
    			"workspace" : "YOUR_WORKSPACEID"
           },
@@ -341,7 +341,7 @@
             "yaxis": ""
           },
           "azureLogAnalytics": {
-            "query": "SparkListenerEvent_CL\n| where $__timeFilter(TimeGenerated)\n| where Event_s contains \"SparkListenerStageCompleted\" \n| extend stage_query = strcat(Stage_Info_Stage_Name_s,\"_30%\") \n| extend stageDuration=Stage_Info_Completion_Time_d - Stage_Info_Submission_Time_d \n| summarize percentile(stageDuration,30)  by bin(TimeGenerated,  1m), stage_query\n| order by TimeGenerated asc nulls last\n\n",
+            "query": "let results=SparkListenerEvent_CL\n| where $__timeFilter(TimeGenerated)\n| where  Event_s  contains \"SparkListenerStageSubmitted\"\n| project \nStage_Info_Stage_ID_d,Properties_spark_app_id_s,TimeGenerated,Properties_spark_databricks_clusterUsageTags_clusterName_s\n| order by TimeGenerated asc  nulls last \n| join kind= inner (\n    SparkListenerEvent_CL\n    | where $__timeFilter(TimeGenerated)\n    | where Event_s contains \"SparkListenerStageCompleted\"  \n    | extend stageDuration=Stage_Info_Completion_Time_d - Stage_Info_Submission_Time_d\n) on Stage_Info_Stage_ID_d;\nresults\n | extend slice = strcat(Properties_spark_databricks_clusterUsageTags_clusterName_s,\"-\",\nProperties_spark_app_id_s,\" \",Stage_Info_Stage_Name_s,\"_30%\") \n| extend stageDuration=Stage_Info_Completion_Time_d - Stage_Info_Submission_Time_d \n| summarize percentile(stageDuration,30)  by bin(TimeGenerated,  1m), slice\n| order by TimeGenerated asc nulls last\n\n",
             "resultFormat": "time_series",
    			"workspace" : "YOUR_WORKSPACEID"
           },
@@ -368,7 +368,7 @@
             "yaxis": ""
           },
           "azureLogAnalytics": {
-            "query": "SparkListenerEvent_CL\n| where $__timeFilter(TimeGenerated)\n| where Event_s contains \"SparkListenerStageCompleted\" \n| extend stage_query = strcat(Stage_Info_Stage_Name_s,\"_10%\") \n| extend stageDuration=Stage_Info_Completion_Time_d - Stage_Info_Submission_Time_d \n| summarize percentile(stageDuration,10)  by bin(TimeGenerated,  1m), stage_query\n| order by TimeGenerated asc nulls last\n\n",
+            "query": "let results=SparkListenerEvent_CL\n| where $__timeFilter(TimeGenerated)\n| where  Event_s  contains \"SparkListenerStageSubmitted\"\n| project \nStage_Info_Stage_ID_d,Properties_spark_app_id_s,TimeGenerated,Properties_spark_databricks_clusterUsageTags_clusterName_s\n| order by TimeGenerated asc  nulls last \n| join kind= inner (\n    SparkListenerEvent_CL\n    | where $__timeFilter(TimeGenerated)\n    | where Event_s contains \"SparkListenerStageCompleted\"  \n    | extend stageDuration=Stage_Info_Completion_Time_d - Stage_Info_Submission_Time_d\n) on Stage_Info_Stage_ID_d;\nresults\n | extend slice = strcat(Properties_spark_databricks_clusterUsageTags_clusterName_s,\"-\",\nProperties_spark_app_id_s,\" \",Stage_Info_Stage_Name_s,\"_10%\") \n| extend stageDuration=Stage_Info_Completion_Time_d - Stage_Info_Submission_Time_d \n| summarize percentile(stageDuration,10)  by bin(TimeGenerated,  1m), slice\n| order by TimeGenerated asc nulls last\n\n",
             "resultFormat": "time_series",
    			"workspace" : "YOUR_WORKSPACEID"
           },
@@ -434,9 +434,442 @@
       "fill": 1,
       "gridPos": {
         "h": 9,
-        "w": 11,
+        "w": 23,
         "x": 0,
         "y": 9
+      },
+      "id": 49,
+      "legend": {
+        "alignAsTable": true,
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "alias": "TaskShuffleWriteTime start at TaxiCabReader.scala:233",
+          "yaxis": 1
+        },
+        {
+          "alias": "ShuffleBytesWritten start at TaxiCabReader.scala:233",
+          "yaxis": 2
+        },
+        {
+          "alias": "ShuffleBytesRead start at TaxiCabReader.scala:233",
+          "yaxis": 2
+        },
+        {
+          "alias": "InputBytesRead start at TaxiCabReader.scala:233",
+          "yaxis": 2
+        }
+      ],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "appInsights": {
+            "groupBy": "none",
+            "metricName": "select",
+            "rawQuery": false,
+            "rawQueryString": "",
+            "spliton": "",
+            "timeGrainType": "auto",
+            "xaxis": "timestamp",
+            "yaxis": ""
+          },
+          "azureLogAnalytics": {
+            "query": "let result=SparkListenerEvent_CL\n| where   $__timeFilter(TimeGenerated)\n| where  Event_s  contains \"SparkListenerStageSubmitted\"\n| project Stage_Info_Stage_ID_d,Stage_Info_Stage_Name_s,Properties_spark_app_id_s,Properties_spark_databricks_clusterUsageTags_clusterName_s,Event_s,TimeGenerated\n| order by TimeGenerated asc  nulls last \n| join kind= inner (\n    SparkListenerEvent_CL\n    | where $__timeFilter(TimeGenerated)\n    | where Event_s contains \"SparkListenerTaskEnd\"\n    | where Task_End_Reason_Reason_s contains \"Success\"\n    | project Task_Info_Launch_Time_d,Stage_ID_d,Task_Info_Task_ID_d,Event_s,\n              Task_Info_Finish_Time_d\n              ) on $left.Stage_Info_Stage_ID_d == $right.Stage_ID_d;\nresult\n| extend TaskLatency =  Task_Info_Finish_Time_d - Task_Info_Launch_Time_d\n| extend slice=strcat(Properties_spark_databricks_clusterUsageTags_clusterName_s,\"-\",Properties_spark_app_id_s,\"-\",Stage_Info_Stage_Name_s)\n| summarize percentile(TaskLatency,90)  by bin(TimeGenerated,1m),slice\n| order by TimeGenerated asc nulls last;\n",
+            "resultFormat": "time_series",
+   			"workspace" : "YOUR_WORKSPACEID"
+          },
+          "azureMonitor": {
+            "dimensionFilter": "*",
+            "metricDefinition": "select",
+            "metricName": "select",
+            "resourceGroup": "select",
+            "resourceName": "select",
+            "timeGrain": "auto"
+          },
+          "queryType": "Azure Log Analytics",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Task Latency Per Stage ( 90% Percentile)",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "ms",
+          "label": "Latency",
+          "logBase": 2,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "bytes",
+          "label": "Data Size",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "${DS_ALA}",
+      "fill": 1,
+      "gridPos": {
+        "h": 9,
+        "w": 23,
+        "x": 0,
+        "y": 18
+      },
+      "id": 52,
+      "legend": {
+        "alignAsTable": true,
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "alias": "TaskShuffleWriteTime start at TaxiCabReader.scala:233",
+          "yaxis": 1
+        },
+        {
+          "alias": "ShuffleBytesWritten start at TaxiCabReader.scala:233",
+          "yaxis": 2
+        },
+        {
+          "alias": "ShuffleBytesRead start at TaxiCabReader.scala:233",
+          "yaxis": 2
+        },
+        {
+          "alias": "InputBytesRead start at TaxiCabReader.scala:233",
+          "yaxis": 2
+        }
+      ],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "appInsights": {
+            "groupBy": "none",
+            "metricName": "select",
+            "rawQuery": false,
+            "rawQueryString": "",
+            "spliton": "",
+            "timeGrainType": "auto",
+            "xaxis": "timestamp",
+            "yaxis": ""
+          },
+          "azureLogAnalytics": {
+            "query": "let result=SparkListenerEvent_CL\n| where   $__timeFilter(TimeGenerated)\n| where  Event_s  contains \"SparkListenerStageSubmitted\"\n| project Stage_Info_Stage_ID_d,Stage_Info_Stage_Name_s,Stage_Info_Submission_Time_d,Event_s,TimeGenerated,Properties_spark_databricks_clusterUsageTags_clusterName_s,Properties_spark_app_id_s\n| order by TimeGenerated asc  nulls last \n| join kind= inner (\n    SparkListenerEvent_CL\n    | where $__timeFilter(TimeGenerated)\n    | where Event_s contains \"SparkListenerTaskEnd\"\n    | where Task_End_Reason_Reason_s contains \"Success\"\n    | project Task_Info_Launch_Time_d,Stage_ID_d,Task_Info_Task_ID_d,Event_s,\n              Task_Metrics_Executor_Deserialize_Time_d,Task_Metrics_Shuffle_Read_Metrics_Fetch_Wait_Time_d,\n              Task_Metrics_Executor_Run_Time_d,Task_Metrics_Shuffle_Write_Metrics_Shuffle_Write_Time_d,\n              Task_Metrics_Result_Serialization_Time_d,Task_Info_Getting_Result_Time_d,\n              Task_Metrics_Shuffle_Read_Metrics_Remote_Bytes_Read_d,Task_Metrics_Shuffle_Write_Metrics_Shuffle_Bytes_Written_d,\n              Task_Metrics_JVM_GC_Time_d,TimeGenerated\n) on $left.Stage_Info_Stage_ID_d == $right.Stage_ID_d;\nresult\n| extend schedulerdelay = Task_Info_Launch_Time_d - Stage_Info_Submission_Time_d\n| extend name=strcat(\"SchedulerDelayTime \",Properties_spark_databricks_clusterUsageTags_clusterName_s,\"-\",Properties_spark_app_id_s,\" \",Stage_Info_Stage_Name_s)\n| summarize percentile(schedulerdelay,90) , percentile(Task_Metrics_Executor_Run_Time_d,90) by bin(TimeGenerated,1m),name\n| order by TimeGenerated asc nulls last;\n\n",
+            "resultFormat": "time_series",
+   			"workspace" : "YOUR_WORKSPACEID"
+          },
+          "azureMonitor": {
+            "dimensionFilter": "*",
+            "metricDefinition": "select",
+            "metricName": "select",
+            "resourceGroup": "select",
+            "resourceName": "select",
+            "timeGrain": "auto"
+          },
+          "queryType": "Azure Log Analytics",
+          "refId": "A"
+        },
+        {
+          "appInsights": {
+            "groupBy": "none",
+            "metricName": "select",
+            "rawQuery": false,
+            "rawQueryString": "",
+            "spliton": "",
+            "timeGrainType": "auto",
+            "xaxis": "timestamp",
+            "yaxis": ""
+          },
+          "azureLogAnalytics": {
+            "query": "let result=SparkListenerEvent_CL\n| where   $__timeFilter(TimeGenerated)\n| where  Event_s  contains \"SparkListenerStageSubmitted\"\n| project Stage_Info_Stage_ID_d,Stage_Info_Stage_Name_s,Stage_Info_Submission_Time_d,Event_s,TimeGenerated,Properties_spark_databricks_clusterUsageTags_clusterName_s,Properties_spark_app_id_s\n| order by TimeGenerated asc  nulls last\n| join kind= inner (\n    SparkListenerEvent_CL\n    | where $__timeFilter(TimeGenerated)\n    | where Event_s contains \"SparkListenerTaskEnd\"\n    | where Task_End_Reason_Reason_s contains \"Success\"\n    | project Task_Info_Launch_Time_d,Stage_ID_d,Task_Info_Task_ID_d,Event_s,\n              Task_Metrics_Executor_Deserialize_Time_d,Task_Metrics_Shuffle_Read_Metrics_Fetch_Wait_Time_d,\n              Task_Metrics_Executor_Run_Time_d,Task_Metrics_Shuffle_Write_Metrics_Shuffle_Write_Time_d,\n              Task_Metrics_Result_Serialization_Time_d,Task_Info_Getting_Result_Time_d,\n              Task_Metrics_Shuffle_Read_Metrics_Remote_Bytes_Read_d,Task_Metrics_Shuffle_Write_Metrics_Shuffle_Bytes_Written_d,\n              Task_Metrics_JVM_GC_Time_d,TimeGenerated\n) on $left.Stage_Info_Stage_ID_d == $right.Stage_ID_d;\nresult\n| extend name=strcat(\"ExecutorComputeTime \",Properties_spark_databricks_clusterUsageTags_clusterName_s,\"-\",Properties_spark_app_id_s,\" \",Stage_Info_Stage_Name_s)\n| summarize percentile(Task_Metrics_Executor_Run_Time_d,90) by bin(TimeGenerated,1m),name\n| order by TimeGenerated asc nulls last;\n\n",
+            "resultFormat": "time_series",
+   			"workspace" : "YOUR_WORKSPACEID"
+          },
+          "azureMonitor": {
+            "dimensionFilter": "*",
+            "metricDefinition": "select",
+            "metricName": "select",
+            "resourceGroup": "select",
+            "resourceName": "select",
+            "timeGrain": "auto"
+          },
+          "queryType": "Azure Log Analytics",
+          "refId": "B"
+        },
+        {
+          "appInsights": {
+            "groupBy": "none",
+            "metricName": "select",
+            "rawQuery": false,
+            "rawQueryString": "",
+            "spliton": "",
+            "timeGrainType": "auto",
+            "xaxis": "timestamp",
+            "yaxis": ""
+          },
+          "azureLogAnalytics": {
+            "query": "let result=SparkListenerEvent_CL\n| where   $__timeFilter(TimeGenerated)\n| where  Event_s  contains \"SparkListenerStageSubmitted\"\n| project Stage_Info_Stage_ID_d,Stage_Info_Stage_Name_s,Stage_Info_Submission_Time_d,Event_s,TimeGenerated,Properties_spark_databricks_clusterUsageTags_clusterName_s,Properties_spark_app_id_s\n| order by TimeGenerated asc  nulls last \n| join kind= inner (\n    SparkListenerEvent_CL\n    | where $__timeFilter(TimeGenerated)\n    | where Event_s contains \"SparkListenerTaskEnd\"\n    | where Task_End_Reason_Reason_s contains \"Success\"\n    | project Task_Info_Launch_Time_d,Stage_ID_d,Task_Info_Task_ID_d,Event_s,\n              Task_Metrics_Executor_Deserialize_Time_d,Task_Metrics_Shuffle_Read_Metrics_Fetch_Wait_Time_d,\n              Task_Metrics_Executor_Run_Time_d,Task_Metrics_Shuffle_Write_Metrics_Shuffle_Write_Time_d,\n              Task_Metrics_Result_Serialization_Time_d,Task_Info_Getting_Result_Time_d,\n              Task_Metrics_Shuffle_Read_Metrics_Remote_Bytes_Read_d,Task_Metrics_Shuffle_Write_Metrics_Shuffle_Bytes_Written_d,\n              Task_Metrics_JVM_GC_Time_d,Task_Metrics_Input_Metrics_Bytes_Read_d,TimeGenerated\n) on $left.Stage_Info_Stage_ID_d == $right.Stage_ID_d;\nresult\n| extend name=strcat(\"TaskDeserializationTime \",Properties_spark_databricks_clusterUsageTags_clusterName_s,\"-\",Properties_spark_app_id_s,\" \",Stage_Info_Stage_Name_s)\n| summarize percentile(Task_Metrics_Executor_Deserialize_Time_d,90) by bin(TimeGenerated,1m),name\n| order by TimeGenerated asc nulls last;\n\n",
+            "resultFormat": "time_series",
+   			"workspace" : "YOUR_WORKSPACEID"
+          },
+          "azureMonitor": {
+            "dimensionFilter": "*",
+            "metricDefinition": "select",
+            "metricName": "select",
+            "resourceGroup": "select",
+            "resourceName": "select",
+            "timeGrain": "auto"
+          },
+          "queryType": "Azure Log Analytics",
+          "refId": "C"
+        },
+        {
+          "appInsights": {
+            "groupBy": "none",
+            "metricName": "select",
+            "rawQuery": false,
+            "rawQueryString": "",
+            "spliton": "",
+            "timeGrainType": "auto",
+            "xaxis": "timestamp",
+            "yaxis": ""
+          },
+          "azureLogAnalytics": {
+            "query": "let result=SparkListenerEvent_CL\n| where   $__timeFilter(TimeGenerated)\n| where  Event_s  contains \"SparkListenerStageSubmitted\"\n| project Stage_Info_Stage_ID_d,Stage_Info_Stage_Name_s,Stage_Info_Submission_Time_d,Event_s,TimeGenerated,Properties_spark_databricks_clusterUsageTags_clusterName_s,Properties_spark_app_id_s\n| order by TimeGenerated asc  nulls last  \n| join kind= inner (\n    SparkListenerEvent_CL\n    | where $__timeFilter(TimeGenerated)\n    | where Event_s contains \"SparkListenerTaskEnd\"\n    | where Task_End_Reason_Reason_s contains \"Success\"\n    | project Task_Info_Launch_Time_d,Stage_ID_d,Task_Info_Task_ID_d,Event_s,\n              Task_Metrics_Executor_Deserialize_Time_d,Task_Metrics_Shuffle_Read_Metrics_Fetch_Wait_Time_d,\n              Task_Metrics_Executor_Run_Time_d,Task_Metrics_Shuffle_Write_Metrics_Shuffle_Write_Time_d,\n              Task_Metrics_Result_Serialization_Time_d,Task_Info_Getting_Result_Time_d,\n              Task_Metrics_Shuffle_Read_Metrics_Remote_Bytes_Read_d,Task_Metrics_Shuffle_Write_Metrics_Shuffle_Bytes_Written_d,\n              Task_Metrics_JVM_GC_Time_d,TimeGenerated\n) on $left.Stage_Info_Stage_ID_d == $right.Stage_ID_d;\nresult\n| extend name=strcat(\"TaskResultSerializationTime \",Properties_spark_databricks_clusterUsageTags_clusterName_s,\"-\",Properties_spark_app_id_s,\" \",Stage_Info_Stage_Name_s)\n| summarize percentile(Task_Metrics_Result_Serialization_Time_d,90) by bin(TimeGenerated,1m),name\n| order by TimeGenerated asc nulls last;\n\n",
+            "resultFormat": "time_series",
+   			"workspace" : "YOUR_WORKSPACEID"
+          },
+          "azureMonitor": {
+            "dimensionFilter": "*",
+            "metricDefinition": "select",
+            "metricName": "select",
+            "resourceGroup": "select",
+            "resourceName": "select",
+            "timeGrain": "auto"
+          },
+          "queryType": "Azure Log Analytics",
+          "refId": "D"
+        },
+        {
+          "appInsights": {
+            "groupBy": "none",
+            "metricName": "select",
+            "rawQuery": false,
+            "rawQueryString": "",
+            "spliton": "",
+            "timeGrainType": "auto",
+            "xaxis": "timestamp",
+            "yaxis": ""
+          },
+          "azureLogAnalytics": {
+            "query": "let result=SparkListenerEvent_CL\n| where   $__timeFilter(TimeGenerated)\n| where  Event_s  contains \"SparkListenerStageSubmitted\"\n| project Stage_Info_Stage_ID_d,Stage_Info_Stage_Name_s,Stage_Info_Submission_Time_d,Event_s,TimeGenerated,Properties_spark_databricks_clusterUsageTags_clusterName_s,Properties_spark_app_id_s\n| order by TimeGenerated asc  nulls last \n| join kind= inner (\n    SparkListenerEvent_CL\n    | where $__timeFilter(TimeGenerated)\n    | where Event_s contains \"SparkListenerTaskEnd\"\n    | where Task_End_Reason_Reason_s contains \"Success\"\n    | project Task_Info_Launch_Time_d,Stage_ID_d,Task_Info_Task_ID_d,Event_s,\n              Task_Metrics_Executor_Deserialize_Time_d,Task_Metrics_Shuffle_Read_Metrics_Fetch_Wait_Time_d,\n              Task_Metrics_Executor_Run_Time_d,Task_Metrics_Shuffle_Write_Metrics_Shuffle_Write_Time_d,\n              Task_Metrics_Result_Serialization_Time_d,Task_Info_Getting_Result_Time_d,\n              Task_Metrics_Shuffle_Read_Metrics_Remote_Bytes_Read_d,Task_Metrics_Shuffle_Write_Metrics_Shuffle_Bytes_Written_d,\n              Task_Metrics_JVM_GC_Time_d,TimeGenerated\n) on $left.Stage_Info_Stage_ID_d == $right.Stage_ID_d;\nresult\n| extend name=strcat(\"TaskShuffleReadTime \",Properties_spark_databricks_clusterUsageTags_clusterName_s,\"-\",Properties_spark_app_id_s,\" \",Stage_Info_Stage_Name_s)\n| summarize percentile(Task_Metrics_Shuffle_Read_Metrics_Fetch_Wait_Time_d,90) by bin(TimeGenerated,1m),name\n| order by TimeGenerated asc nulls last;\n\n",
+            "resultFormat": "time_series",
+   			"workspace" : "YOUR_WORKSPACEID"
+          },
+          "azureMonitor": {
+            "dimensionFilter": "*",
+            "metricDefinition": "select",
+            "metricName": "select",
+            "resourceGroup": "select",
+            "resourceName": "select",
+            "timeGrain": "auto"
+          },
+          "queryType": "Azure Log Analytics",
+          "refId": "E"
+        },
+        {
+          "appInsights": {
+            "groupBy": "none",
+            "metricName": "select",
+            "rawQuery": false,
+            "rawQueryString": "",
+            "spliton": "",
+            "timeGrainType": "auto",
+            "xaxis": "timestamp",
+            "yaxis": ""
+          },
+          "azureLogAnalytics": {
+            "query": "let result=SparkListenerEvent_CL\n| where   $__timeFilter(TimeGenerated)\n| where  Event_s  contains \"SparkListenerStageSubmitted\"\n| project Stage_Info_Stage_ID_d,Stage_Info_Stage_Name_s,Stage_Info_Submission_Time_d,Event_s,TimeGenerated,Properties_spark_databricks_clusterUsageTags_clusterName_s,Properties_spark_app_id_s\n| order by TimeGenerated asc  nulls last \n| join kind= inner (\n    SparkListenerEvent_CL\n    | where $__timeFilter(TimeGenerated)\n    | where Event_s contains \"SparkListenerTaskEnd\"\n    | where Task_End_Reason_Reason_s contains \"Success\"\n    | project Task_Info_Launch_Time_d,Stage_ID_d,Task_Info_Task_ID_d,Event_s,\n              Task_Metrics_Executor_Deserialize_Time_d,Task_Metrics_Shuffle_Read_Metrics_Fetch_Wait_Time_d,\n              Task_Metrics_Executor_Run_Time_d,Task_Metrics_Shuffle_Write_Metrics_Shuffle_Write_Time_d,\n              Task_Metrics_Result_Serialization_Time_d,Task_Info_Getting_Result_Time_d,\n              Task_Metrics_Shuffle_Read_Metrics_Remote_Bytes_Read_d,Task_Metrics_Shuffle_Write_Metrics_Shuffle_Bytes_Written_d,\n              Task_Metrics_JVM_GC_Time_d,TimeGenerated\n) on $left.Stage_Info_Stage_ID_d == $right.Stage_ID_d;\nresult\n| extend schedulerdelay = Task_Info_Launch_Time_d - Stage_Info_Submission_Time_d\n| extend name=strcat(\"SchuffleBytesWritten \",Properties_spark_databricks_clusterUsageTags_clusterName_s,\"-\",Properties_spark_app_id_s,\" \",Stage_Info_Stage_Name_s)\n| summarize percentile(Task_Metrics_Shuffle_Write_Metrics_Shuffle_Bytes_Written_d,90) by bin(TimeGenerated,1m),name\n| order by TimeGenerated asc nulls last;\n\n",
+            "resultFormat": "time_series",
+   			"workspace" : "YOUR_WORKSPACEID"
+          },
+          "azureMonitor": {
+            "dimensionFilter": "*",
+            "metricDefinition": "select",
+            "metricName": "select",
+            "resourceGroup": "select",
+            "resourceName": "select",
+            "timeGrain": "auto"
+          },
+          "queryType": "Azure Log Analytics",
+          "refId": "G"
+        },
+        {
+          "appInsights": {
+            "groupBy": "none",
+            "metricName": "select",
+            "rawQuery": false,
+            "rawQueryString": "",
+            "spliton": "",
+            "timeGrainType": "auto",
+            "xaxis": "timestamp",
+            "yaxis": ""
+          },
+          "azureLogAnalytics": {
+            "query": "let result=SparkListenerEvent_CL\n| where   $__timeFilter(TimeGenerated)\n| where  Event_s  contains \"SparkListenerStageSubmitted\"\n| project Stage_Info_Stage_ID_d,Stage_Info_Stage_Name_s,Stage_Info_Submission_Time_d,Event_s,TimeGenerated,Properties_spark_databricks_clusterUsageTags_clusterName_s,Properties_spark_app_id_s\n| order by TimeGenerated asc  nulls last\n| join kind= inner (\n    SparkListenerEvent_CL\n    | where $__timeFilter(TimeGenerated)\n    | where Event_s contains \"SparkListenerTaskEnd\"\n    | where Task_End_Reason_Reason_s contains \"Success\"\n    | project Task_Info_Launch_Time_d,Stage_ID_d,Task_Info_Task_ID_d,Event_s,\n              Task_Metrics_Executor_Deserialize_Time_d,Task_Metrics_Shuffle_Read_Metrics_Fetch_Wait_Time_d,\n              Task_Metrics_Executor_Run_Time_d,Task_Metrics_Shuffle_Write_Metrics_Shuffle_Write_Time_d,\n              Task_Metrics_Result_Serialization_Time_d,Task_Info_Getting_Result_Time_d,\n              Task_Metrics_Shuffle_Read_Metrics_Remote_Bytes_Read_d,Task_Metrics_Shuffle_Write_Metrics_Shuffle_Bytes_Written_d,\n              Task_Metrics_JVM_GC_Time_d,TimeGenerated\n) on $left.Stage_Info_Stage_ID_d == $right.Stage_ID_d;\nresult\n| extend name=strcat(\"SchuffleBytesRead \",Properties_spark_databricks_clusterUsageTags_clusterName_s,\"-\",Properties_spark_app_id_s,\" \",Stage_Info_Stage_Name_s)\n| summarize percentile(Task_Metrics_Shuffle_Read_Metrics_Remote_Bytes_Read_d,90) by bin(TimeGenerated,1m),name\n| order by TimeGenerated asc nulls last;\n\n",
+            "resultFormat": "time_series",
+   			"workspace" : "YOUR_WORKSPACEID"
+          },
+          "azureMonitor": {
+            "dimensionFilter": "*",
+            "metricDefinition": "select",
+            "metricName": "select",
+            "resourceGroup": "select",
+            "resourceName": "select",
+            "timeGrain": "auto"
+          },
+          "queryType": "Azure Log Analytics",
+          "refId": "H"
+        },
+        {
+          "appInsights": {
+            "groupBy": "none",
+            "metricName": "select",
+            "rawQuery": false,
+            "rawQueryString": "",
+            "spliton": "",
+            "timeGrainType": "auto",
+            "xaxis": "timestamp",
+            "yaxis": ""
+          },
+          "azureLogAnalytics": {
+            "query": "let result=SparkListenerEvent_CL\n| where   $__timeFilter(TimeGenerated)\n| where  Event_s  contains \"SparkListenerStageSubmitted\"\n| project Stage_Info_Stage_ID_d,Stage_Info_Stage_Name_s,Stage_Info_Submission_Time_d,Event_s,TimeGenerated,Properties_spark_databricks_clusterUsageTags_clusterName_s,Properties_spark_app_id_s\n| order by TimeGenerated asc  nulls last \n| join kind= inner (\n    SparkListenerEvent_CL\n    | where $__timeFilter(TimeGenerated)\n    | where Event_s contains \"SparkListenerTaskEnd\"\n    | where Task_End_Reason_Reason_s contains \"Success\"\n    | project Task_Info_Launch_Time_d,Stage_ID_d,Task_Info_Task_ID_d,Event_s,\n              Task_Metrics_Executor_Deserialize_Time_d,Task_Metrics_Shuffle_Read_Metrics_Fetch_Wait_Time_d,\n              Task_Metrics_Executor_Run_Time_d,Task_Metrics_Shuffle_Write_Metrics_Shuffle_Write_Time_d,\n              Task_Metrics_Result_Serialization_Time_d,Task_Info_Getting_Result_Time_d,\n              Task_Metrics_Shuffle_Read_Metrics_Remote_Bytes_Read_d,Task_Metrics_Shuffle_Write_Metrics_Shuffle_Bytes_Written_d,\n              Task_Metrics_JVM_GC_Time_d,Task_Metrics_Input_Metrics_Bytes_Read_d,TimeGenerated\n) on $left.Stage_Info_Stage_ID_d == $right.Stage_ID_d;\nresult\n| extend name=strcat(\"InputBytesRead \",Properties_spark_databricks_clusterUsageTags_clusterName_s,\"-\",Properties_spark_app_id_s,\" \",Stage_Info_Stage_Name_s)\n| summarize percentile(Task_Metrics_Input_Metrics_Bytes_Read_d,90) by bin(TimeGenerated,1m),name\n| order by TimeGenerated asc nulls last;\n\n",
+            "resultFormat": "time_series",
+   			"workspace" : "YOUR_WORKSPACEID"
+          },
+          "azureMonitor": {
+            "dimensionFilter": "*",
+            "metricDefinition": "select",
+            "metricName": "select",
+            "resourceGroup": "select",
+            "resourceName": "select",
+            "timeGrain": "auto"
+          },
+          "queryType": "Azure Log Analytics",
+          "refId": "I"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Tasks Metrics  Per Stage ( 90% Percentile)",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "ms",
+          "label": "Latency",
+          "logBase": 2,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "bytes",
+          "label": "Data Size",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "${DS_ALA}",
+      "fill": 1,
+      "gridPos": {
+        "h": 9,
+        "w": 11,
+        "x": 0,
+        "y": 27
       },
       "id": 44,
       "legend": {
@@ -473,7 +906,7 @@
             "yaxis": ""
           },
           "azureLogAnalytics": {
-            "query": "let results=SparkListenerEvent_CL\n| where $__timeFilter(TimeGenerated)\n| where  Event_s  contains \"SparkListenerJobStart\"\n| project Job_ID_d,Properties_callSite_short_s,TimeGenerated\n| order by TimeGenerated asc  nulls last \n| join kind= inner (\n    SparkListenerEvent_CL\n    | where $__timeFilter(TimeGenerated)\n    | where Event_s contains \"SparkListenerJobEnd\"\n    | where Job_Result_Result_s contains \"JobSucceeded\"\n    | project Event_s,Job_ID_d,TimeGenerated\n) on Job_ID_d;\nresults\n| extend slice=strcat(\"#JobsCompleted \",Properties_callSite_short_s)\n| summarize count(Event_s)   by bin(TimeGenerated,  1m),slice\n| order by TimeGenerated asc nulls last",
+            "query": "let results=SparkListenerEvent_CL\n| where $__timeFilter(TimeGenerated)\n| where  Event_s  contains \"SparkListenerJobStart\"\n| project Job_ID_d,Properties_spark_app_id_s,Properties_spark_databricks_clusterUsageTags_clusterName_s,TimeGenerated\n| order by TimeGenerated asc  nulls last \n| join kind= inner (\n    SparkListenerEvent_CL\n    | where $__timeFilter(TimeGenerated)\n    | where Event_s contains \"SparkListenerJobEnd\"\n    | where Job_Result_Result_s contains \"JobSucceeded\"\n    | project Event_s,Job_ID_d,TimeGenerated\n) on Job_ID_d;\nresults\n| extend slice=strcat(\"#JobsCompleted \",Properties_spark_databricks_clusterUsageTags_clusterName_s,\"-\",Properties_spark_app_id_s)\n| summarize count(Event_s)   by bin(TimeGenerated,  1m),slice\n| order by TimeGenerated asc nulls last",
             "resultFormat": "time_series",
    			"workspace" : "YOUR_WORKSPACEID"
           },
@@ -500,7 +933,7 @@
             "yaxis": ""
           },
           "azureLogAnalytics": {
-            "query": "let result=SparkListenerEvent_CL\n| where   $__timeFilter(TimeGenerated)\n| where  Event_s  contains \"SparkListenerStageCompleted\"\n| project Stage_Info_Stage_ID_d,Stage_Info_Stage_Name_s,Event_s,TimeGenerated\n| order by TimeGenerated asc  nulls last \n| join kind= inner (\n    SparkListenerEvent_CL\n    | where $__timeFilter(TimeGenerated)\n    | where Event_s contains \"SparkListenerTaskEnd\"\n    | where Task_End_Reason_Reason_s contains \"Success\"\n    | project Stage_ID_d,Task_Info_Task_ID_d,\n              TaskEvent=Event_s,TimeGenerated\n) on $left.Stage_Info_Stage_ID_d == $right.Stage_ID_d;\nresult\n| extend slice=strcat(\"#TasksCompleted \",Stage_Info_Stage_Name_s)\n| summarize count(TaskEvent)  by bin(TimeGenerated,1m),slice\n| order by TimeGenerated asc nulls last\n",
+            "query": "let result=SparkListenerEvent_CL\n| where   $__timeFilter(TimeGenerated)\n| where  Event_s  contains \"SparkListenerStageSubmitted\"\n| project Stage_Info_Stage_ID_d,Stage_Info_Stage_Name_s,Stage_Info_Submission_Time_d,Event_s,TimeGenerated,Properties_spark_databricks_clusterUsageTags_clusterName_s,Properties_spark_app_id_s\n| order by TimeGenerated asc  nulls last \n| join kind= inner (\n    SparkListenerEvent_CL\n    | where $__timeFilter(TimeGenerated)\n    | where Event_s contains \"SparkListenerTaskEnd\"\n    | where Task_End_Reason_Reason_s contains \"Success\"\n    | project Stage_ID_d,Task_Info_Task_ID_d,\n              TaskEvent=Event_s,TimeGenerated\n) on $left.Stage_Info_Stage_ID_d == $right.Stage_ID_d;\nresult\n| extend slice=strcat(\"#TasksCompleted \",Properties_spark_databricks_clusterUsageTags_clusterName_s,\"-\",Properties_spark_app_id_s,\" \",Stage_Info_Stage_Name_s)\n| summarize count(TaskEvent)  by bin(TimeGenerated,1m),slice\n| order by TimeGenerated asc nulls last\n",
             "resultFormat": "time_series",
    			"workspace" : "YOUR_WORKSPACEID"
           },
@@ -527,7 +960,7 @@
             "yaxis": ""
           },
           "azureLogAnalytics": {
-            "query": "SparkListenerEvent_CL\n| where  $__timeFilter(TimeGenerated)\n| where Event_s contains \"SparkListenerStageCompleted\"\n| extend slice = strcat(\"# StagesCompleted \",Stage_Info_Stage_Name_s)  \n| summarize StagesCompleted=count(Event_s) by bin(TimeGenerated,1m), slice\n| order by TimeGenerated asc nulls last",
+            "query": "let results=SparkListenerEvent_CL\n| where $__timeFilter(TimeGenerated)\n| where  Event_s  contains \"SparkListenerStageSubmitted\"\n| project \nStage_Info_Stage_ID_d,Properties_spark_app_id_s,TimeGenerated,Properties_spark_databricks_clusterUsageTags_clusterName_s\n| order by TimeGenerated asc  nulls last \n| join kind= inner (\n    SparkListenerEvent_CL\n    | where $__timeFilter(TimeGenerated)\n    | where Event_s contains \"SparkListenerStageCompleted\"  \n) on Stage_Info_Stage_ID_d;\nresults\n | extend slice = strcat(\"# StagesCompleted \",Properties_spark_databricks_clusterUsageTags_clusterName_s,\"-\",\nProperties_spark_app_id_s,\" \",Stage_Info_Stage_Name_s) \n| summarize StagesCompleted=count(Event_s) by bin(TimeGenerated,1m), slice\n| order by TimeGenerated asc nulls last\n\n",
             "resultFormat": "time_series",
    			"workspace" : "YOUR_WORKSPACEID"
           },
@@ -594,7 +1027,7 @@
         "h": 9,
         "w": 12,
         "x": 11,
-        "y": 9
+        "y": 27
       },
       "id": 18,
       "legend": {
@@ -835,348 +1268,10 @@
       "datasource": "${DS_ALA}",
       "fill": 1,
       "gridPos": {
-        "h": 9,
-        "w": 23,
-        "x": 0,
-        "y": 18
-      },
-      "id": 49,
-      "legend": {
-        "alignAsTable": true,
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "null",
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [
-        {
-          "alias": "TaskShuffleWriteTime start at TaxiCabReader.scala:233",
-          "yaxis": 1
-        },
-        {
-          "alias": "ShuffleBytesWritten start at TaxiCabReader.scala:233",
-          "yaxis": 2
-        },
-        {
-          "alias": "ShuffleBytesRead start at TaxiCabReader.scala:233",
-          "yaxis": 2
-        },
-        {
-          "alias": "InputBytesRead start at TaxiCabReader.scala:233",
-          "yaxis": 2
-        }
-      ],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "appInsights": {
-            "groupBy": "none",
-            "metricName": "select",
-            "rawQuery": false,
-            "rawQueryString": "",
-            "spliton": "",
-            "timeGrainType": "auto",
-            "xaxis": "timestamp",
-            "yaxis": ""
-          },
-          "azureLogAnalytics": {
-            "query": "let result=SparkListenerEvent_CL\n| where   $__timeFilter(TimeGenerated)\n| where  Event_s  contains \"SparkListenerStageCompleted\"\n| project Stage_Info_Stage_ID_d,Stage_Info_Stage_Name_s,Stage_Info_Submission_Time_d,Event_s,TimeGenerated\n| order by TimeGenerated asc  nulls last \n| join kind= inner (\n    SparkListenerEvent_CL\n    | where $__timeFilter(TimeGenerated)\n    | where Event_s contains \"SparkListenerTaskEnd\"\n    | where Task_End_Reason_Reason_s contains \"Success\"\n    | project Task_Info_Launch_Time_d,Stage_ID_d,Task_Info_Task_ID_d,Event_s,\n              Task_Metrics_Executor_Deserialize_Time_d,Task_Metrics_Shuffle_Read_Metrics_Fetch_Wait_Time_d,\n              Task_Metrics_Executor_Run_Time_d,Task_Metrics_Shuffle_Write_Metrics_Shuffle_Write_Time_d,\n              Task_Metrics_Result_Serialization_Time_d,Task_Info_Getting_Result_Time_d,\n              Task_Metrics_Shuffle_Read_Metrics_Remote_Bytes_Read_d,Task_Metrics_Shuffle_Write_Metrics_Shuffle_Bytes_Written_d,\n              Task_Metrics_JVM_GC_Time_d,TimeGenerated\n) on $left.Stage_Info_Stage_ID_d == $right.Stage_ID_d;\nresult\n| extend schedulerdelay = Task_Info_Launch_Time_d - Stage_Info_Submission_Time_d\n| extend name=strcat(\"SchedulerDelayTime \",Stage_Info_Stage_Name_s)\n| summarize percentile(schedulerdelay,90) , percentile(Task_Metrics_Executor_Run_Time_d,90) by bin(TimeGenerated,1m),name\n| order by TimeGenerated asc nulls last;\n\n",
-            "resultFormat": "time_series",
-   			"workspace" : "YOUR_WORKSPACEID"
-          },
-          "azureMonitor": {
-            "dimensionFilter": "*",
-            "metricDefinition": "select",
-            "metricName": "select",
-            "resourceGroup": "select",
-            "resourceName": "select",
-            "timeGrain": "auto"
-          },
-          "queryType": "Azure Log Analytics",
-          "refId": "A"
-        },
-        {
-          "appInsights": {
-            "groupBy": "none",
-            "metricName": "select",
-            "rawQuery": false,
-            "rawQueryString": "",
-            "spliton": "",
-            "timeGrainType": "auto",
-            "xaxis": "timestamp",
-            "yaxis": ""
-          },
-          "azureLogAnalytics": {
-            "query": "let result=SparkListenerEvent_CL\n| where   $__timeFilter(TimeGenerated)\n| where  Event_s  contains \"SparkListenerStageCompleted\"\n| project Stage_Info_Stage_ID_d,Stage_Info_Stage_Name_s,Stage_Info_Submission_Time_d,Event_s,TimeGenerated\n| order by TimeGenerated asc  nulls last \n| join kind= inner (\n    SparkListenerEvent_CL\n    | where $__timeFilter(TimeGenerated)\n    | where Event_s contains \"SparkListenerTaskEnd\"\n    | where Task_End_Reason_Reason_s contains \"Success\"\n    | project Task_Info_Launch_Time_d,Stage_ID_d,Task_Info_Task_ID_d,Event_s,\n              Task_Metrics_Executor_Deserialize_Time_d,Task_Metrics_Shuffle_Read_Metrics_Fetch_Wait_Time_d,\n              Task_Metrics_Executor_Run_Time_d,Task_Metrics_Shuffle_Write_Metrics_Shuffle_Write_Time_d,\n              Task_Metrics_Result_Serialization_Time_d,Task_Info_Getting_Result_Time_d,\n              Task_Metrics_Shuffle_Read_Metrics_Remote_Bytes_Read_d,Task_Metrics_Shuffle_Write_Metrics_Shuffle_Bytes_Written_d,\n              Task_Metrics_JVM_GC_Time_d,TimeGenerated\n) on $left.Stage_Info_Stage_ID_d == $right.Stage_ID_d;\nresult\n| extend name=strcat(\"ExecutorComputeTime \",Stage_Info_Stage_Name_s)\n| summarize percentile(Task_Metrics_Executor_Run_Time_d,90) by bin(TimeGenerated,1m),name\n| order by TimeGenerated asc nulls last;\n\n",
-            "resultFormat": "time_series",
-   			"workspace" : "YOUR_WORKSPACEID"
-          },
-          "azureMonitor": {
-            "dimensionFilter": "*",
-            "metricDefinition": "select",
-            "metricName": "select",
-            "resourceGroup": "select",
-            "resourceName": "select",
-            "timeGrain": "auto"
-          },
-          "queryType": "Azure Log Analytics",
-          "refId": "B"
-        },
-        {
-          "appInsights": {
-            "groupBy": "none",
-            "metricName": "select",
-            "rawQuery": false,
-            "rawQueryString": "",
-            "spliton": "",
-            "timeGrainType": "auto",
-            "xaxis": "timestamp",
-            "yaxis": ""
-          },
-          "azureLogAnalytics": {
-            "query": "let result=SparkListenerEvent_CL\n| where   $__timeFilter(TimeGenerated)\n| where  Event_s  contains \"SparkListenerStageCompleted\"\n| project Stage_Info_Stage_ID_d,Stage_Info_Stage_Name_s,Stage_Info_Submission_Time_d,Event_s,TimeGenerated\n| order by TimeGenerated asc  nulls last \n| join kind= inner (\n    SparkListenerEvent_CL\n    | where $__timeFilter(TimeGenerated)\n    | where Event_s contains \"SparkListenerTaskEnd\"\n    | where Task_End_Reason_Reason_s contains \"Success\"\n    | project Task_Info_Launch_Time_d,Stage_ID_d,Task_Info_Task_ID_d,Event_s,\n              Task_Metrics_Executor_Deserialize_Time_d,Task_Metrics_Shuffle_Read_Metrics_Fetch_Wait_Time_d,\n              Task_Metrics_Executor_Run_Time_d,Task_Metrics_Shuffle_Write_Metrics_Shuffle_Write_Time_d,\n              Task_Metrics_Result_Serialization_Time_d,Task_Info_Getting_Result_Time_d,\n              Task_Metrics_Shuffle_Read_Metrics_Remote_Bytes_Read_d,Task_Metrics_Shuffle_Write_Metrics_Shuffle_Bytes_Written_d,\n              Task_Metrics_JVM_GC_Time_d,Task_Metrics_Input_Metrics_Bytes_Read_d,TimeGenerated\n) on $left.Stage_Info_Stage_ID_d == $right.Stage_ID_d;\nresult\n| extend name=strcat(\"TaskDeserializationTime \",Stage_Info_Stage_Name_s)\n| summarize percentile(Task_Metrics_Executor_Deserialize_Time_d,90) by bin(TimeGenerated,1m),name\n| order by TimeGenerated asc nulls last;\n\n",
-            "resultFormat": "time_series",
-   			"workspace" : "YOUR_WORKSPACEID"
-          },
-          "azureMonitor": {
-            "dimensionFilter": "*",
-            "metricDefinition": "select",
-            "metricName": "select",
-            "resourceGroup": "select",
-            "resourceName": "select",
-            "timeGrain": "auto"
-          },
-          "queryType": "Azure Log Analytics",
-          "refId": "C"
-        },
-        {
-          "appInsights": {
-            "groupBy": "none",
-            "metricName": "select",
-            "rawQuery": false,
-            "rawQueryString": "",
-            "spliton": "",
-            "timeGrainType": "auto",
-            "xaxis": "timestamp",
-            "yaxis": ""
-          },
-          "azureLogAnalytics": {
-            "query": "let result=SparkListenerEvent_CL\n| where   $__timeFilter(TimeGenerated)\n| where  Event_s  contains \"SparkListenerStageCompleted\"\n| project Stage_Info_Stage_ID_d,Stage_Info_Stage_Name_s,Stage_Info_Submission_Time_d,Event_s,TimeGenerated\n| order by TimeGenerated asc  nulls last \n| join kind= inner (\n    SparkListenerEvent_CL\n    | where $__timeFilter(TimeGenerated)\n    | where Event_s contains \"SparkListenerTaskEnd\"\n    | where Task_End_Reason_Reason_s contains \"Success\"\n    | project Task_Info_Launch_Time_d,Stage_ID_d,Task_Info_Task_ID_d,Event_s,\n              Task_Metrics_Executor_Deserialize_Time_d,Task_Metrics_Shuffle_Read_Metrics_Fetch_Wait_Time_d,\n              Task_Metrics_Executor_Run_Time_d,Task_Metrics_Shuffle_Write_Metrics_Shuffle_Write_Time_d,\n              Task_Metrics_Result_Serialization_Time_d,Task_Info_Getting_Result_Time_d,\n              Task_Metrics_Shuffle_Read_Metrics_Remote_Bytes_Read_d,Task_Metrics_Shuffle_Write_Metrics_Shuffle_Bytes_Written_d,\n              Task_Metrics_JVM_GC_Time_d,TimeGenerated\n) on $left.Stage_Info_Stage_ID_d == $right.Stage_ID_d;\nresult\n| extend name=strcat(\"TaskResultSerializationTime \",Stage_Info_Stage_Name_s)\n| summarize percentile(Task_Metrics_Result_Serialization_Time_d,90) by bin(TimeGenerated,1m),name\n| order by TimeGenerated asc nulls last;\n\n",
-            "resultFormat": "time_series",
-   			"workspace" : "YOUR_WORKSPACEID"
-          },
-          "azureMonitor": {
-            "dimensionFilter": "*",
-            "metricDefinition": "select",
-            "metricName": "select",
-            "resourceGroup": "select",
-            "resourceName": "select",
-            "timeGrain": "auto"
-          },
-          "queryType": "Azure Log Analytics",
-          "refId": "D"
-        },
-        {
-          "appInsights": {
-            "groupBy": "none",
-            "metricName": "select",
-            "rawQuery": false,
-            "rawQueryString": "",
-            "spliton": "",
-            "timeGrainType": "auto",
-            "xaxis": "timestamp",
-            "yaxis": ""
-          },
-          "azureLogAnalytics": {
-            "query": "let result=SparkListenerEvent_CL\n| where   $__timeFilter(TimeGenerated)\n| where  Event_s  contains \"SparkListenerStageCompleted\"\n| project Stage_Info_Stage_ID_d,Stage_Info_Stage_Name_s,Stage_Info_Submission_Time_d,Event_s,TimeGenerated\n| order by TimeGenerated asc  nulls last \n| join kind= inner (\n    SparkListenerEvent_CL\n    | where $__timeFilter(TimeGenerated)\n    | where Event_s contains \"SparkListenerTaskEnd\"\n    | where Task_End_Reason_Reason_s contains \"Success\"\n    | project Task_Info_Launch_Time_d,Stage_ID_d,Task_Info_Task_ID_d,Event_s,\n              Task_Metrics_Executor_Deserialize_Time_d,Task_Metrics_Shuffle_Read_Metrics_Fetch_Wait_Time_d,\n              Task_Metrics_Executor_Run_Time_d,Task_Metrics_Shuffle_Write_Metrics_Shuffle_Write_Time_d,\n              Task_Metrics_Result_Serialization_Time_d,Task_Info_Getting_Result_Time_d,\n              Task_Metrics_Shuffle_Read_Metrics_Remote_Bytes_Read_d,Task_Metrics_Shuffle_Write_Metrics_Shuffle_Bytes_Written_d,\n              Task_Metrics_JVM_GC_Time_d,TimeGenerated\n) on $left.Stage_Info_Stage_ID_d == $right.Stage_ID_d;\nresult\n| extend ShuffleWriteTime=Task_Metrics_Shuffle_Write_Metrics_Shuffle_Write_Time_d/1000000\n| extend name=strcat(\"TaskShuffleWriteTime \",Stage_Info_Stage_Name_s)\n| summarize percentile(ShuffleWriteTime,90) by bin(TimeGenerated,1m),name\n| order by TimeGenerated asc nulls last;\n\n",
-            "resultFormat": "time_series",
-   			"workspace" : "YOUR_WORKSPACEID"
-          },
-          "azureMonitor": {
-            "dimensionFilter": "*",
-            "metricDefinition": "select",
-            "metricName": "select",
-            "resourceGroup": "select",
-            "resourceName": "select",
-            "timeGrain": "auto"
-          },
-          "queryType": "Azure Log Analytics",
-          "refId": "E"
-        },
-        {
-          "appInsights": {
-            "groupBy": "none",
-            "metricName": "select",
-            "rawQuery": false,
-            "rawQueryString": "",
-            "spliton": "",
-            "timeGrainType": "auto",
-            "xaxis": "timestamp",
-            "yaxis": ""
-          },
-          "azureLogAnalytics": {
-            "query": "let result=SparkListenerEvent_CL\n| where   $__timeFilter(TimeGenerated)\n| where  Event_s  contains \"SparkListenerStageCompleted\"\n| project Stage_Info_Stage_ID_d,Stage_Info_Stage_Name_s,Stage_Info_Submission_Time_d,Event_s,TimeGenerated\n| order by TimeGenerated asc  nulls last \n| join kind= inner (\n    SparkListenerEvent_CL\n    | where $__timeFilter(TimeGenerated)\n    | where Event_s contains \"SparkListenerTaskEnd\"\n    | where Task_End_Reason_Reason_s contains \"Success\"\n    | project Task_Info_Launch_Time_d,Stage_ID_d,Task_Info_Task_ID_d,Event_s,\n              Task_Metrics_Executor_Deserialize_Time_d,Task_Metrics_Shuffle_Read_Metrics_Fetch_Wait_Time_d,\n              Task_Metrics_Executor_Run_Time_d,Task_Metrics_Shuffle_Write_Metrics_Shuffle_Write_Time_d,\n              Task_Metrics_Result_Serialization_Time_d,Task_Info_Getting_Result_Time_d,\n              Task_Metrics_Shuffle_Read_Metrics_Remote_Bytes_Read_d,Task_Metrics_Shuffle_Write_Metrics_Shuffle_Bytes_Written_d,\n              Task_Metrics_JVM_GC_Time_d,TimeGenerated\n) on $left.Stage_Info_Stage_ID_d == $right.Stage_ID_d;\nresult\n| extend name=strcat(\"TaskShuffleReadTime \",Stage_Info_Stage_Name_s)\n| summarize percentile(Task_Metrics_Shuffle_Read_Metrics_Fetch_Wait_Time_d,90) by bin(TimeGenerated,1m),name\n| order by TimeGenerated asc nulls last;\n\n",
-            "resultFormat": "time_series",
-   			"workspace" : "YOUR_WORKSPACEID"
-          },
-          "azureMonitor": {
-            "dimensionFilter": "*",
-            "metricDefinition": "select",
-            "metricName": "select",
-            "resourceGroup": "select",
-            "resourceName": "select",
-            "timeGrain": "auto"
-          },
-          "queryType": "Azure Log Analytics",
-          "refId": "F"
-        },
-        {
-          "appInsights": {
-            "groupBy": "none",
-            "metricName": "select",
-            "rawQuery": false,
-            "rawQueryString": "",
-            "spliton": "",
-            "timeGrainType": "auto",
-            "xaxis": "timestamp",
-            "yaxis": ""
-          },
-          "azureLogAnalytics": {
-            "query": "let result=SparkListenerEvent_CL\n| where   $__timeFilter(TimeGenerated)\n| where  Event_s  contains \"SparkListenerStageCompleted\"\n| project Stage_Info_Stage_ID_d,Stage_Info_Stage_Name_s,Stage_Info_Submission_Time_d,Event_s,TimeGenerated\n| order by TimeGenerated asc  nulls last \n| join kind= inner (\n    SparkListenerEvent_CL\n    | where $__timeFilter(TimeGenerated)\n    | where Event_s contains \"SparkListenerTaskEnd\"\n    | where Task_End_Reason_Reason_s contains \"Success\"\n    | project Task_Info_Launch_Time_d,Stage_ID_d,Task_Info_Task_ID_d,Event_s,\n              Task_Metrics_Executor_Deserialize_Time_d,Task_Metrics_Shuffle_Read_Metrics_Fetch_Wait_Time_d,\n              Task_Metrics_Executor_Run_Time_d,Task_Metrics_Shuffle_Write_Metrics_Shuffle_Write_Time_d,\n              Task_Metrics_Result_Serialization_Time_d,Task_Info_Getting_Result_Time_d,\n              Task_Metrics_Shuffle_Read_Metrics_Remote_Bytes_Read_d,Task_Metrics_Shuffle_Write_Metrics_Shuffle_Bytes_Written_d,\n              Task_Metrics_JVM_GC_Time_d,TimeGenerated\n) on $left.Stage_Info_Stage_ID_d == $right.Stage_ID_d;\nresult\n| extend schedulerdelay = Task_Info_Launch_Time_d - Stage_Info_Submission_Time_d\n| extend name=strcat(\"ShuffleBytesWritten \",Stage_Info_Stage_Name_s)\n| summarize percentile(Task_Metrics_Shuffle_Write_Metrics_Shuffle_Bytes_Written_d,90) by bin(TimeGenerated,1m),name\n| order by TimeGenerated asc nulls last;\n\n",
-            "resultFormat": "time_series",
-   			"workspace" : "YOUR_WORKSPACEID"
-          },
-          "azureMonitor": {
-            "dimensionFilter": "*",
-            "metricDefinition": "select",
-            "metricName": "select",
-            "resourceGroup": "select",
-            "resourceName": "select",
-            "timeGrain": "auto"
-          },
-          "queryType": "Azure Log Analytics",
-          "refId": "G"
-        },
-        {
-          "appInsights": {
-            "groupBy": "none",
-            "metricName": "select",
-            "rawQuery": false,
-            "rawQueryString": "",
-            "spliton": "",
-            "timeGrainType": "auto",
-            "xaxis": "timestamp",
-            "yaxis": ""
-          },
-          "azureLogAnalytics": {
-            "query": "let result=SparkListenerEvent_CL\n| where   $__timeFilter(TimeGenerated)\n| where  Event_s  contains \"SparkListenerStageCompleted\"\n| project Stage_Info_Stage_ID_d,Stage_Info_Stage_Name_s,Stage_Info_Submission_Time_d,Event_s,TimeGenerated\n| order by TimeGenerated asc  nulls last \n| join kind= inner (\n    SparkListenerEvent_CL\n    | where $__timeFilter(TimeGenerated)\n    | where Event_s contains \"SparkListenerTaskEnd\"\n    | where Task_End_Reason_Reason_s contains \"Success\"\n    | project Task_Info_Launch_Time_d,Stage_ID_d,Task_Info_Task_ID_d,Event_s,\n              Task_Metrics_Executor_Deserialize_Time_d,Task_Metrics_Shuffle_Read_Metrics_Fetch_Wait_Time_d,\n              Task_Metrics_Executor_Run_Time_d,Task_Metrics_Shuffle_Write_Metrics_Shuffle_Write_Time_d,\n              Task_Metrics_Result_Serialization_Time_d,Task_Info_Getting_Result_Time_d,\n              Task_Metrics_Shuffle_Read_Metrics_Remote_Bytes_Read_d,Task_Metrics_Shuffle_Write_Metrics_Shuffle_Bytes_Written_d,\n              Task_Metrics_JVM_GC_Time_d,TimeGenerated\n) on $left.Stage_Info_Stage_ID_d == $right.Stage_ID_d;\nresult\n| extend name=strcat(\"ShuffleBytesRead \",Stage_Info_Stage_Name_s)\n| summarize percentile(Task_Metrics_Shuffle_Read_Metrics_Remote_Bytes_Read_d,90) by bin(TimeGenerated,1m),name\n| order by TimeGenerated asc nulls last;\n\n",
-            "resultFormat": "time_series",
-   			"workspace" : "YOUR_WORKSPACEID"
-          },
-          "azureMonitor": {
-            "dimensionFilter": "*",
-            "metricDefinition": "select",
-            "metricName": "select",
-            "resourceGroup": "select",
-            "resourceName": "select",
-            "timeGrain": "auto"
-          },
-          "queryType": "Azure Log Analytics",
-          "refId": "H"
-        },
-        {
-          "appInsights": {
-            "groupBy": "none",
-            "metricName": "select",
-            "rawQuery": false,
-            "rawQueryString": "",
-            "spliton": "",
-            "timeGrainType": "auto",
-            "xaxis": "timestamp",
-            "yaxis": ""
-          },
-          "azureLogAnalytics": {
-            "query": "let result=SparkListenerEvent_CL\n| where   $__timeFilter(TimeGenerated)\n| where  Event_s  contains \"SparkListenerStageCompleted\"\n| project Stage_Info_Stage_ID_d,Stage_Info_Stage_Name_s,Stage_Info_Submission_Time_d,Event_s,TimeGenerated\n| order by TimeGenerated asc  nulls last \n| join kind= inner (\n    SparkListenerEvent_CL\n    | where $__timeFilter(TimeGenerated)\n    | where Event_s contains \"SparkListenerTaskEnd\"\n    | where Task_End_Reason_Reason_s contains \"Success\"\n    | project Task_Info_Launch_Time_d,Stage_ID_d,Task_Info_Task_ID_d,Event_s,\n              Task_Metrics_Executor_Deserialize_Time_d,Task_Metrics_Shuffle_Read_Metrics_Fetch_Wait_Time_d,\n              Task_Metrics_Executor_Run_Time_d,Task_Metrics_Shuffle_Write_Metrics_Shuffle_Write_Time_d,\n              Task_Metrics_Result_Serialization_Time_d,Task_Info_Getting_Result_Time_d,\n              Task_Metrics_Shuffle_Read_Metrics_Remote_Bytes_Read_d,Task_Metrics_Shuffle_Write_Metrics_Shuffle_Bytes_Written_d,\n              Task_Metrics_JVM_GC_Time_d,Task_Metrics_Input_Metrics_Bytes_Read_d,TimeGenerated\n) on $left.Stage_Info_Stage_ID_d == $right.Stage_ID_d;\nresult\n| extend name=strcat(\"InputBytesRead \",Stage_Info_Stage_Name_s)\n| summarize percentile(Task_Metrics_Input_Metrics_Bytes_Read_d,90) by bin(TimeGenerated,1m),name\n| order by TimeGenerated asc nulls last;\n\n",
-            "resultFormat": "time_series",
-   			"workspace" : "YOUR_WORKSPACEID"
-          },
-          "azureMonitor": {
-            "dimensionFilter": "*",
-            "metricDefinition": "select",
-            "metricName": "select",
-            "resourceGroup": "select",
-            "resourceName": "select",
-            "timeGrain": "auto"
-          },
-          "queryType": "Azure Log Analytics",
-          "refId": "I"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "Tasks Metrics  Per Stage ( 90% Percentile)",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "ms",
-          "label": "Latency",
-          "logBase": 2,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "bytes",
-          "label": "Data Size",
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "${DS_ALA}",
-      "fill": 1,
-      "gridPos": {
         "h": 8,
         "w": 11,
         "x": 0,
-        "y": 27
+        "y": 36
       },
       "id": 37,
       "legend": {
@@ -1213,7 +1308,7 @@
             "yaxis": ""
           },
           "azureLogAnalytics": {
-            "query": "SparkListenerEvent_CL\n| where $__timeFilter(TimeGenerated)\n| where Event_s contains \"SparkListenerStageCompleted\"\n| project Stage_Info_Number_of_Tasks_d,Stage_Info_Stage_Name_s,TimeGenerated \n| order by TimeGenerated asc nulls last",
+            "query": "let results=SparkListenerEvent_CL\n| where $__timeFilter(TimeGenerated)\n| where  Event_s  contains \"SparkListenerStageSubmitted\"\n| project \nStage_Info_Stage_ID_d,Properties_spark_app_id_s,TimeGenerated,Properties_spark_databricks_clusterUsageTags_clusterName_s\n| order by TimeGenerated asc  nulls last \n| join kind= inner (\n    SparkListenerEvent_CL\n    | where $__timeFilter(TimeGenerated)\n    | where Event_s contains \"SparkListenerStageCompleted\"  \n) on Stage_Info_Stage_ID_d;\nresults\n | extend slice = strcat(\"# StagesCompleted \",Properties_spark_databricks_clusterUsageTags_clusterName_s,\"-\",\nProperties_spark_app_id_s,\" \",Stage_Info_Stage_Name_s)\n| extend slice=strcat(Properties_spark_databricks_clusterUsageTags_clusterName_s,\"-\",Properties_spark_app_id_s,\" \",Stage_Info_Stage_Name_s) \n| project Stage_Info_Number_of_Tasks_d,slice,TimeGenerated \n| order by TimeGenerated asc nulls last\n\n",
             "resultFormat": "time_series",
    			"workspace" : "YOUR_WORKSPACEID"
           },
@@ -1281,7 +1376,7 @@
         "h": 8,
         "w": 12,
         "x": 11,
-        "y": 27
+        "y": 36
       },
       "id": 40,
       "legend": {
@@ -1318,7 +1413,7 @@
             "yaxis": ""
           },
           "azureLogAnalytics": {
-            "query": "SparkMetric_CL\n| where $__timeFilter(TimeGenerated)\n| extend sname=split(name_s, \".\")\n| extend executor=strcat(\"executorid:\",sname[1]) \n| where name_s contains \"threadpool.activeTasks\" \n| summarize percentile(value_d,90)  by bin(TimeGenerated, 1m),executor\n| order by TimeGenerated asc  nulls last ",
+            "query": "SparkMetric_CL\n| where $__timeFilter(TimeGenerated)\n| extend sname=split(name_s, \".\")\n| extend executor=strcat(sname[0],\".\",sname[1]) \n| where name_s contains \"threadpool.activeTasks\" \n| summarize percentile(value_d,90)  by bin(TimeGenerated, 1m),executor\n| order by TimeGenerated asc  nulls last ",
             "resultFormat": "time_series",
    			"workspace" : "YOUR_WORKSPACEID"
           },
@@ -1385,7 +1480,7 @@
         "h": 8,
         "w": 11,
         "x": 0,
-        "y": 35
+        "y": 44
       },
       "id": 42,
       "legend": {
@@ -1489,7 +1584,7 @@
         "h": 8,
         "w": 12,
         "x": 11,
-        "y": 35
+        "y": 44
       },
       "id": 19,
       "legend": {
@@ -1532,7 +1627,7 @@
             "yaxis": ""
           },
           "azureLogAnalytics": {
-            "query": "SparkMetric_CL\n| where $__timeFilter(TimeGenerated)\n| where name_s !contains \"driver\" \n| where name_s contains \"executor\"\n| extend sname=split(name_s, \".\")\n| extend executor=strcat(sname[0],sname[1]) \n| summarize NumExecutors=dcount(executor)  by bin(TimeGenerated,  1m)\n| order by TimeGenerated asc  nulls last ",
+            "query": "SparkMetric_CL\n| where $__timeFilter(TimeGenerated)\n| where name_s !contains \"driver\" \n| where name_s contains \"executor\"\n| extend sname=split(name_s, \".\")\n| extend executor=strcat(sname[1]) \n| extend app=strcat(sname[0])\n| summarize NumExecutors=dcount(executor)  by bin(TimeGenerated,  1m),app\n| order by TimeGenerated asc  nulls last",
             "resultFormat": "time_series",
    			"workspace" : "YOUR_WORKSPACEID"
           },
@@ -1651,7 +1746,7 @@
         "h": 9,
         "w": 7,
         "x": 0,
-        "y": 43
+        "y": 52
       },
       "id": 13,
       "legend": {
@@ -1688,7 +1783,7 @@
             "yaxis": ""
           },
           "azureLogAnalytics": {
-            "query": "let results = SparkMetric_CL \n| where $__timeFilter(TimeGenerated)\n| where name_s contains \"executor.deserializetime\" \n| extend sname=split(name_s, \".\") \n| extend executor=strcat(\"executorid:\",sname[1])\n| project TimeGenerated , desetime=count_d , executor ,name_s\n| join kind= inner (\nSparkMetric_CL\n| where $__timeFilter(TimeGenerated)\n| where name_s contains \"executor.RunTime\"\n| extend sname=split(name_s, \".\") \n| extend executor=strcat(\"executorid:\",sname[1])\n| project TimeGenerated , runTime=count_d , executor ,name_s\n) on executor, TimeGenerated;\nresults\n| extend deseUsage=(desetime/runTime)*100\n| summarize deSerializationCpuTime=percentiles(deseUsage,90) by bin(TimeGenerated, 1m), executor\n| order by TimeGenerated asc nulls last ",
+            "query": "let results = SparkMetric_CL \n| where $__timeFilter(TimeGenerated)\n| where name_s contains \"executor.deserializetime\" \n| extend sname=split(name_s, \".\") \n| extend executor=strcat(sname[0],\".\",sname[1])\n| project TimeGenerated , desetime=count_d , executor ,name_s\n| join kind= inner (\nSparkMetric_CL\n| where $__timeFilter(TimeGenerated)\n| where name_s contains \"executor.RunTime\"\n| extend sname=split(name_s, \".\") \n| extend executor=strcat(sname[0],\".\",sname[1])\n| project TimeGenerated , runTime=count_d , executor ,name_s\n) on executor, TimeGenerated;\nresults\n| extend deseUsage=(desetime/runTime)*100\n| summarize deSerializationCpuTime=percentiles(deseUsage,90) by bin(TimeGenerated, 1m), executor\n| order by TimeGenerated asc nulls last ",
             "resultFormat": "time_series",
    			"workspace" : "YOUR_WORKSPACEID"
           },
@@ -1756,7 +1851,7 @@
         "h": 9,
         "w": 7,
         "x": 7,
-        "y": 43
+        "y": 52
       },
       "id": 14,
       "legend": {
@@ -1793,7 +1888,7 @@
             "yaxis": ""
           },
           "azureLogAnalytics": {
-            "query": "let results = SparkMetric_CL\n| where $__timeFilter(TimeGenerated)\n| where name_s contains \"executor.resultserializationtime\" \n| extend sname=split(name_s, \".\") \n| extend executor=strcat(\"executorid:\",sname[1])\n| project TimeGenerated , setime=count_d , executor ,name_s\n| join kind= inner (\nSparkMetric_CL\n| where $__timeFilter(TimeGenerated)\n| where name_s contains \"executor.RunTime\"\n| extend sname=split(name_s, \".\") \n| extend executor=strcat(\"executorid:\",sname[1])\n| project TimeGenerated , runTime=count_d , executor ,name_s\n) on executor, TimeGenerated;\nresults\n| extend serUsage=(setime/runTime)*100\n| summarize SerializationCpuTime=percentile(serUsage,90) by bin(TimeGenerated, 1m), executor\n| order by TimeGenerated asc nulls last\n| render timechart ",
+            "query": "let results = SparkMetric_CL\n| where $__timeFilter(TimeGenerated)\n| where name_s contains \"executor.resultserializationtime\" \n| extend sname=split(name_s, \".\") \n| extend executor=strcat(sname[0],\".\",sname[1])\n| project TimeGenerated , setime=count_d , executor ,name_s\n| join kind= inner (\nSparkMetric_CL\n| where $__timeFilter(TimeGenerated)\n| where name_s contains \"executor.RunTime\"\n| extend sname=split(name_s, \".\") \n| extend executor=strcat(sname[0],\".\",sname[1])\n| project TimeGenerated , runTime=count_d , executor ,name_s\n) on executor, TimeGenerated;\nresults\n| extend serUsage=(setime/runTime)*100\n| summarize SerializationCpuTime=percentile(serUsage,90) by bin(TimeGenerated, 1m), executor\n| order by TimeGenerated asc nulls last\n| render timechart ",
             "resultFormat": "time_series",
    			"workspace" : "YOUR_WORKSPACEID"
           },
@@ -1861,7 +1956,7 @@
         "h": 9,
         "w": 9,
         "x": 14,
-        "y": 43
+        "y": 52
       },
       "id": 11,
       "legend": {
@@ -1899,7 +1994,7 @@
             "yaxis": ""
           },
           "azureLogAnalytics": {
-            "query": "let results = SparkMetric_CL \n| where $__timeFilter(TimeGenerated) \n| where name_s contains \"executor.cpuTime\" \n| extend sname=split(name_s, \".\")\n| extend executor=strcat(\"executorid:\",sname[1])\n| project TimeGenerated , cpuTime=count_d/1000000  ,  executor ,name_s\n| join kind= inner (\n    SparkMetric_CL\n| where $__timeFilter(TimeGenerated) \n| where name_s contains \"executor.RunTime\"\n| extend sname=split(name_s, \".\") \n| extend executor=strcat(\"executorid:\",sname[1])\n| project TimeGenerated , runTime=count_d  ,  executor ,name_s\n) on executor, TimeGenerated;\nresults\n| extend cpuUsage=(cpuTime/runTime)*100\n| summarize ExecutorCpuTime = percentile(cpuUsage,90) by bin(TimeGenerated, 1m), executor\n| order by TimeGenerated asc nulls last   \n",
+            "query": "let results = SparkMetric_CL \n| where $__timeFilter(TimeGenerated) \n| where name_s contains \"executor.cpuTime\" \n| extend sname=split(name_s, \".\")\n| extend executor=strcat(sname[0],\".\",sname[1])\n| project TimeGenerated , cpuTime=count_d/1000000  ,  executor ,name_s\n| join kind= inner (\n    SparkMetric_CL\n| where $__timeFilter(TimeGenerated) \n| where name_s contains \"executor.RunTime\"\n| extend sname=split(name_s, \".\") \n| extend executor=strcat(sname[0],\".\",sname[1])\n| project TimeGenerated , runTime=count_d  ,  executor ,name_s\n) on executor, TimeGenerated;\nresults\n| extend cpuUsage=(cpuTime/runTime)*100\n| summarize ExecutorCpuTime = percentile(cpuUsage,90) by bin(TimeGenerated, 1m), executor\n| order by TimeGenerated asc nulls last   \n",
             "resultFormat": "time_series",
    			"workspace" : "YOUR_WORKSPACEID"
           },
@@ -2017,7 +2112,7 @@
         "h": 8,
         "w": 7,
         "x": 0,
-        "y": 52
+        "y": 61
       },
       "id": 24,
       "legend": {
@@ -2060,7 +2155,7 @@
             "yaxis": ""
           },
           "azureLogAnalytics": {
-            "query": "SparkMetric_CL\n| where $__timeFilter(TimeGenerated)\n| where  name_s  contains \"shuffle-client.usedDirectMemory\"\n| extend sname=split(name_s, \".\")\n| extend executor=strcat(\"executorid:\",sname[1])\n| summarize percentile(value_d,90)  by bin(TimeGenerated,  1m), executor\n| order by TimeGenerated asc  nulls last",
+            "query": "SparkMetric_CL\n| where $__timeFilter(TimeGenerated)\n| where  name_s  contains \"shuffle-client.usedDirectMemory\"\n| extend sname=split(name_s, \".\")\n| extend executor=strcat(sname[0],\".\",sname[1])\n| summarize percentile(value_d,90)  by bin(TimeGenerated,  1m), executor\n| order by TimeGenerated asc  nulls last",
             "resultFormat": "time_series",
    			"workspace" : "YOUR_WORKSPACEID"
           },
@@ -2179,7 +2274,7 @@
         "h": 8,
         "w": 7,
         "x": 7,
-        "y": 52
+        "y": 61
       },
       "id": 25,
       "legend": {
@@ -2222,7 +2317,7 @@
             "yaxis": ""
           },
           "azureLogAnalytics": {
-            "query": "SparkMetric_CL\n| where $__timeFilter(TimeGenerated)\n| where  name_s  contains \"shuffle-client.usedHeapMemory\"\n| extend sname=split(name_s, \".\")\n| extend executor=strcat(\"executorid:\",sname[1])\n| summarize percentile(value_d,90)  by bin(TimeGenerated,  1m), executor\n| order by TimeGenerated asc  nulls last",
+            "query": "SparkMetric_CL\n| where $__timeFilter(TimeGenerated)\n| where  name_s  contains \"shuffle-client.usedHeapMemory\"\n| extend sname=split(name_s, \".\")\n| extend executor=strcat(sname[0],\".\",sname[1])\n| summarize percentile(value_d,90)  by bin(TimeGenerated,  1m), executor\n| order by TimeGenerated asc  nulls last",
             "resultFormat": "time_series",
    			"workspace" : "YOUR_WORKSPACEID"
           },
@@ -2341,7 +2436,7 @@
         "h": 8,
         "w": 7,
         "x": 14,
-        "y": 52
+        "y": 61
       },
       "id": 9,
       "legend": {
@@ -2378,7 +2473,7 @@
             "yaxis": ""
           },
           "azureLogAnalytics": {
-            "query": "let results = SparkMetric_CL\n| where $__timeFilter(TimeGenerated)\n| where name_s contains \"executor.jvmGCTime\" \n| extend sname=split(name_s, \".\")\n| extend executor=strcat(\"executorid:\",sname[1])\n| project TimeGenerated , jvmgcTime=count_d , executor ,name_s\n| join kind= inner (\nSparkMetric_CL\n| where $__timeFilter(TimeGenerated)\n| where name_s contains \"executor.RunTime\"\n| extend sname=split(name_s, \".\")\n| extend executor=strcat(\"executorid:\",sname[1]) \n| project TimeGenerated , runTime=count_d , executor ,name_s\n) on executor, TimeGenerated;\nresults\n| extend JvmcpuUsage=(jvmgcTime/runTime)*100\n| summarize JvmCpuTime = percentile(JvmcpuUsage,90) by bin(TimeGenerated, 1m), executor\n| order by TimeGenerated asc nulls last\n| render timechart  \n",
+            "query": "let results = SparkMetric_CL\n| where $__timeFilter(TimeGenerated)\n| where name_s contains \"executor.jvmGCTime\" \n| extend sname=split(name_s, \".\")\n| extend executor=strcat(sname[0],\".\",sname[1])\n| project TimeGenerated , jvmgcTime=count_d , executor ,name_s\n| join kind= inner (\nSparkMetric_CL\n| where $__timeFilter(TimeGenerated)\n| where name_s contains \"executor.RunTime\"\n| extend sname=split(name_s, \".\")\n| extend executor=strcat(sname[0],\".\",sname[1])\n| project TimeGenerated , runTime=count_d , executor ,name_s\n) on executor, TimeGenerated;\nresults\n| extend JvmcpuUsage=(jvmgcTime/runTime)*100\n| summarize JvmCpuTime = percentile(JvmcpuUsage,90) by bin(TimeGenerated, 1m), executor\n| order by TimeGenerated asc nulls last\n| render timechart  \n",
             "resultFormat": "time_series",
    			"workspace" : "YOUR_WORKSPACEID"
           },
@@ -2446,7 +2541,7 @@
         "h": 7,
         "w": 7,
         "x": 0,
-        "y": 60
+        "y": 69
       },
       "id": 22,
       "legend": {
@@ -2489,7 +2584,7 @@
             "yaxis": ""
           },
           "azureLogAnalytics": {
-            "query": "let results=SparkMetric_CL\n| where $__timeFilter()\n| where  name_s  contains \"executor.shuffleBytesWritten\"\n| extend sname=split(name_s, \".\") \n| extend executor=strcat(\"executorid:\",sname[1])\n| summarize MaxShuffleWrites=max(count_d)  by bin(TimeGenerated,  1m), executor \n| order by TimeGenerated asc  nulls last \n| join kind= inner (\n    SparkMetric_CL\n    | where $__timeFilter()\n    | where name_s contains \"executor.shuffleBytesWritten\"\n    | extend sname=split(name_s, \".\") \n    | extend executor=strcat(\"executorid:\",sname[1])\n| summarize MinShuffleWrites=min(count_d)  by bin(TimeGenerated,  1m), executor\n) on executor, TimeGenerated;\nresults\n| extend ShuffleBytesWritten=MaxShuffleWrites-MinShuffleWrites \n| summarize max(ShuffleBytesWritten)   by bin(TimeGenerated,  1m), executor\n| order by TimeGenerated asc nulls last\n",
+            "query": "let results=SparkMetric_CL\n| where $__timeFilter()\n| where  name_s  contains \"executor.shuffleBytesWritten\"\n| extend sname=split(name_s, \".\") \n| extend executor=strcat(sname[0],\".\",sname[1])\n| summarize MaxShuffleWrites=max(count_d)  by bin(TimeGenerated,  1m), executor \n| order by TimeGenerated asc  nulls last \n| join kind= inner (\n    SparkMetric_CL\n    | where $__timeFilter()\n    | where name_s contains \"executor.shuffleBytesWritten\"\n    | extend sname=split(name_s, \".\") \n    | extend executor=strcat(sname[0],\".\",sname[1])\n| summarize MinShuffleWrites=min(count_d)  by bin(TimeGenerated,  1m), executor\n) on executor, TimeGenerated;\nresults\n| extend ShuffleBytesWritten=MaxShuffleWrites-MinShuffleWrites \n| summarize max(ShuffleBytesWritten)   by bin(TimeGenerated,  1m), executor\n| order by TimeGenerated asc nulls last\n",
             "resultFormat": "time_series",
    			"workspace" : "YOUR_WORKSPACEID"
           },
@@ -2608,7 +2703,7 @@
         "h": 7,
         "w": 7,
         "x": 7,
-        "y": 60
+        "y": 69
       },
       "id": 26,
       "legend": {
@@ -2651,7 +2746,7 @@
             "yaxis": ""
           },
           "azureLogAnalytics": {
-            "query": "let results=SparkMetric_CL\n| where $__timeFilter()\n| where  name_s  contains \"executor.shuffleTotalBytesRead\"\n| extend sname=split(name_s, \".\") \n| extend executor=strcat(\"executorid:\",sname[1])\n| summarize MaxShuffleWrites=max(count_d)  by bin(TimeGenerated,  1m), executor \n| order by TimeGenerated asc  nulls last \n| join kind= inner (\n    SparkMetric_CL\n    | where $__timeFilter()\n    | where name_s contains \"executor.shuffleTotalBytesRead\"\n    | extend sname=split(name_s, \".\") \n    | extend executor=strcat(\"executorid:\",sname[1])\n| summarize MinShuffleWrites=min(count_d)  by bin(TimeGenerated,  1m), executor\n) on executor, TimeGenerated;\nresults\n| extend ShuffleBytesWritten=MaxShuffleWrites-MinShuffleWrites \n| summarize max(ShuffleBytesWritten)   by bin(TimeGenerated,  1m), executor\n| order by TimeGenerated asc nulls last\n",
+            "query": "let results=SparkMetric_CL\n| where $__timeFilter()\n| where  name_s  contains \"executor.shuffleTotalBytesRead\"\n| extend sname=split(name_s, \".\") \n| extend executor=strcat(sname[0],\".\",sname[1])\n| summarize MaxShuffleWrites=max(count_d)  by bin(TimeGenerated,  1m), executor \n| order by TimeGenerated asc  nulls last \n| join kind= inner (\n    SparkMetric_CL\n    | where $__timeFilter()\n    | where name_s contains \"executor.shuffleTotalBytesRead\"\n    | extend sname=split(name_s, \".\") \n    | extend executor=strcat(sname[0],\".\",sname[1])\n| summarize MinShuffleWrites=min(count_d)  by bin(TimeGenerated,  1m), executor\n) on executor, TimeGenerated;\nresults\n| extend ShuffleBytesWritten=MaxShuffleWrites-MinShuffleWrites \n| summarize max(ShuffleBytesWritten)   by bin(TimeGenerated,  1m), executor\n| order by TimeGenerated asc nulls last\n",
             "resultFormat": "time_series",
    			"workspace" : "YOUR_WORKSPACEID"
           },
@@ -2770,7 +2865,7 @@
         "h": 7,
         "w": 9,
         "x": 14,
-        "y": 60
+        "y": 69
       },
       "id": 27,
       "legend": {
@@ -2813,7 +2908,7 @@
             "yaxis": ""
           },
           "azureLogAnalytics": {
-            "query": "let results=SparkMetric_CL\n| where $__timeFilter(TimeGenerated)\n| where  name_s  contains \"executor.memoryBytesSpilled\"\n| extend sname=split(name_s, \".\") \n| extend executor=strcat(\"executorid:\",sname[1])\n| summarize MaxShuffleWrites=max(count_d)  by bin(TimeGenerated,  1m), executor \n| order by TimeGenerated asc  nulls last \n| join kind= inner (\n    SparkMetric_CL\n    | where $__timeFilter(TimeGenerated)\n    | where name_s contains \"executor.memoryBytesSpilled\"\n    | extend sname=split(name_s, \".\") \n    | extend executor=strcat(\"executorid:\",sname[1])\n| summarize MinShuffleWrites=min(count_d)  by bin(TimeGenerated,  1m), executor\n) on executor, TimeGenerated;\nresults\n| extend ShuffleBytesWritten=MaxShuffleWrites-MinShuffleWrites \n| summarize any(ShuffleBytesWritten)   by bin(TimeGenerated,  1m), executor\n| order by TimeGenerated asc nulls last\n",
+            "query": "let results=SparkMetric_CL\n| where $__timeFilter(TimeGenerated)\n| where  name_s  contains \"executor.memoryBytesSpilled\"\n| extend sname=split(name_s, \".\") \n| extend executor=strcat(sname[0],\".\",sname[1])\n| summarize MaxShuffleWrites=max(count_d)  by bin(TimeGenerated,  1m), executor \n| order by TimeGenerated asc  nulls last \n| join kind= inner (\n    SparkMetric_CL\n    | where $__timeFilter(TimeGenerated)\n    | where name_s contains \"executor.memoryBytesSpilled\"\n    | extend sname=split(name_s, \".\") \n    | extend executor=strcat(sname[0],\".\",sname[1])\n| summarize MinShuffleWrites=min(count_d)  by bin(TimeGenerated,  1m), executor\n) on executor, TimeGenerated;\nresults\n| extend ShuffleBytesWritten=MaxShuffleWrites-MinShuffleWrites \n| summarize any(ShuffleBytesWritten)   by bin(TimeGenerated,  1m), executor\n| order by TimeGenerated asc nulls last\n",
             "resultFormat": "time_series",
    			"workspace" : "YOUR_WORKSPACEID"
           },
@@ -2932,7 +3027,7 @@
         "h": 8,
         "w": 13,
         "x": 0,
-        "y": 67
+        "y": 76
       },
       "id": 20,
       "legend": {
@@ -2975,7 +3070,7 @@
             "yaxis": ""
           },
           "azureLogAnalytics": {
-            "query": "SparkMetric_CL\n| where $__timeFilter(TimeGenerated)\n| extend sname=split(name_s, \".\")\n| extend executor=strcat(\"executorid:\",sname[1])\n| where  name_s  contains \"executor.filesystem.file.write_bytes\" \n| summarize FileSystemWriteBytes=percentile(value_d,90)  by bin(TimeGenerated,  1m), executor\n| order by TimeGenerated asc  nulls last \n| render timechart",
+            "query": "SparkMetric_CL\n| where $__timeFilter(TimeGenerated)\n| extend sname=split(name_s, \".\")\n| extend executor=strcat(sname[0],\".\",sname[1])\n| where  name_s  contains \"executor.filesystem.file.write_bytes\" \n| summarize FileSystemWriteBytes=percentile(value_d,90)  by bin(TimeGenerated,  1m), executor\n| order by TimeGenerated asc  nulls last ",
             "resultFormat": "time_series",
    			"workspace" : "YOUR_WORKSPACEID"
           },
@@ -3094,7 +3189,7 @@
         "h": 8,
         "w": 9,
         "x": 13,
-        "y": 67
+        "y": 76
       },
       "id": 23,
       "legend": {
@@ -3137,7 +3232,7 @@
             "yaxis": ""
           },
           "azureLogAnalytics": {
-            "query": "SparkMetric_CL\n| where $__timeFilter(TimeGenerated)\n| extend sname=split(name_s, \".\")\n| extend executor=strcat(\"executorid:\",sname[1])\n| where  name_s  contains \"executor.filesystem.file.read_bytes\" \n| summarize FileSystemReadBytes=percentile(value_d,90)  by bin(TimeGenerated,  1m), executor\n| order by TimeGenerated asc  nulls last \n| render timechart",
+            "query": "SparkMetric_CL\n| where $__timeFilter(TimeGenerated)\n| extend sname=split(name_s, \".\")\n| extend executor=strcat(sname[0],\".\",sname[1])\n| where  name_s  contains \"executor.filesystem.file.read_bytes\" \n| summarize FileSystemReadBytes=percentile(value_d,90)  by bin(TimeGenerated,  1m), executor\n| order by TimeGenerated asc  nulls last \n| render timechart",
             "resultFormat": "time_series",
    			"workspace" : "YOUR_WORKSPACEID"
           },
@@ -3256,7 +3351,7 @@
         "h": 7,
         "w": 13,
         "x": 0,
-        "y": 75
+        "y": 84
       },
       "id": 51,
       "legend": {
@@ -3299,7 +3394,7 @@
             "yaxis": ""
           },
           "azureLogAnalytics": {
-            "query": "let results=SparkMetric_CL\n| where $__timeFilter()\n| where  name_s  contains \"executor.diskBytesSpilled\"\n| extend sname=split(name_s, \".\") \n| extend executor=strcat(\"executorid:\",sname[1])\n| summarize MaxShuffleWrites=max(count_d)  by bin(TimeGenerated,  1m), executor \n| order by TimeGenerated asc  nulls last \n| join kind= inner (\n    SparkMetric_CL\n    | where $__timeFilter()\n    | where name_s contains \"executor.diskBytesSpilled\"\n    | extend sname=split(name_s, \".\") \n    | extend executor=strcat(\"executorid:\",sname[1])\n| summarize MinShuffleWrites=min(count_d)  by bin(TimeGenerated,  1m), executor\n) on executor, TimeGenerated;\nresults\n| extend ShuffleBytesWritten=MaxShuffleWrites-MinShuffleWrites \n| summarize any(ShuffleBytesWritten)   by bin(TimeGenerated,  1m), executor\n| order by TimeGenerated asc nulls last\n",
+            "query": "let results=SparkMetric_CL\n| where $__timeFilter()\n| where  name_s  contains \"executor.diskBytesSpilled\"\n| extend sname=split(name_s, \".\") \n| extend executor=strcat(sname[0],\".\",sname[1])\n| summarize MaxShuffleWrites=max(count_d)  by bin(TimeGenerated,  1m), executor \n| order by TimeGenerated asc  nulls last \n| join kind= inner (\n    SparkMetric_CL\n    | where $__timeFilter()\n    | where name_s contains \"executor.diskBytesSpilled\"\n    | extend sname=split(name_s, \".\") \n    | extend executor=strcat(sname[0],\".\",sname[1])\n| summarize MinShuffleWrites=min(count_d)  by bin(TimeGenerated,  1m), executor\n) on executor, TimeGenerated;\nresults\n| extend ShuffleBytesWritten=MaxShuffleWrites-MinShuffleWrites \n| summarize any(ShuffleBytesWritten)   by bin(TimeGenerated,  1m), executor\n| order by TimeGenerated asc nulls last\n",
             "resultFormat": "time_series",
    			"workspace" : "YOUR_WORKSPACEID"
           },
@@ -3418,7 +3513,7 @@
         "h": 7,
         "w": 9,
         "x": 13,
-        "y": 75
+        "y": 84
       },
       "id": 50,
       "legend": {
@@ -3461,7 +3556,7 @@
             "yaxis": ""
           },
           "azureLogAnalytics": {
-            "query": "let results=SparkMetric_CL\n| where $__timeFilter()\n| where  name_s  contains \"executor.shuffleRemoteBytesReadToDisk\"\n| extend sname=split(name_s, \".\") \n| extend executor=strcat(\"executorid:\",sname[1])\n| summarize MaxShuffleWrites=max(count_d)  by bin(TimeGenerated,  1m), executor \n| order by TimeGenerated asc  nulls last \n| join kind= inner (\n    SparkMetric_CL\n    | where $__timeFilter()\n    | where name_s contains \"executor.shuffleRemoteBytesReadToDisk\"\n    | extend sname=split(name_s, \".\") \n    | extend executor=strcat(\"executorid:\",sname[1])\n| summarize MinShuffleWrites=min(count_d)  by bin(TimeGenerated,  1m), executor\n) on executor, TimeGenerated;\nresults\n| extend ShuffleBytesWritten=MaxShuffleWrites-MinShuffleWrites \n| summarize any(ShuffleBytesWritten)   by bin(TimeGenerated,  1m), executor\n| order by TimeGenerated asc nulls last\n",
+            "query": "let results=SparkMetric_CL\n| where $__timeFilter()\n| where  name_s  contains \"executor.shuffleRemoteBytesReadToDisk\"\n| extend sname=split(name_s, \".\") \n| extend executor=strcat(sname[0],\".\",sname[1])\n| summarize MaxShuffleWrites=max(count_d)  by bin(TimeGenerated,  1m), executor \n| order by TimeGenerated asc  nulls last \n| join kind= inner (\n    SparkMetric_CL\n    | where $__timeFilter()\n    | where name_s contains \"executor.shuffleRemoteBytesReadToDisk\"\n    | extend sname=split(name_s, \".\") \n    | extend executor=strcat(sname[0],\".\",sname[1])\n| summarize MinShuffleWrites=min(count_d)  by bin(TimeGenerated,  1m), executor\n) on executor, TimeGenerated;\nresults\n| extend ShuffleBytesWritten=MaxShuffleWrites-MinShuffleWrites \n| summarize any(ShuffleBytesWritten)   by bin(TimeGenerated,  1m), executor\n| order by TimeGenerated asc nulls last\n",
             "resultFormat": "time_series",
    			"workspace" : "YOUR_WORKSPACEID"
           },
@@ -3580,7 +3675,7 @@
         "h": 7,
         "w": 13,
         "x": 0,
-        "y": 82
+        "y": 91
       },
       "id": 17,
       "legend": {
@@ -3685,7 +3780,7 @@
         "h": 7,
         "w": 9,
         "x": 13,
-        "y": 82
+        "y": 91
       },
       "id": 47,
       "legend": {
@@ -3814,7 +3909,7 @@
         "h": 4,
         "w": 23,
         "x": 0,
-        "y": 89
+        "y": 98
       },
       "id": 16,
       "links": [],
@@ -3922,8 +4017,8 @@
     "list": []
   },
   "time": {
-    "from": "2019-02-04T19:24:54.834Z",
-    "to": "2019-02-04T19:25:01.206Z"
+    "from": "now-5m",
+    "to": "now"
   },
   "timepicker": {
     "refresh_intervals": [
@@ -3953,5 +4048,5 @@
   "timezone": "",
   "title": "Spark Metrics",
   "uid": "SP3yfcBmz",
-  "version": 370
+  "version": 409
 }
