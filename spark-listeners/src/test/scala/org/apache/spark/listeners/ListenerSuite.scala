@@ -1,6 +1,7 @@
 package org.apache.spark.listeners
 
 import org.apache.spark.internal.Logging
+import org.apache.spark.listeners.sink.SparkListenerSink
 import org.apache.spark.scheduler.SparkListenerEvent
 import org.apache.spark.sql.streaming.StreamingQueryListener
 import org.apache.spark.streaming.scheduler.StreamingListenerEvent

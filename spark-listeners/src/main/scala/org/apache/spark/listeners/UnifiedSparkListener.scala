@@ -2,8 +2,9 @@ package org.apache.spark.listeners
 
 import java.time.Instant
 
-import org.apache.spark.SparkConf
+import org.apache.spark.{SparkConf, SparkException}
 import org.apache.spark.internal.Logging
+import org.apache.spark.listeners.sink.SparkListenerSink
 import org.apache.spark.scheduler._
 import org.apache.spark.sql.streaming.StreamingQueryListener
 import org.apache.spark.util.JsonProtocol
@@ -46,16 +47,14 @@ class UnifiedSparkListener(override val conf: SparkConf)
   }
 
   private def createSink(conf: SparkConf): SparkListenerSink = {
-    val sink = conf.get(
-      "spark.unifiedListener.sink",
-      classOf[org.apache.spark.listeners.LogAnalyticsListenerSink].getName
-    )
+    val sink = conf.getOption("spark.unifiedListener.sink") match {
+      case Some(listenerSinkClassName) => listenerSinkClassName
+      case None => throw new SparkException("spark.unifiedListener.sink setting is required")
+    }
     logInfo(s"Creating listener sink: ${sink}")
     org.apache.spark.util.Utils.loadExtensions(
       classOf[SparkListenerSink],
-      //Seq("org.apache.spark.listeners.LogAnalyticsListenerSink"),
       Seq(sink),
-      //Seq("org.apache.spark.listeners.EventHubListenerSink"),
       conf).head
   }
 
