@@ -3,7 +3,7 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "workspaceName": {
-      "defaultValue": "[toLower(concat('spark-monitoring-',uniqueString(subscription().subscriptionId)))]",
+      "defaultValue": "[toLower(concat('spark-monitoring-',uniqueString(resourceGroup().name)))]",
       "type": "string",
       "metadata": {
         "description": "workspaceName"
