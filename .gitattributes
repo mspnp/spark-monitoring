@@ -1,0 +1,7 @@
+###############################################################################
+# Set default behavior to automatically normalize line endings.
+###############################################################################
+* text=auto
+
+# Keep shell scripts with LF
+*.sh text eol=lf
