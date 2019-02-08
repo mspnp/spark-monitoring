@@ -2,12 +2,17 @@ package com.microsoft.pnp.samplejob
 
 import com.microsoft.pnp.logging.Log4jConfiguration
 import com.microsoft.pnp.util.TryWith
+import org.apache.spark.SparkEnv
 import org.apache.spark.internal.Logging
+import org.apache.spark.metrics.UserMetricsSystems
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.functions.window
 import org.apache.spark.sql.types.{StringType, StructType, TimestampType}
 
 object StreamingQueryListenerSampleJob extends Logging {
+
+  private final val METRICS_NAMESPACE = "streamingquerylistenersamplejob"
+  private final val COUNTER_NAME = "rowcounter"
 
   def main(args: Array[String]): Unit = {
 
@@ -35,6 +40,13 @@ object StreamingQueryListenerSampleJob extends Logging {
 
     val jsonSchema = new StructType().add("time", TimestampType).add("action", StringType)
 
+    val driverMetricsSystem = UserMetricsSystems
+        .getMetricSystem(METRICS_NAMESPACE, builder => {
+          builder.registerCounter(COUNTER_NAME)
+        })
+
+    driverMetricsSystem.counter(COUNTER_NAME).inc
+
     // Similar to definition of staticInputDF above, just using `readStream` instead of `read`
     val streamingInputDF =
       spark
@@ -43,6 +55,8 @@ object StreamingQueryListenerSampleJob extends Logging {
         .option("maxFilesPerTrigger", 1) // Treat a sequence of files as a stream by picking one file at a time
         .json(inputPath)
 
+    driverMetricsSystem.counter(COUNTER_NAME).inc(5)
+
     val streamingCountsDF =
       streamingInputDF
         .groupBy($"action", window($"time", "1 hour"))
@@ -50,6 +64,8 @@ object StreamingQueryListenerSampleJob extends Logging {
 
     // Is this DF actually a streaming DF?
     streamingCountsDF.isStreaming
+
+    driverMetricsSystem.counter(COUNTER_NAME).inc(10)
 
     val query =
       streamingCountsDF
