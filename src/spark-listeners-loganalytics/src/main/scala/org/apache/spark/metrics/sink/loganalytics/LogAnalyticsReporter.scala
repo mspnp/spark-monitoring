@@ -1,24 +1,16 @@
 package org.apache.spark.metrics.sink.loganalytics
 
-import com.codahale.metrics._
-import com.codahale.metrics.Timer
-import com.codahale.metrics.json.MetricsModule
-import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.node.ObjectNode
-import org.apache.spark.listeners.sink.loganalytics
-import org.json4s.JsonAST.JValue
-import org.json4s.JsonDSL._
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-import java.io.IOException
 import java.time.Instant
-import java.util._
 import java.util.concurrent.TimeUnit
 
+import com.codahale.metrics.{Timer, _}
+import com.codahale.metrics.json.MetricsModule
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import com.microsoft.pnp.client.loganalytics.{LogAnalyticsClient, LogAnalyticsSendBufferClient}
 import org.apache.spark.internal.Logging
+import org.json4s.JsonAST.JValue
+import org.json4s.JsonDSL._
 import org.json4s.jackson.JsonMethods.{compact, parse, render}
 
 import scala.collection.mutable.ArrayBuffer
@@ -38,7 +30,7 @@ object LogAnalyticsReporter {
     * events/second, converting durations to milliseconds, and not filtering metrics. The default
     * Log Analytics log type is DropWizard
     */
-  class Builder(val registry: MetricRegistry) {
+  class Builder(val registry: MetricRegistry) extends Logging {
     private var clock = Clock.defaultClock
     private var prefix: String = null
     private var rateUnit = TimeUnit.SECONDS
@@ -105,12 +97,13 @@ object LogAnalyticsReporter {
     }
 
     /**
-      * The log type to send to Log Analytics. Defaults to 'DropWizard'.
+      * The log type to send to Log Analytics. Defaults to 'SparkMetrics'.
       *
       * @param logType Log Analytics log type
       * @return { @code this}
       */
     def withLogType(logType: String): LogAnalyticsReporter.Builder = {
+      logInfo(s"Setting logType to '${logType}'")
       this.logType = logType
       this
     }
@@ -122,6 +115,7 @@ object LogAnalyticsReporter {
       * @return { @code this}
       */
     def withWorkspaceId(workspaceId: String): LogAnalyticsReporter.Builder = {
+      logInfo(s"Setting workspaceId to '${workspaceId}'")
       this.workspaceId = workspaceId
       this
     }
@@ -153,21 +147,21 @@ object LogAnalyticsReporter {
       *
       * @return a { @link LogAnalyticsReporter}
       */
-    def build = new LogAnalyticsReporter(
-      registry,
-      workspaceId,
-      workspaceKey,
-      logType,
-      clock,
-      prefix,
-      rateUnit,
-      durationUnit,
-      filter
-      //additionalFields
-    )
+    def build(): LogAnalyticsReporter = {
+      logDebug("Creating LogAnalyticsReporter")
+      new LogAnalyticsReporter(
+        registry,
+        workspaceId,
+        workspaceKey,
+        logType,
+        clock,
+        prefix,
+        rateUnit,
+        durationUnit,
+        filter
+      )
+    }
   }
-
-  private val LOGGER = LoggerFactory.getLogger(classOf[LogAnalyticsReporter])
 }
 
 class LogAnalyticsReporter(val registry: MetricRegistry, val workspaceId: String, val workspaceKey: String, val logType: String, val clock: Clock, val prefix: String, val rateUnit: TimeUnit, val durationUnit: TimeUnit, val filter: MetricFilter)//, var additionalFields: util.Map[String, AnyRef]) //this.logType);
@@ -196,10 +190,11 @@ class LogAnalyticsReporter(val registry: MetricRegistry, val workspaceId: String
                        histograms: java.util.SortedMap[String, Histogram],
                        meters: java.util.SortedMap[String, Meter],
                        timers: java.util.SortedMap[String, Timer]): Unit = {
+    logDebug("Reporting metrics")
     val nodes = new ArrayBuffer[JValue]
     // nothing to do if we don't have any metrics to report
     if (gauges.isEmpty && counters.isEmpty && histograms.isEmpty && meters.isEmpty && timers.isEmpty) {
-      LogAnalyticsReporter.LOGGER.info("All metrics empty, nothing to report")
+      logInfo("All metrics empty, nothing to report")
       return
     }
     val now = Instant.now
@@ -227,9 +222,6 @@ class LogAnalyticsReporter(val registry: MetricRegistry, val workspaceId: String
         compact(node),
         "SparkMetricTime"
       ))
-      //val json = this.mapper.writer.writeValueAsString(nodes)
-      //this.logAnalyticsClient.send(json);
-      //this.logAnalyticsClient.send(json, this.logType)
     } catch {
       case NonFatal(e) =>
         logError(s"Error serializing metric to JSON", e)

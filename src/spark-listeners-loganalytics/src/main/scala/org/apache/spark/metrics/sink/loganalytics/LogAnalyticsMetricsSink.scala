@@ -8,7 +8,7 @@ import org.apache.spark.internal.Logging
 import org.apache.spark.metrics.sink.Sink
 import org.apache.spark.{SecurityManager, SparkException}
 
-private class LogAnalyticsSink(
+private class LogAnalyticsMetricsSink(
                                 val property: Properties,
                                 val registry: MetricRegistry,
                                 securityMgr: SecurityManager)
@@ -22,17 +22,19 @@ private class LogAnalyticsSink(
     .withWorkspaceId(config.workspaceId)
     .withWorkspaceKey(config.secret)
     .withLogType(config.logType)
-    .build
+    .build()
 
   override def start(): Unit = {
     reporter.start(config.pollPeriod, config.pollUnit)
-    logInfo(s"LogAnalyticsSink started with workspaceId: '${config.workspaceId}'")
+    logInfo(s"LogAnalyticsMetricsSink started")
   }
 
   override def stop(): Unit = {
     reporter.stop()
-    logInfo("LogAnalyticsSink stopped.")
+    logInfo("LogAnalyticsMetricsSink stopped.")
   }
 
-  override def report(): Unit = reporter.report()
+  override def report(): Unit = {
+    reporter.report()
+  }
 }
