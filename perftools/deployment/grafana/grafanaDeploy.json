@@ -1,0 +1,551 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "virtualMachines_grafanavm_name": {
+      "defaultValue": "[toLower( concat( parameters('TelemetrySystemName'),'-grafana-','vm-',uniqueString(resourceGroup().id) ) )]",
+      "type": "string"
+    },
+    "networkInterfaces_grafananic_name": {
+      "defaultValue": "[toLower( concat( parameters('TelemetrySystemName'),'-nic-',uniqueString(resourceGroup().id) ) )]",
+      "type": "string"
+    },
+    "publicIPAddresses_grafanavm_ip_name": {
+      "defaultValue": "grafanavm-ip",
+      "type": "string"
+    },
+    "storageAccounts_granasparkdiag_name": {
+      "defaultValue": "[toLower( concat( 'diag',uniqueString(resourceGroup().id) ) )]",
+      "type": "string"
+    },
+    "virtualNetworks_grafana_vnet_name": {
+      "defaultValue": "grafanaspark-vnet",
+      "type": "string"
+    },
+    "networkSecurityGroups_grafanavm_nsg_name": {
+      "defaultValue": "grafanavm-nsg",
+      "type": "string"
+    },
+    "subnets_default_name": {
+      "defaultValue": "default",
+      "type": "string"
+    },
+    "securityRules_SSH_name": {
+      "defaultValue": "SSH",
+      "type": "string"
+    },
+    "securityRules_Port_3000_name": {
+      "defaultValue": "Port_3000",
+      "type": "string"
+    },
+    "virtualMachines_grafanavm_id": {
+      "defaultValue": "[concat('/subscriptions/',subscription().subscriptionId,'/resourceGroups/',resourceGroup().name,'/providers/Microsoft.Compute/disks/','grafana_osdisk_',uniqueString(resourceGroup().id))]",
+      "type": "string"
+    },
+    "telemetrySystemName": {
+      "defaultValue": "SparkMonitoring",
+      "type": "string"
+    },
+    "adminPass": {
+      "type": "securestring",
+      "defaultValue": ""
+    },
+    "vmSize": {
+      "defaultValue": "Standard_D1_v2",
+      "type": "string",
+      "allowedValues": [
+        "Standard_D1_v2",
+        "Standard_D2_v2",
+        "Standard_D3_v2",
+        "Standard_D4_v2"
+      ]
+    },
+      "grafanaVersion": {
+      "defaultValue": "latest",
+      "type": "string"
+    },
+    "dataSource": {
+      "defaultValue": "",
+      "type": "string"
+    }
+  },
+
+  "variables": {
+
+    "grafanaVmName": "[toLower( concat( parameters('TelemetrySystemName'),'-vm-','grafana-',uniqueString(resourceGroup().id) ) )]",
+    "storageName": "[toLower( concat( parameters('TelemetrySystemName'),'-storage-', uniqueString(resourceGroup().id) ) )]",
+    "location": "[resourceGroup().location]"
+  },
+  "resources": [
+    {
+
+      "type": "Microsoft.Compute/virtualMachines",
+      "name": "[variables('grafanaVmName')]",
+      "apiVersion": "2018-06-01",
+      "location": "[variables('location')]",
+      "plan": {
+        "name": "default",
+        "product": "grafana",
+        "publisher": "bitnami"
+      },
+      "tags": {},
+      "scale": null,
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "[parameters('vmSize')]"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "bitnami",
+            "offer": "grafana",
+            "sku": "default",
+            "version": "[parameters('grafanaVersion')]"
+          },
+          "osDisk": {
+            "osType": "Linux",
+            "createOption": "FromImage",
+            "caching": "ReadWrite",
+            "managedDisk": {
+              "storageAccountType": "StandardSSD_LRS"
+            },
+            "diskSizeGB": 30
+          },
+          "dataDisks": []
+        },
+        "osProfile": {
+          "computerName": "[parameters('virtualMachines_grafanavm_name')]",
+          "adminUsername": "administrator1",
+          "adminPassword": "[ parameters('adminPass') ]",
+          "linuxConfiguration": {
+            "disablePasswordAuthentication": false,
+            "provisionVMAgent": true
+          },
+          "secrets": [],
+          "allowExtensionOperations": true
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_grafananic_name'))]"
+            }
+          ]
+        },
+        "diagnosticsProfile": {
+          "bootDiagnostics": {
+            "enabled": true,
+            "storageUri": "[concat('https', '://', parameters('storageAccounts_granasparkdiag_name'), '.blob.core.windows.net', '/')]"
+          }
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_grafananic_name'))]",
+        "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_granasparkdiag_name'))]"
+      ]
+    },
+    {
+
+      "type": "Microsoft.Network/networkInterfaces",
+      "name": "[parameters('networkInterfaces_grafananic_name')]",
+      "apiVersion": "2018-08-01",
+      "location": "[variables('location')]",
+      "tags": {},
+      "scale": null,
+      "properties": {
+        "provisioningState": "Succeeded",
+        "resourceGuid": "[guid(subscription().subscriptionId)]",
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
+            "etag": "W/\"f8859540-7fcd-4ee0-835b-63c3925a78c8\"",
+            "properties": {
+              "provisioningState": "Succeeded",
+              "privateIPAllocationMethod": "Dynamic",
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_grafanavm_ip_name'))]"
+              },
+              "subnet": {
+                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_grafana_vnet_name'), parameters('subnets_default_name'))]"
+              },
+              "primary": true,
+              "privateIPAddressVersion": "IPv4"
+            }
+          }
+        ],
+        "dnsSettings": {
+          "dnsServers": [],
+          "appliedDnsServers": [],
+          "internalDomainNameSuffix": "fpht1zlk0zgehgaex3wi1i0mkh.gx.internal.cloudapp.net"
+        },
+        "enableAcceleratedNetworking": false,
+        "enableIPForwarding": false,
+        "networkSecurityGroup": {
+          "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_grafanavm_nsg_name'))]"
+        },
+        "primary": true,
+        "tapConfigurations": []
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_grafanavm_ip_name'))]",
+        "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_grafana_vnet_name'), parameters('subnets_default_name'))]",
+        "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_grafanavm_nsg_name'))]"
+      ]
+    },
+    {
+
+      "type": "Microsoft.Network/networkSecurityGroups",
+      "name": "[parameters('networkSecurityGroups_grafanavm_nsg_name')]",
+      "apiVersion": "2018-08-01",
+      "location": "[variables('location')]",
+      "tags": {},
+      "scale": null,
+      "properties": {
+        "provisioningState": "Succeeded",
+        "resourceGuid": "[guid(subscription().subscriptionId)]",
+        "securityRules": [
+          {
+            "name": "SSH",
+            "etag": "W/\"984cceea-6adf-45bc-94d0-8efa2da6dc58\"",
+            "properties": {
+              "provisioningState": "Succeeded",
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "destinationPortRange": "22",
+              "sourceAddressPrefix": "*",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 1010,
+              "direction": "Inbound",
+              "sourcePortRanges": [],
+              "destinationPortRanges": [],
+              "sourceAddressPrefixes": [],
+              "destinationAddressPrefixes": []
+            }
+          },
+          {
+            "name": "Port_3000",
+            "etag": "W/\"984cceea-6adf-45bc-94d0-8efa2da6dc58\"",
+            "properties": {
+              "provisioningState": "Succeeded",
+              "protocol": "*",
+              "sourcePortRange": "*",
+              "destinationPortRange": "3000",
+              "sourceAddressPrefix": "*",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 1020,
+              "direction": "Inbound",
+              "sourcePortRanges": [],
+              "destinationPortRanges": [],
+              "sourceAddressPrefixes": [],
+              "destinationAddressPrefixes": []
+            }
+          }
+        ],
+        "defaultSecurityRules": [
+          {
+            "name": "AllowVnetInBound",
+            "etag": "W/\"984cceea-6adf-45bc-94d0-8efa2da6dc58\"",
+            "properties": {
+              "provisioningState": "Succeeded",
+              "description": "Allow inbound traffic from all VMs in VNET",
+              "protocol": "*",
+              "sourcePortRange": "*",
+              "destinationPortRange": "*",
+              "sourceAddressPrefix": "VirtualNetwork",
+              "destinationAddressPrefix": "VirtualNetwork",
+              "access": "Allow",
+              "priority": 65000,
+              "direction": "Inbound",
+              "sourcePortRanges": [],
+              "destinationPortRanges": [],
+              "sourceAddressPrefixes": [],
+              "destinationAddressPrefixes": []
+            }
+          },
+          {
+            "name": "AllowAzureLoadBalancerInBound",
+            "etag": "W/\"984cceea-6adf-45bc-94d0-8efa2da6dc58\"",
+            "properties": {
+              "provisioningState": "Succeeded",
+              "description": "Allow inbound traffic from azure load balancer",
+              "protocol": "*",
+              "sourcePortRange": "*",
+              "destinationPortRange": "*",
+              "sourceAddressPrefix": "AzureLoadBalancer",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 65001,
+              "direction": "Inbound",
+              "sourcePortRanges": [],
+              "destinationPortRanges": [],
+              "sourceAddressPrefixes": [],
+              "destinationAddressPrefixes": []
+            }
+          },
+          {
+            "name": "DenyAllInBound",
+            "etag": "W/\"984cceea-6adf-45bc-94d0-8efa2da6dc58\"",
+            "properties": {
+              "provisioningState": "Succeeded",
+              "description": "Deny all inbound traffic",
+              "protocol": "*",
+              "sourcePortRange": "*",
+              "destinationPortRange": "*",
+              "sourceAddressPrefix": "*",
+              "destinationAddressPrefix": "*",
+              "access": "Deny",
+              "priority": 65500,
+              "direction": "Inbound",
+              "sourcePortRanges": [],
+              "destinationPortRanges": [],
+              "sourceAddressPrefixes": [],
+              "destinationAddressPrefixes": []
+            }
+          },
+          {
+            "name": "AllowVnetOutBound",
+            "etag": "W/\"984cceea-6adf-45bc-94d0-8efa2da6dc58\"",
+            "properties": {
+              "provisioningState": "Succeeded",
+              "description": "Allow outbound traffic from all VMs to all VMs in VNET",
+              "protocol": "*",
+              "sourcePortRange": "*",
+              "destinationPortRange": "*",
+              "sourceAddressPrefix": "VirtualNetwork",
+              "destinationAddressPrefix": "VirtualNetwork",
+              "access": "Allow",
+              "priority": 65000,
+              "direction": "Outbound",
+              "sourcePortRanges": [],
+              "destinationPortRanges": [],
+              "sourceAddressPrefixes": [],
+              "destinationAddressPrefixes": []
+            }
+          },
+          {
+            "name": "AllowInternetOutBound",
+            "etag": "W/\"984cceea-6adf-45bc-94d0-8efa2da6dc58\"",
+            "properties": {
+              "provisioningState": "Succeeded",
+              "description": "Allow outbound traffic from all VMs to Internet",
+              "protocol": "*",
+              "sourcePortRange": "*",
+              "destinationPortRange": "*",
+              "sourceAddressPrefix": "*",
+              "destinationAddressPrefix": "Internet",
+              "access": "Allow",
+              "priority": 65001,
+              "direction": "Outbound",
+              "sourcePortRanges": [],
+              "destinationPortRanges": [],
+              "sourceAddressPrefixes": [],
+              "destinationAddressPrefixes": []
+            }
+          },
+          {
+            "name": "DenyAllOutBound",
+            "etag": "W/\"984cceea-6adf-45bc-94d0-8efa2da6dc58\"",
+            "properties": {
+              "provisioningState": "Succeeded",
+              "description": "Deny all outbound traffic",
+              "protocol": "*",
+              "sourcePortRange": "*",
+              "destinationPortRange": "*",
+              "sourceAddressPrefix": "*",
+              "destinationAddressPrefix": "*",
+              "access": "Deny",
+              "priority": 65500,
+              "direction": "Outbound",
+              "sourcePortRanges": [],
+              "destinationPortRanges": [],
+              "sourceAddressPrefixes": [],
+              "destinationAddressPrefixes": []
+            }
+          }
+        ]
+      },
+      "dependsOn": []
+    },
+    {
+
+      "type": "Microsoft.Network/publicIPAddresses",
+      "sku": {
+        "name": "Basic",
+        "tier": "Regional"
+      },
+      "name": "[parameters('publicIPAddresses_grafanavm_ip_name')]",
+      "apiVersion": "2018-08-01",
+      "location": "[variables('location')]",
+      "tags": {},
+      "scale": null,
+      "properties": {
+        "provisioningState": "Succeeded",
+        "resourceGuid": "[guid(subscription().subscriptionId)]",
+        "ipAddress": "168.61.179.179",
+        "publicIPAddressVersion": "IPv4",
+        "publicIPAllocationMethod": "Dynamic",
+        "idleTimeoutInMinutes": 4,
+        "ipTags": []
+      },
+      "dependsOn": []
+    },
+    {
+
+      "type": "Microsoft.Network/virtualNetworks",
+      "name": "[parameters('virtualNetworks_grafana_vnet_name')]",
+      "apiVersion": "2018-08-01",
+      "location": "[variables('location')]",
+      "tags": {},
+      "scale": null,
+      "properties": {
+        "provisioningState": "Succeeded",
+        "resourceGuid": "[guid(subscription().subscriptionId)]",
+        "addressSpace": {
+          "addressPrefixes": [
+            "172.19.2.0/24"
+          ]
+        },
+        "subnets": [
+          {
+            "name": "default",
+            "etag": "W/\"0c7db4de-2bb0-4452-a885-9c13f7c03640\"",
+            "properties": {
+              "provisioningState": "Succeeded",
+              "addressPrefix": "172.19.2.0/24",
+              "delegations": []
+            }
+          }
+        ],
+        "virtualNetworkPeerings": [],
+        "enableDdosProtection": false,
+        "enableVmProtection": false
+      },
+      "dependsOn": []
+    },
+    {
+
+      "type": "Microsoft.Storage/storageAccounts",
+      "sku": {
+        "name": "Standard_LRS",
+        "tier": "Standard"
+      },
+      "kind": "Storage",
+      "name": "[parameters('storageAccounts_granasparkdiag_name')]",
+      "apiVersion": "2018-07-01",
+      "location": "[variables('location')]",
+      "tags": {},
+      "scale": null,
+      "properties": {
+        "networkAcls": {
+          "bypass": "AzureServices",
+          "virtualNetworkRules": [],
+          "ipRules": [],
+          "defaultAction": "Allow"
+        },
+        "supportsHttpsTrafficOnly": false,
+        "encryption": {
+          "services": {
+            "file": {
+              "enabled": true
+            },
+            "blob": {
+              "enabled": true
+            }
+          },
+          "keySource": "Microsoft.Storage"
+        }
+      },
+      "dependsOn": []
+    },
+    {
+
+      "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+      "name": "[concat(parameters('networkSecurityGroups_grafanavm_nsg_name'), '/', parameters('securityRules_SSH_name'))]",
+      "apiVersion": "2018-08-01",
+      "scale": null,
+      "properties": {
+        "provisioningState": "Succeeded",
+        "protocol": "TCP",
+        "sourcePortRange": "*",
+        "destinationPortRange": "22",
+        "sourceAddressPrefix": "*",
+        "destinationAddressPrefix": "*",
+        "access": "Allow",
+        "priority": 1010,
+        "direction": "Inbound",
+        "sourcePortRanges": [],
+        "destinationPortRanges": [],
+        "sourceAddressPrefixes": [],
+        "destinationAddressPrefixes": []
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_grafanavm_nsg_name'))]"
+      ]
+    },
+    {
+
+      "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+      "name": "[concat(parameters('networkSecurityGroups_grafanavm_nsg_name'), '/', parameters('securityRules_Port_3000_name'))]",
+      "apiVersion": "2018-08-01",
+      "scale": null,
+      "properties": {
+        "provisioningState": "Succeeded",
+        "protocol": "*",
+        "sourcePortRange": "*",
+        "destinationPortRange": "3000",
+        "sourceAddressPrefix": "*",
+        "destinationAddressPrefix": "*",
+        "access": "Allow",
+        "priority": 1020,
+        "direction": "Inbound",
+        "sourcePortRanges": [],
+        "destinationPortRanges": [],
+        "sourceAddressPrefixes": [],
+        "destinationAddressPrefixes": []
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_grafanavm_nsg_name'))]"
+      ]
+    },
+    {
+
+      "type": "Microsoft.Network/virtualNetworks/subnets",
+      "name": "[concat(parameters('virtualNetworks_grafana_vnet_name'), '/', parameters('subnets_default_name'))]",
+      "apiVersion": "2018-08-01",
+      "scale": null,
+      "properties": {
+        "provisioningState": "Succeeded",
+        "addressPrefix": "172.19.2.0/24",
+        "delegations": []
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_grafana_vnet_name'))]"
+      ]
+    },
+    {
+      "name": "[concat(variables('grafanaVmName'),'/extension')]",
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2015-06-15",
+      "dependsOn": [
+        "[concat('Microsoft.Compute/virtualMachines/', variables('grafanaVmName'))]"
+      ],
+      "tags": {
+        "displayName": "[concat(variables('grafanaVmName'),'/extension')]"
+      },
+      "properties": {
+        "publisher": "Microsoft.Azure.Extensions",
+        "type": "CustomScript",
+        "typeHandlerVersion": "2.0",
+        "autoUpgradeMinorVersion": true,
+        "settings": {
+          "skipDos2Unix": false
+        },
+        "protectedSettings": {
+          "commandToExecute": "sudo sh AzureDataSource.sh",
+          "fileUris": [ "[parameters('dataSource')]" ]
+        }
+      }
+    }
+  ]
+}
