@@ -3,10 +3,10 @@
 This repository extends the core monitoring functionality of Azure Databricks to send streaming query event information to Azure Log Analytics. It has the following directory structure:
 
 /src  
-  /spark-jobs  
-  /spark-listeners-loganalytics  
-  /spark-listeners  
-  /pom.xml
+&nbsp;&nbsp;/spark-jobs  
+&nbsp;&nbsp;/spark-listeners-loganalytics  
+&nbsp;&nbsp;/spark-listeners  
+&nbsp;&nbsp;/pom.xml
 
 The **spark-jobs** directory is a sample Spark application with sample code demonstrating how to implement a Spark application metric counter.
 
