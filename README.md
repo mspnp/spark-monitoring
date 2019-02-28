@@ -67,7 +67,7 @@ dbfs cp <local path to metrics.properties> dbfs:/databricks/monitoring-staging/m
 6. Use the Azure Databricks CLI to copy **spark-listeners-1.0-SNAPSHOT.jar** and **spark-listeners-loganalytics-1.0-SNAPSHOT.jar** that were built in step 2 to the directory created in step 3:
 
 ```bash
-dbfs cp <local path to spark-listeners-1.0-SNAPSNOT.jar> dbfs:/databricks/monitoring-staging/spark-listeners-1.0-SNAPSHOT.jar
+dbfs cp <local path to spark-listeners-1.0-SNAPSHOT.jar> dbfs:/databricks/monitoring-staging/spark-listeners-1.0-SNAPSHOT.jar
 dbfs cp <local path to spark-listeners-loganalytics-1.0-SNAPSHOT.jar> dbfs:/databricks/monitoring-staging/spark-listeners-loganalytics-1.0-SNAPSHOT.jar
 ```
 
