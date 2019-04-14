@@ -11,6 +11,7 @@
     },
     "serviceTier": {
       "type": "string",
+      "defaultValue": "PerGB2018",
       "allowedValues": [
         "Free",
         "Standalone",
@@ -32,12 +33,10 @@
     },
     "location": {
       "type": "string",
-      "allowedValues": [
-        "East US",
-        "West Europe",
-        "Southeast Asia",
-        "Australia Southeast"
-      ]
+      "defaultValue": "[resourceGroup().location]",
+      "metadata": {
+        "description": "The location in which the resources should be deployed."
+      }
     }
 
   },
@@ -137,27 +136,16 @@
   },
   "resources": [
     {
-
       "type": "microsoft.operationalinsights/workspaces",
       "name": "[parameters('workspaceName')]",
-      "apiVersion": "2015-11-01-preview",
+      "apiVersion": "2017-03-15-preview",
       "location": "[parameters('location')]",
-      "scale": null,
       "properties": {
-        "source": "Azure",
-        "properties": {
-          "sku": {
-            "Name": "[parameters('serviceTier')]"
-          },
-          "retentionInDays": "[parameters('dataRetention')]"
+        "sku": {
+          "name": "[parameters('serviceTier')]"
         },
-        "dependsOn": []
+        "retentionInDays": "[parameters('dataRetention')]"
       }
-
-
-
-
-
     },
     {
       "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
