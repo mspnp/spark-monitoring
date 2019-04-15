@@ -21,7 +21,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <slf4j.version>1.7.7</slf4j.version>
-        <spark.version>2.3.1</spark.version>
+        <spark.version>2.4.0</spark.version>
     </properties>
     <dependencyManagement>
         <dependencies>
