@@ -1,11 +1,12 @@
 package com.microsoft.pnp.client.loganalytics;
 
+import com.microsoft.pnp.client.GenericSendBuffer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.LinkedHashMap;
 
-public class LogAnalyticsSendBufferClient {
+public class LogAnalyticsSendBufferClient implements AutoCloseable {
     private static final Logger logger = LoggerFactory.getLogger(LogAnalyticsSendBufferClient.class);
 
     private final LinkedHashMap<String, LogAnalyticsSendBuffer> buffers = new LinkedHashMap<>();
@@ -29,9 +30,9 @@ public class LogAnalyticsSendBufferClient {
     }
 
     public LogAnalyticsSendBufferClient(LogAnalyticsClient client,
-                                      String logType,
-                                      int maxMessageSizeInBytes,
-                                      int batchTimeInMilliseconds) {
+                                        String logType,
+                                        int maxMessageSizeInBytes,
+                                        int batchTimeInMilliseconds) {
         this.client = client;
         this.logType = logType;
         this.maxMessageSizeInBytes = maxMessageSizeInBytes;
@@ -63,5 +64,10 @@ public class LogAnalyticsSendBufferClient {
         }
 
         return buffer;
+    }
+
+    @Override
+    public void close() {
+        this.buffers.values().forEach(GenericSendBuffer::close);
     }
 }

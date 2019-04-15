@@ -1,10 +1,13 @@
 package com.microsoft.pnp.client;
 
-import java.util.concurrent.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class GenericSendBuffer<T> {
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Semaphore;
+
+public abstract class GenericSendBuffer<T> implements AutoCloseable {
 
     private static final Logger logger = LoggerFactory.getLogger(GenericSendBuffer.class);
 
@@ -12,7 +15,7 @@ public abstract class GenericSendBuffer<T> {
      * This executor that will be shared among all buffers. We may not need this, since we
      * shouldn't have hundreds of different time generated fields, but we can't have
      * executors spinning up hundreds of threads.
-     *
+     * <p>
      * We won't use daemon threads because in the event of a crash, we want to try to send
      * as much data as we can.
      */
@@ -22,6 +25,11 @@ public abstract class GenericSendBuffer<T> {
     public interface Listener<T> {
         void invoke(T o);
     }
+
+    // making it available to every thread to see if changes happen.
+    // also this value will be set only when shutdown is called.
+    public volatile boolean isClosed = false;
+
 
     /**
      * Object used to serialize sendRequest calls.
@@ -49,6 +57,11 @@ public abstract class GenericSendBuffer<T> {
     protected abstract GenericSendBufferTask<T> createSendBufferTask();
 
     public void send(T data) {
+        // if this buffer is closed , then no need to proceed.
+        if (this.isClosed) {
+            return;
+        }
+
         try {
             synchronized (this.sendBufferLock) {
                 if (this.sendBufferTask == null
@@ -111,5 +124,19 @@ public abstract class GenericSendBuffer<T> {
             Thread.currentThread().interrupt();
         }
     }
+
+
+    /**
+     * makes this buffer closed,
+     * flush what is in
+     * executor will complete what is in and will not accept new entries.
+     */
+    public void close() {
+        this.isClosed = true;
+        flush();
+        this.executor.shutdown();
+    }
+
+
 }
 
