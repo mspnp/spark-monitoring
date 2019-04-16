@@ -7,8 +7,7 @@ private[spark] object LogAnalyticsListenerSinkConfiguration {
   private val CONFIG_PREFIX = "spark.logAnalytics"
 
   private[spark] val WORKSPACE_ID = CONFIG_PREFIX + ".workspaceId"
-
-  // We'll name this secret so Spark will redact it.
+   // We'll name this secret so Spark will redact it.
   private[spark] val SECRET = CONFIG_PREFIX + ".secret"
 
   private[spark] val LOG_TYPE = CONFIG_PREFIX + ".logType"

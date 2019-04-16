@@ -8,6 +8,7 @@ import org.apache.log4j.AppenderSkeleton;
 import org.apache.log4j.Layout;
 import org.apache.log4j.spi.Filter;
 import org.apache.log4j.spi.LoggingEvent;
+import org.apache.commons.lang3.StringUtils;
 
 import static com.microsoft.pnp.logging.JSONLayout.TIMESTAMP_FIELD_NAME;
 
@@ -18,16 +19,17 @@ public class LogAnalyticsAppender extends AppenderSkeleton {
             if (loggingEvent.getLoggerName().startsWith("org.apache.http")) {
                 return Filter.DENY;
             }
-
             return Filter.ACCEPT;
         }
     };
 
-    private static final String DEFAULT_LOG_TYPE = "SparkLoggingEvent";
+
     // We will default to environment so the properties file can override
     private String workspaceId = LogAnalyticsEnvironment.getWorkspaceId();
     private String secret = LogAnalyticsEnvironment.getWorkspaceKey();
-    private String logType = DEFAULT_LOG_TYPE;
+    private String clusterId = LogAnalyticsEnvironment.getClusterId();
+    private String isSparkDriver = LogAnalyticsEnvironment.isDriverNode();
+    private String logType = LogAnalyticsEnvironment.getLog4jTableName();
     private LogAnalyticsSendBufferClient client;
 
     public LogAnalyticsAppender() {
@@ -47,6 +49,12 @@ public class LogAnalyticsAppender extends AppenderSkeleton {
         if (this.layout == null) {
             this.setLayout(new JSONLayout());
         }
+        // Add 2 custom properties so that cluster can be identified and whether is driver or not
+        if (!StringUtils.isEmpty(clusterId))
+            loggingEvent.setProperty("clusterId",clusterId);
+
+        if (!StringUtils.isEmpty(isSparkDriver))
+            loggingEvent.setProperty("isDriverNode",isSparkDriver);
 
         String json = this.getLayout().format(loggingEvent);
         this.client.sendMessage(json, TIMESTAMP_FIELD_NAME);
@@ -78,8 +86,9 @@ public class LogAnalyticsAppender extends AppenderSkeleton {
         this.addFilter(ORG_APACHE_HTTP_FILTER);
     }
 
-    public String getWorkspaceId() {
-        return this.workspaceId;
+    public String getWorkspaceId() {return this.workspaceId;}
+    public String getClusterId() {
+        return this.clusterId;
     }
 
     public void setWorkspaceId(String workspaceId) {

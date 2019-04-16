@@ -32,7 +32,7 @@ private class LogAnalyticsMetricsSink(
   override def stop(): Unit = {
     reporter.stop()
     logInfo("LogAnalyticsMetricsSink stopped.")
-  }
+    }
 
   override def report(): Unit = {
     reporter.report()
