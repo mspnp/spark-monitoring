@@ -1,14 +1,10 @@
 package com.microsoft.pnp.client.loganalytics;
 
 import com.microsoft.pnp.client.GenericSendBuffer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.LinkedHashMap;
 
 public class LogAnalyticsSendBufferClient implements AutoCloseable {
-    private static final Logger logger = LoggerFactory.getLogger(LogAnalyticsSendBufferClient.class);
-
     private final LinkedHashMap<String, LogAnalyticsSendBuffer> buffers = new LinkedHashMap<>();
 
     private final LogAnalyticsClient client;
@@ -48,14 +44,8 @@ public class LogAnalyticsSendBufferClient implements AutoCloseable {
     }
 
     private synchronized LogAnalyticsSendBuffer getBuffer(String timeGeneratedField) {
-        logger.debug(
-                "Getting buffer for key: " +
-                        (timeGeneratedField == null ? "null" : timeGeneratedField)
-        );
-
         LogAnalyticsSendBuffer buffer = this.buffers.get(timeGeneratedField);
         if (null == buffer) {
-            logger.debug("Buffer was null....creating");
             buffer = new LogAnalyticsSendBuffer(
                     this.client,
                     this.logType,
