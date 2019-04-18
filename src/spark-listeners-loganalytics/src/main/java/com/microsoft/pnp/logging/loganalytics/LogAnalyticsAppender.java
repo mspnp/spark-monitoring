@@ -59,6 +59,7 @@ public class LogAnalyticsAppender extends AppenderSkeleton {
 
     @Override
     public void close() {
+        this.client.close();
     }
 
     @Override
