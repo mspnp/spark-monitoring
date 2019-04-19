@@ -16,8 +16,6 @@ sed -i 's/log4j.rootCategory=.*/&, logAnalyticsAppender/g' /databricks/spark/dbc
 tee -a /databricks/spark/dbconf/log4j/executor/log4j.properties << EOF
 # logAnalytics
 log4j.appender.logAnalyticsAppender=com.microsoft.pnp.logging.loganalytics.LogAnalyticsAppender
-log4j.appender.logAnalyticsAppender.layout=com.microsoft.pnp.logging.JSONLayout
-log4j.appender.logAnalyticsAppender.layout.LocationInfo=false
 EOF
 echo "END: Updating Executor log4j properties file with Log analytics appender"
 
@@ -26,8 +24,6 @@ sed -i 's/log4j.rootCategory=.*/&, logAnalyticsAppender/g' /databricks/spark/dbc
 tee -a /databricks/spark/dbconf/log4j/driver/log4j.properties << EOF
 # logAnalytics
 log4j.appender.logAnalyticsAppender=com.microsoft.pnp.logging.loganalytics.LogAnalyticsAppender
-log4j.appender.logAnalyticsAppender.layout=com.microsoft.pnp.logging.JSONLayout
-log4j.appender.logAnalyticsAppender.layout.LocationInfo=false
 EOF
 echo "END: Updating Driver log4j properties file with Log analytics appender"
 

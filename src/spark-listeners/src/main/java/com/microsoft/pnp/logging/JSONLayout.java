@@ -10,13 +10,12 @@ import org.apache.log4j.spi.LoggingEvent;
 import org.apache.log4j.spi.ThrowableInformation;
 
 import java.time.Instant;
-import java.time.ZoneOffset;
 import java.util.Map;
 
 public class JSONLayout extends Layout {
 
     public static final String TIMESTAMP_FIELD_NAME = "timestamp";
-    private boolean locationInfo = false;
+    private boolean locationInfo;
     private String jsonConfiguration;
     private ObjectMapper objectMapper = new ObjectMapper();
 
@@ -90,7 +89,7 @@ public class JSONLayout extends Layout {
      * @return true if location information is included in log messages, false otherwise.
      */
     public boolean getLocationInfo() {
-        return locationInfo;
+        return this.locationInfo;
     }
 
     public void setLocationInfo(boolean locationInfo) {
