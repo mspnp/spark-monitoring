@@ -1,15 +1,10 @@
 package com.microsoft.pnp.client;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
 
 public abstract class GenericSendBuffer<T> implements AutoCloseable {
-
-    private static final Logger logger = LoggerFactory.getLogger(GenericSendBuffer.class);
 
     /**
      * This executor that will be shared among all buffers. We may not need this, since we
@@ -66,7 +61,6 @@ public abstract class GenericSendBuffer<T> implements AutoCloseable {
             synchronized (this.sendBufferLock) {
                 if (this.sendBufferTask == null
                         || (!this.sendBufferTask.addEvent(data))) {
-                    logger.debug("Creating new task");
                     // We need a new task because one of the following is true:
                     // 1.  We don't have one yet (i.e. first message!)
                     // 2.  The task is full
@@ -76,17 +70,13 @@ public abstract class GenericSendBuffer<T> implements AutoCloseable {
                     // This WILL block the calling code, but it's simpler than
                     // building a circular buffer, although we are sort of doing that. :)
                     // Not sure we need this yet!
-                    logger.debug("Acquiring semaphore");
                     this.inflightBatches.acquire();
-                    logger.debug("Acquired semaphore");
                     this.sendBufferTask = sendBufferTask;
 
                     // Register a listener for the event signaling that the
                     // batch task has completed (successfully or not).
                     this.sendBufferTask.setOnCompleted(task -> {
-                        logger.debug("Releasing semaphore");
                         inflightBatches.release();
-                        logger.debug("Released semaphore");
                     });
 
                     // There is an edge case here.

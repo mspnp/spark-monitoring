@@ -1,8 +1,5 @@
 package com.microsoft.pnp.client;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -18,8 +15,6 @@ import java.util.concurrent.TimeUnit;
  *
  */
 public abstract class GenericSendBufferTask<T> implements Runnable {
-
-    private static final Logger logger = LoggerFactory.getLogger(GenericSendBufferTask.class);
 
     int currentBatchSize = 0;
     private final int maxBatchSizeBytes;
@@ -58,7 +53,6 @@ public abstract class GenericSendBufferTask<T> implements Runnable {
         boolean wasAdded = addIfAllowed(data);
         // If we can't add the event (because we are full), close the batch
         if (!wasAdded) {
-            logger.debug("Could not add.  Closing batch");
             closed = true;
             notify();
         }
@@ -75,7 +69,6 @@ public abstract class GenericSendBufferTask<T> implements Runnable {
      */
     private boolean addIfAllowed(T data) {
         if (isOkToAdd(data)) {
-            logger.debug("Allowed to add");
             this.datas.add(data);
             onEventAdded(data);
             return true;
@@ -147,25 +140,17 @@ public abstract class GenericSendBufferTask<T> implements Runnable {
                 datas = new ArrayList<>(this.datas);
             }
 
-            logger.debug("Processing on thread " + Thread.currentThread().getName());
             process(datas);
-            logger.debug("Processing complete");
         } catch (InterruptedException e) {
-            logger.error("run was interrupted", e);
-            //throw e;
         } catch (RuntimeException e) {
-            logger.error("RuntimeException", e);
             throw e;
         } catch (Error e) {
-            Exception ex = new Exception("Error encountered", e);
-            logger.error("Error encountered", ex);
-            throw e;
+            throw new RuntimeException("Error encountered", e);
         } finally {
             // make a copy of the listener since it (theoretically) can be
             // modified from the outside.
             GenericSendBuffer.Listener<GenericSendBufferTask<T>> listener = onCompleted;
             if (listener != null) {
-                logger.debug("Invoking completion callback.");
                 listener.invoke(this);
             }
         }

@@ -1,14 +1,10 @@
 package com.microsoft.pnp.client.loganalytics;
 
 import com.microsoft.pnp.client.GenericSendBufferTask;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
 public class LogAnalyticsSendBufferTask extends GenericSendBufferTask<String> {
-
-    private static final Logger logger = LoggerFactory.getLogger(LogAnalyticsSendBufferTask.class);
 
     private final LogAnalyticsClient client;
     private final String logType;
@@ -34,7 +30,6 @@ public class LogAnalyticsSendBufferTask extends GenericSendBufferTask<String> {
     @Override
     protected void process(List<String> datas) {
         if (datas.isEmpty()) {
-            logger.debug("No events to send");
             return;
         }
 
@@ -51,11 +46,11 @@ public class LogAnalyticsSendBufferTask extends GenericSendBufferTask<String> {
         }
         sb.deleteCharAt(sb.lastIndexOf(",")).append("]");
         try {
-            logger.debug("LogAnalyticsSendBufferTask.process()");
-            logger.debug(sb.toString());
             client.send(sb.toString(), logType, timeGeneratedField);
         } catch (Exception ioe) {
-            logger.error(ioe.getMessage(), ioe);
+            // We can't do much here since we might be inside a logger
+            System.err.println(ioe.getMessage());
+            System.err.println(ioe);
         }
     }
 }
