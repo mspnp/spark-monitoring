@@ -9,8 +9,6 @@ import org.apache.log4j.Layout;
 import org.apache.log4j.helpers.LogLog;
 import org.apache.log4j.spi.Filter;
 import org.apache.log4j.spi.LoggingEvent;
-import org.apache.spark.sql.SparkSession;
-import scala.runtime.AbstractFunction0;
 
 import static com.microsoft.pnp.logging.JSONLayout.TIMESTAMP_FIELD_NAME;
 
@@ -22,7 +20,7 @@ public class LogAnalyticsAppender extends AppenderSkeleton {
                 return Filter.DENY;
             }
 
-            return Filter.ACCEPT;
+            return Filter.NEUTRAL;
         }
     };
 
@@ -32,10 +30,6 @@ public class LogAnalyticsAppender extends AppenderSkeleton {
     private String secret = LogAnalyticsEnvironment.getWorkspaceKey();
     private String logType = DEFAULT_LOG_TYPE;
     private LogAnalyticsSendBufferClient client;
-
-    private String applicationId;
-    private String clusterId;
-    private String executorId;
 
     public LogAnalyticsAppender() {
         this.addFilter(ORG_APACHE_HTTP_FILTER);
@@ -49,64 +43,11 @@ public class LogAnalyticsAppender extends AppenderSkeleton {
                 new LogAnalyticsClient(this.workspaceId, this.secret),
                 this.logType
         );
-
-        this.executorId = System.getProperty(
-                "local.spark.executor.id",
-                null);
-        this.clusterId = System.getProperty(
-                "local.spark.databricks.clusterUsageTags.clusterId",
-                null
-        );
-
-        // If we are on the executor, we can get the application id
-        if (this.executorId != "driver") {
-            this.applicationId = System.getProperty(
-                    "local.spark.application.id",
-                    null
-            );
-        }
     }
 
     @Override
     protected void append(LoggingEvent loggingEvent) {
         try {
-            // If we are on the driver, we may or may not have an application id yet
-            String localApplicationId = null;
-
-            if ("driver".equals(this.executorId)) {
-                // We need to check each time we log since on the driver it's a different lifecycle
-                // See if we have an active session.  If not, see if we have a default session.
-                SparkSession sparkSession = SparkSession.getActiveSession().getOrElse(
-                        new AbstractFunction0<SparkSession>() {
-                            @Override
-                            public SparkSession apply() {
-                                return SparkSession.getDefaultSession().getOrElse(new AbstractFunction0<SparkSession>() {
-                                    @Override
-                                    public SparkSession apply() {
-                                        return null;
-                                    }
-                                });
-                            }
-                        });
-                if (sparkSession != null) {
-                    localApplicationId = sparkSession.sparkContext().applicationId();
-                }
-            } else {
-                // If we are not on the driver, the applicationId should have been given to us in
-                // system properties, so this should be okay
-                localApplicationId = this.applicationId;
-            }
-
-            // Add extra stuff
-            if (localApplicationId != null) {
-                loggingEvent.setProperty("applicationId", localApplicationId);
-            }
-            if (this.executorId != null) {
-                loggingEvent.setProperty("executorId", this.executorId);
-            }
-            if (this.clusterId != null) {
-                loggingEvent.setProperty("clusterId", this.clusterId);
-            }
             String json = this.getLayout().format(loggingEvent);
             this.client.sendMessage(json, TIMESTAMP_FIELD_NAME);
         } catch (Exception ex) {

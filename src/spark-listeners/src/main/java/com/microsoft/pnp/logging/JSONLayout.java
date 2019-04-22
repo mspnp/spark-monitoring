@@ -1,6 +1,5 @@
 package com.microsoft.pnp.logging;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.log4j.Layout;
@@ -11,6 +10,7 @@ import org.apache.log4j.spi.ThrowableInformation;
 
 import java.time.Instant;
 import java.util.Map;
+import java.util.Set;
 
 public class JSONLayout extends Layout {
 
@@ -67,9 +67,21 @@ public class JSONLayout extends Layout {
         }
 
         event.put("logger_name", loggingEvent.getLoggerName());
-        event.set("mdc", objectMapper.convertValue(mdc, JsonNode.class));
         event.put("level", loggingEvent.getLevel().toString());
         event.put("thread_name", threadName);
+
+        // We are going to change this to promote all MDC properties to top-level properties.
+        // If there is a name collision, we will just log a warning to LogLog.
+        // Because of this, we need to process MDC as the last set of properties.
+        for (Map.Entry property : (Set<Map.Entry>)mdc.entrySet()) {
+            String key = (String)property.getKey();
+            if (event.has(key)) {
+                // The field in MDC has a name conflict with the existing fields.
+                LogLog.warn(String.format("MDC field '%s' already exists in log4j event", key));
+            } else {
+                event.put(key, (String)property.getValue());
+            }
+        }
 
         try {
             return objectMapper.writeValueAsString(event);
