@@ -6,6 +6,7 @@ import com.microsoft.pnp.client.loganalytics.LogAnalyticsSendBufferClient;
 import com.microsoft.pnp.logging.JSONLayout;
 import org.apache.log4j.AppenderSkeleton;
 import org.apache.log4j.Layout;
+import org.apache.log4j.helpers.LogLog;
 import org.apache.log4j.spi.Filter;
 import org.apache.log4j.spi.LoggingEvent;
 
@@ -19,7 +20,7 @@ public class LogAnalyticsAppender extends AppenderSkeleton {
                 return Filter.DENY;
             }
 
-            return Filter.ACCEPT;
+            return Filter.NEUTRAL;
         }
     };
 
@@ -32,6 +33,8 @@ public class LogAnalyticsAppender extends AppenderSkeleton {
 
     public LogAnalyticsAppender() {
         this.addFilter(ORG_APACHE_HTTP_FILTER);
+        // Add a default layout so we can simplify config
+        this.setLayout(new JSONLayout());
     }
 
     @Override
@@ -44,17 +47,19 @@ public class LogAnalyticsAppender extends AppenderSkeleton {
 
     @Override
     protected void append(LoggingEvent loggingEvent) {
-        if (this.layout == null) {
-            this.setLayout(new JSONLayout());
+        try {
+            String json = this.getLayout().format(loggingEvent);
+            this.client.sendMessage(json, TIMESTAMP_FIELD_NAME);
+        } catch (Exception ex) {
+            LogLog.error("Error sending logging event to Log Analytics", ex);
         }
-
-        String json = this.getLayout().format(loggingEvent);
-        this.client.sendMessage(json, TIMESTAMP_FIELD_NAME);
     }
 
     @Override
     public boolean requiresLayout() {
-        return true;
+        // We will set this to false so we can simplify our config
+        // If no layout is provided, we will get the default.
+        return false;
     }
 
     @Override

@@ -151,6 +151,9 @@
                     <groupId>net.alchim31.maven</groupId>
                     <artifactId>scala-maven-plugin</artifactId>
                     <version>3.4.2</version>
+                    <configuration>
+                        <recompileMode>incremental</recompileMode>
+                    </configuration>
                     <executions>
                         <execution>
                             <goals>
@@ -181,12 +184,18 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>3.8.0</version>
+                    <!--<executions>-->
+                        <!--<execution>-->
+                            <!--<goals>-->
+                                <!--<goal>compile</goal>-->
+                                <!--<goal>testCompile</goal>-->
+                            <!--</goals>-->
+                        <!--</execution>-->
+                    <!--</executions>-->
                     <executions>
                         <execution>
-                            <goals>
-                                <goal>compile</goal>
-                                <goal>testCompile</goal>
-                            </goals>
+                            <id>default-compile</id>
+                            <phase>none</phase>
                         </execution>
                     </executions>
                     <configuration>

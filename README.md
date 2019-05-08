@@ -52,19 +52,26 @@ To build the Azure Databricks monitoring library, follow these steps:
   dbfs mkdirs dbfs:/databricks/monitoring-staging
   ```
 
-4. Use the Azure Databricks CLI to copy **/src/spark-listeners/scripts/listeners.sh** to the directory created in step 3:
+4. Open the **/src/spark-listeners/scripts/listeners.sh** script file and add your [Log Analytics Workspace ID and Key](/azure/azure-monitor/platform/agent-windows#obtain-workspace-id-and-key) to the lines below:
+
+```bash
+export LOG_ANALYTICS_WORKSPACE_ID=
+export LOG_ANALYTICS_WORKSPACE_KEY=
+```
+  
+5. Use the Azure Databricks CLI to copy **/src/spark-listeners/scripts/listeners.sh** to the directory created in step 3:
 
 ```bash
 dbfs cp <local path to listeners.sh> dbfs:/databricks/monitoring-staging/listeners.sh
 ```
 
-5. Use the Azure Databricks CLI to copy **/src/spark-listeners/scripts/metrics.properties** to the directory created in step 3:
+6. Use the Azure Databricks CLI to copy **/src/spark-listeners/scripts/metrics.properties** to the directory created in step 3:
 
 ```bash
 dbfs cp <local path to metrics.properties> dbfs:/databricks/monitoring-staging/metrics.properties
 ```
 
-6. Use the Azure Databricks CLI to copy **spark-listeners-1.0-SNAPSHOT.jar** and **spark-listeners-loganalytics-1.0-SNAPSHOT.jar** that were built in step 2 to the directory created in step 3:
+7. Use the Azure Databricks CLI to copy **spark-listeners-1.0-SNAPSHOT.jar** and **spark-listeners-loganalytics-1.0-SNAPSHOT.jar** that were built in step 2 to the directory created in step 3:
 
 ```bash
 dbfs cp <local path to spark-listeners-1.0-SNAPSHOT.jar> dbfs:/databricks/monitoring-staging/spark-listeners-1.0-SNAPSHOT.jar
@@ -79,19 +86,10 @@ To create and configure the Azure Databricks cluster, follow these steps:
 2. On the home page, click "new cluster".
 3. Choose a name for your cluster and enter it in "cluster name" text box. 
 4. In the "Databricks Runtime Version" dropdown, select **5.0** or later (includes Apache Spark 2.4.0, Scala 2.11).
-5. Under "Advanced Options", click on the "Spark" tab. Enter the following name-value pairs in the "Spark Config" text box:
-
-  | Name | Value |
-  |------|-------|
-  |spark.extraListeners| com.databricks.backend.daemon.driver.DBCEventLoggingListener,org.apache.spark.listeners.UnifiedSparkListener|
-  |spark.unifiedListener.sink |org.apache.spark.listeners.sink.loganalytics.LogAnalyticsListenerSink|
-  |spark.unifiedListener.logBlockUpdates|false|
-6. While still under the "Spark" tab, enter the following in the "Environment Variables" text box:
-* LOG_ANALYTICS_WORKSPACE_ID=[your Azure Log Analytics workspace ID](/azure/azure-monitor/platform/agent-windows#obtain-workspace-id-and-key)
-* LOG_ANALYTICS_WORKSPACE_KEY=[your Azure Log Analytics shared access signature](/azure/azure-monitor/platform/agent-windows#obtain-workspace-id-and-key)
-7. While still under the "Advanced Options" section, click on the "Init Scripts" tab. Go to the last line under the "Init Scripts section" Under the "destination" dropdown, select "DBFS". Enter "dbfs:/databricks/monitoring-staging/listeners.sh" in the text box. Click the "add" button.
-8. Click the "create cluster" button to create the cluster. Next, click on the "start" button to start the cluster.
+5. Under "Advanced Options", click on the "Init Scripts" tab. Go to the last line under the "Init Scripts section" Under the "destination" dropdown, select "DBFS". Enter "dbfs:/databricks/monitoring-staging/listeners.sh" in the text box. Click the "add" button.
+6. Click the "create cluster" button to create the cluster. Next, click on the "start" button to start the cluster.
 
 ## More information
 
 For more information about using this library to monitor Azure Databricks, see [Monitoring Azure Databricks](https://docs.microsoft.com/azure/architecture/databricks-monitoring)
+

@@ -2,7 +2,7 @@ package org.apache.spark.listeners
 
 import java.time.Instant
 
-import org.apache.spark.{SparkConf, SparkException}
+import org.apache.spark.{SparkConf, SparkException, SparkInformation}
 import org.apache.spark.internal.Logging
 import org.apache.spark.listeners.sink.SparkListenerSink
 import org.apache.spark.scheduler._
@@ -67,7 +67,7 @@ class UnifiedSparkListener(override val conf: SparkConf)
       Some(
         JsonProtocol.sparkEventToJson(event)
           .merge(render(
-            "SparkEventTime" -> getTimestamp().toString
+            SparkInformation.get() + ("SparkEventTime" -> getTimestamp().toString)
           ))
       )
     } catch {

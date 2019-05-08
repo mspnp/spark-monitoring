@@ -8,12 +8,12 @@ import com.codahale.metrics.json.MetricsModule
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import com.microsoft.pnp.client.loganalytics.{LogAnalyticsClient, LogAnalyticsSendBufferClient}
+import org.apache.spark.SparkInformation
 import org.apache.spark.internal.Logging
 import org.json4s.JsonAST.JValue
 import org.json4s.JsonDSL._
 import org.json4s.jackson.JsonMethods.{compact, parse, render}
 
-import scala.collection.mutable.ArrayBuffer
 import scala.util.control.NonFatal
 
 object LogAnalyticsReporter {
@@ -39,7 +39,6 @@ object LogAnalyticsReporter {
     private var logType = "SparkMetrics"
     private var workspaceId: String = null
     private var workspaceKey: String = null
-    //private var additionalFields = null
 
     /**
       * Use the given {@link Clock} instance for the time. Usually the default clock is sufficient.
@@ -132,17 +131,6 @@ object LogAnalyticsReporter {
     }
 
     /**
-      * Additional fields to be included for each metric
-      *
-      * @param additionalFields custom fields for reporting
-      * @return { @code this}
-      */
-    //    def additionalFields(additionalFields: util.Map[String, AnyRef]): LogAnalyticsReporter.Builder = {
-    //      this.additionalFields = additionalFields
-    //      this
-    //    }
-
-    /**
       * Builds a {@link LogAnalyticsReporter} with the given properties.
       *
       * @return a { @link LogAnalyticsReporter}
@@ -191,7 +179,6 @@ class LogAnalyticsReporter(val registry: MetricRegistry, val workspaceId: String
                        meters: java.util.SortedMap[String, Meter],
                        timers: java.util.SortedMap[String, Timer]): Unit = {
     logDebug("Reporting metrics")
-    val nodes = new ArrayBuffer[JValue]
     // nothing to do if we don't have any metrics to report
     if (gauges.isEmpty && counters.isEmpty && histograms.isEmpty && meters.isEmpty && timers.isEmpty) {
       logInfo("All metrics empty, nothing to report")
@@ -199,50 +186,40 @@ class LogAnalyticsReporter(val registry: MetricRegistry, val workspaceId: String
     }
     val now = Instant.now
     import scala.collection.JavaConversions._
-    for (entry <- gauges.entrySet) {
-      if (entry.getValue.getValue != null) {
-        nodes.add(addProperties(entry.getKey, entry.getValue, now))
-      }
-    }
 
-    for (entry <- counters.entrySet) {
-      nodes.add(addProperties(entry.getKey, entry.getValue, now))
-    }
-    for (entry <- histograms.entrySet) {
-      nodes.add(addProperties(entry.getKey, entry.getValue, now))
-    }
-    for (entry <- meters.entrySet) {
-      nodes.add(addProperties(entry.getKey, entry.getValue, now))
-    }
-    for (entry <- timers.entrySet) {
-      nodes.add(addProperties(entry.getKey, entry.getValue, now))
-    }
-    try {
-      nodes.foreach(node => this.logAnalyticsBufferedClient.sendMessage(
-        compact(node),
-        "SparkMetricTime"
-      ))
-    } catch {
-      case NonFatal(e) =>
-        logError(s"Error serializing metric to JSON", e)
-        None
+    val ambientProperties = SparkInformation.get() + ("SparkEventTime" -> now.toString)
+    val metrics = gauges.retain((_, v) => v.getValue != null).toSeq ++
+      counters.toSeq ++ histograms.toSeq ++ meters.toSeq ++ timers.toSeq
+    for ((name, metric) <- metrics) {
+      try {
+        this.logAnalyticsBufferedClient.sendMessage(
+          compact(this.addProperties(name, metric, ambientProperties)),
+          "SparkMetricTime"
+        )
+      } catch {
+        case NonFatal(e) =>
+          logError(s"Error serializing metric to JSON", e)
+          None
+      }
     }
   }
 
-  private def addProperties(name: String, metric: Metric, timestamp: Instant): JValue = {
-    var metricType: String = null
-    if (metric.isInstanceOf[Counter]) metricType = classOf[Counter].getSimpleName
-    else if (metric.isInstanceOf[Gauge[_]]) metricType = classOf[Gauge[_]].getSimpleName
-    else if (metric.isInstanceOf[Histogram]) metricType = classOf[Histogram].getSimpleName
-    else if (metric.isInstanceOf[Meter]) metricType = classOf[Meter].getSimpleName
-    else if (metric.isInstanceOf[Timer]) metricType = classOf[Timer].getSimpleName
-    else throw new IllegalArgumentException("Unsupported metric type")
+  //private def addProperties(name: String, metric: Metric, timestamp: Instant): JValue = {
+  private def addProperties(name: String, metric: Metric, properties: Map[String, String]): JValue = {
+    val metricType: String = metric match {
+      case _: Counter => classOf[Counter].getSimpleName
+      case _: Gauge[_] => classOf[Gauge[_]].getSimpleName
+      case _: Histogram => classOf[Histogram].getSimpleName
+      case _: Meter => classOf[Meter].getSimpleName
+      case _: Timer => classOf[Timer].getSimpleName
+      case m: Metric => m.getClass.getSimpleName
+    }
 
     parse(this.mapper.writeValueAsString(metric))
       .merge(render(
         ("metric_type" -> metricType) ~
           ("name" -> name) ~
-          ("SparkMetricTime" -> timestamp.toString)
+          properties
       ))
   }
 }
