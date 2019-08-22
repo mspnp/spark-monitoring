@@ -11,9 +11,17 @@ DB_HOME=/databricks
 SPARK_HOME=$DB_HOME/spark
 SPARK_CONF_DIR=$SPARK_HOME/conf
 
+# Add your Log Analytics Workspace information below so all clusters use the same
+# Log Analytics Workspace
+tee -a "$SPARK_CONF_DIR/spark-env.sh" << EOF
+export DB_CLUSTER_ID=$DB_CLUSTER_ID
+export LOG_ANALYTICS_WORKSPACE_ID=7842e7bc-f9cd-48ce-aeff-14a53b8d7de5
+export LOG_ANALYTICS_WORKSPACE_KEY=vRFx3C4MjtZevX0Yxezv+6G7c5gcuiN9uJBhUb5lmBXXf/B1YVeroudocfFU+PZEYEekJYK1JV6dOz7r6HyCAQ==
+EOF
+
 echo "Copying listener jar"
-cp -f "$STAGE_DIR/spark-listeners-1.0-SNAPSHOT.jar" /mnt/driver-daemon/jars || { echo "Error copying file"; exit 1;}
-cp -f "$STAGE_DIR/spark-listeners-loganalytics-1.0-SNAPSHOT.jar" /mnt/driver-daemon/jars || { echo "Error copying file"; exit 1;}
+cp -f "$STAGE_DIR/spark-listeners-1.0.0.jar" /mnt/driver-daemon/jars || { echo "Error copying file"; exit 1;}
+cp -f "$STAGE_DIR/spark-listeners-loganalytics-1.0.0.jar" /mnt/driver-daemon/jars || { echo "Error copying file"; exit 1;}
 echo "Copied listener jar successfully"
 
 echo "Merging metrics.properties"
@@ -47,12 +55,4 @@ cat << EOF > "$DB_HOME/driver/conf/00-custom-spark-driver-defaults.conf"
     "spark.extraListeners" = "com.databricks.backend.daemon.driver.DBCEventLoggingListener,org.apache.spark.listeners.UnifiedSparkListener"
     "spark.unifiedListener.sink" = "org.apache.spark.listeners.sink.loganalytics.LogAnalyticsListenerSink"
 }
-EOF
-
-# Add your Log Analytics Workspace information below so all clusters use the same
-# Log Analytics Workspace
-tee -a "$SPARK_CONF_DIR/spark-env.sh" << EOF
-export DB_CLUSTER_ID=$DB_CLUSTER_ID
-export LOG_ANALYTICS_WORKSPACE_ID=
-export LOG_ANALYTICS_WORKSPACE_KEY=
 EOF

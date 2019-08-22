@@ -5,13 +5,13 @@
     <parent>
         <artifactId>spark-monitoring</artifactId>
         <groupId>com.microsoft.pnp</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>spark-listeners</artifactId>
+    <artifactId>spark-listeners_${scala.compat.version}_${spark.version}</artifactId>
     <name>${project.artifactId}</name>
-    <version>1.0-SNAPSHOT</version>
+    <version>${spark.listeners.version}</version>
     <packaging>jar</packaging>
     <dependencies>
         <dependency>
@@ -59,7 +59,7 @@
         </dependency>
         <dependency>
             <groupId>com.github.dwickern</groupId>
-            <artifactId>scala-nameof_2.11</artifactId>
+            <artifactId>scala-nameof_${scala.compat.version}</artifactId>
             <version>1.0.3</version>
             <scope>provided</scope>
         </dependency>

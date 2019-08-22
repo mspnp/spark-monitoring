@@ -6,22 +6,85 @@
 
     <groupId>com.microsoft.pnp</groupId>
     <artifactId>spark-monitoring</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0</version>
     <packaging>pom</packaging>
     <modules>
         <module>spark-listeners</module>
         <module>spark-jobs</module>
         <module>spark-listeners-loganalytics</module>
     </modules>
+
+    <profiles>
+        <profile>
+            <id>spark-2.4.0</id>
+            <properties>
+                <codahale.metrics.version>3.1.5</codahale.metrics.version>
+                <commons-codec.version>1.10</commons-codec.version>
+                <commons.httpclient.version>4.5.4</commons.httpclient.version>
+                <fasterxml.jackson.databind.version>2.6.7.1</fasterxml.jackson.databind.version>
+                <jetty.version>9.3.20.v20170531</jetty.version>
+                <log4j.version>1.2.17</log4j.version>
+                <slf4j.version>1.7.16</slf4j.version>
+                <spark.version>2.4.0</spark.version>
+            </properties>
+        </profile>
+        <profile>
+            <id>spark-2.4.1</id>
+            <properties>
+                <codahale.metrics.version>3.1.5</codahale.metrics.version>
+                <commons-codec.version>1.10</commons-codec.version>
+                <commons.httpclient.version>4.5.4</commons.httpclient.version>
+                <fasterxml.jackson.databind.version>2.6.7.1</fasterxml.jackson.databind.version>
+                <jetty.version>9.3.20.v20170531</jetty.version>
+                <log4j.version>1.2.17</log4j.version>
+                <slf4j.version>1.7.16</slf4j.version>
+                <spark.version>2.4.1</spark.version>
+            </properties>
+        </profile>
+        <profile>
+            <id>spark-2.4.3</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <codahale.metrics.version>3.1.5</codahale.metrics.version>
+                <commons-codec.version>1.10</commons-codec.version>
+                <commons.httpclient.version>4.5.4</commons.httpclient.version>
+                <fasterxml.jackson.databind.version>2.6.7.1</fasterxml.jackson.databind.version>
+                <jetty.version>9.3.20.v20170531</jetty.version>
+                <log4j.version>1.2.17</log4j.version>
+                <slf4j.version>1.7.16</slf4j.version>
+                <spark.version>2.4.3</spark.version>
+            </properties>
+        </profile>
+        <!-- Enable this when 2.4.4 is live. -->
+        <!--
+        <profile>
+            <id>spark-2.4.4</id>
+            <properties>
+                <codahale.metrics.version>3.1.5</codahale.metrics.version>
+                <commons-codec.version>1.10</commons-codec.version>
+                <commons.httpclient.version>4.5.6</commons.httpclient.version>
+                <fasterxml.jackson.databind.version>2.6.7.1</fasterxml.jackson.databind.version>
+                <jetty.version>9.3.24.v20180605</jetty.version>
+                <log4j.version>1.2.17</log4j.version>
+                <slf4j.version>1.7.16</slf4j.version>
+                <spark.version>2.4.4</spark.version>
+            </properties>
+        </profile>
+        -->
+    </profiles>
     <properties>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <scala.version>2.11.8</scala.version>
-        <scala.compat.version>2.11</scala.compat.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <slf4j.version>1.7.7</slf4j.version>
-        <spark.version>2.4.0</spark.version>
+        <java.version>1.8</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <maven.version>3.5.4</maven.version>
+        <scala.version>2.11.8</scala.version>
+        <scala.compat.version>2.11</scala.compat.version>
+        <spark.listeners.version>1.0.0</spark.listeners.version>
+        <spark.listeners.loganalytics.version>1.0.0</spark.listeners.loganalytics.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -50,57 +113,51 @@
                 <scope>provided</scope>
             </dependency>
             <dependency>
-                <groupId>com.databricks</groupId>
-                <artifactId>dbutils-api_${scala.compat.version}</artifactId>
-                <version>0.0.3</version>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${fasterxml.jackson.databind.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>commons-codec</groupId>
+                <artifactId>commons-codec</artifactId>
+                <version>${commons-codec.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.dropwizard.metrics</groupId>
+                <artifactId>metrics-core</artifactId>
+                <version>${codahale.metrics.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.dropwizard.metrics</groupId>
+                <artifactId>metrics-json</artifactId>
+                <version>${codahale.metrics.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>log4j</groupId>
+                <artifactId>log4j</artifactId>
+                <version>${log4j.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient</artifactId>
+                <version>${commons.httpclient.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-server</artifactId>
+                <version>${jetty.version}</version>
                 <scope>provided</scope>
             </dependency>
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
                 <version>${slf4j.version}</version>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>log4j</groupId>
-                <artifactId>log4j</artifactId>
-                <version>1.2.17</version>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>commons-codec</groupId>
-                <artifactId>commons-codec</artifactId>
-                <version>1.10</version>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.httpcomponents</groupId>
-                <artifactId>httpclient</artifactId>
-                <version>4.5.4</version>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>io.dropwizard.metrics</groupId>
-                <artifactId>metrics-core</artifactId>
-                <version>3.1.5</version>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>io.dropwizard.metrics</groupId>
-                <artifactId>metrics-json</artifactId>
-                <version>3.1.5</version>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-databind</artifactId>
-                <version>2.6.7.1</version>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-server</artifactId>
-                <version>9.3.20.v20170531</version>
                 <scope>provided</scope>
             </dependency>
             <dependency>
@@ -208,24 +265,6 @@
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-dependency-plugin</artifactId>
-                    <version>3.0.2</version>
-                    <executions>
-                        <execution>
-                            <id>copy-dependencies</id>
-                            <phase>package</phase>
-                            <goals>
-                                <goal>copy-dependencies</goal>
-                            </goals>
-                            <configuration>
-                                <includeScope>runtime</includeScope>
-                                <outputDirectory>${project.build.directory}</outputDirectory>
-                            </configuration>
-                        </execution>
-                    </executions>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>2.22.0</version>
                     <configuration>
@@ -270,9 +309,145 @@
                         </execution>
                     </executions>
                 </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>3.1.2</version>
+                    <configuration>
+                        <outputDirectory>${maven.multiModuleProjectDirectory}/target/${project.parent.artifactId}/${spark.version}</outputDirectory>
+                    </configuration>
+                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
+            <!-- display active profile in compile phase -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-help-plugin</artifactId>
+                <version>3.2.0</version>
+                <inherited>false</inherited>
+                <executions>
+                    <execution>
+                        <id>show-profiles</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>active-profiles</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>3.0.0-M2</version>
+                <inherited>false</inherited>
+                <executions>
+                    <execution>
+                        <id>enforce-minimum-maven-version</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireMavenVersion>
+                                    <version>3.5.4</version>
+                                </requireMavenVersion>
+                            </rules>
+                            <fail>true</fail>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>enforce-only-one-profile-is-active</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <evaluateBeanshell>
+                                    <condition><![CDATA[
+                                        String activeProfiles = "${project.activeProfiles}";
+                                        int indexOf =activeProfiles.indexOf("Profile");
+                                        if (indexOf == -1) {
+                                            print("No active profile");
+                                            return false;
+                                        }
+
+                                        if (indexOf != activeProfiles.lastIndexOf("Profile")) {
+                                            print("Only one profile may be active");
+                                            return false;
+                                        }
+
+                                        return true;
+                                    ]]></condition>
+                                </evaluateBeanshell>
+                            </rules>
+                            <failFast>true</failFast>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>3.1.0</version>
+                <inherited>false</inherited>
+                <executions>
+                    <execution>
+                        <id>auto-clean</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                        <configuration>
+                            <skip>true</skip>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>parent-clean</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                        <configuration>
+                            <excludeDefaultDirectories>true</excludeDefaultDirectories>
+                            <filesets>
+                                <fileset>
+                                    <directory>target/${project.artifactId}/${spark.version}</directory>
+                                    <includes>
+                                        <include>**</include>
+                                    </includes>
+                                </fileset>
+                            </filesets>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <!--<plugin>-->
+                <!--<groupId>org.codehaus.mojo</groupId>-->
+                <!--<artifactId>flatten-maven-plugin</artifactId>-->
+                <!--<version>1.1.0</version>-->
+                <!--<configuration>-->
+                    <!--<flattenMode>resolveCiFriendliesOnly</flattenMode>-->
+                <!--</configuration>-->
+                <!--<executions>-->
+                    <!--&lt;!&ndash; enable flattening &ndash;&gt;-->
+                    <!--<execution>-->
+                        <!--<id>flatten</id>-->
+                        <!--<phase>process-resources</phase>-->
+                        <!--<goals>-->
+                            <!--<goal>flatten</goal>-->
+                        <!--</goals>-->
+                    <!--</execution>-->
+                    <!--&lt;!&ndash; ensure proper cleanup &ndash;&gt;-->
+                    <!--<execution>-->
+                        <!--<id>flatten.clean</id>-->
+                        <!--<phase>clean</phase>-->
+                        <!--<goals>-->
+                            <!--<goal>clean</goal>-->
+                        <!--</goals>-->
+                    <!--</execution>-->
+                <!--</executions>-->
+            <!--</plugin>-->
             <plugin>
                 <!-- see http://davidb.github.com/scala-maven-plugin -->
                 <groupId>net.alchim31.maven</groupId>
@@ -285,10 +460,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-clean-plugin</artifactId>
             </plugin>
             <plugin>
                 <groupId>org.scalatest</groupId>
