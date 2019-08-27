@@ -10,7 +10,6 @@
     <packaging>pom</packaging>
     <modules>
         <module>spark-listeners</module>
-        <module>spark-jobs</module>
         <module>spark-listeners-loganalytics</module>
     </modules>
 
