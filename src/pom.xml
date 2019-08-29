@@ -15,7 +15,7 @@
 
     <profiles>
         <profile>
-            <id>spark-2.4.0</id>
+            <id>scala-2.11_spark-2.4.0</id>
             <properties>
                 <codahale.metrics.version>3.1.5</codahale.metrics.version>
                 <commons-codec.version>1.10</commons-codec.version>
@@ -25,10 +25,12 @@
                 <log4j.version>1.2.17</log4j.version>
                 <slf4j.version>1.7.16</slf4j.version>
                 <spark.version>2.4.0</spark.version>
+                <scala.version>2.11.8</scala.version>
+                <scala.compat.version>2.11</scala.compat.version>
             </properties>
         </profile>
         <profile>
-            <id>spark-2.4.1</id>
+            <id>scala-2.11_spark-2.4.1</id>
             <properties>
                 <codahale.metrics.version>3.1.5</codahale.metrics.version>
                 <commons-codec.version>1.10</commons-codec.version>
@@ -38,10 +40,12 @@
                 <log4j.version>1.2.17</log4j.version>
                 <slf4j.version>1.7.16</slf4j.version>
                 <spark.version>2.4.1</spark.version>
+                <scala.version>2.11.8</scala.version>
+                <scala.compat.version>2.11</scala.compat.version>
             </properties>
         </profile>
         <profile>
-            <id>spark-2.4.3</id>
+            <id>scala-2.11_spark-2.4.3</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
@@ -54,6 +58,8 @@
                 <log4j.version>1.2.17</log4j.version>
                 <slf4j.version>1.7.16</slf4j.version>
                 <spark.version>2.4.3</spark.version>
+                <scala.version>2.11.8</scala.version>
+                <scala.compat.version>2.11</scala.compat.version>
             </properties>
         </profile>
         <!-- Enable this when 2.4.4 is live. -->
@@ -80,8 +86,6 @@
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <maven.version>3.5.4</maven.version>
-        <scala.version>2.11.8</scala.version>
-        <scala.compat.version>2.11</scala.compat.version>
         <spark.listeners.version>1.0.0</spark.listeners.version>
         <spark.listeners.loganalytics.version>1.0.0</spark.listeners.loganalytics.version>
     </properties>
@@ -180,24 +184,6 @@
         </dependencies>
     </dependencyManagement>
     <dependencies>
-        <dependency>
-            <groupId>org.scala-lang</groupId>
-            <artifactId>scala-library</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.scalatest</groupId>
-            <artifactId>scalatest_${scala.compat.version}</artifactId>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
     <build>
         <pluginManagement>
@@ -305,6 +291,17 @@
                             <goals>
                                 <goal>clean</goal>
                             </goals>
+                            <configuration>
+                                <excludeDefaultDirectories>false</excludeDefaultDirectories>
+                                <filesets>
+                                    <fileset>
+                                        <directory>${maven.multiModuleProjectDirectory}/target</directory>
+                                        <includes>
+                                            <include>${project.artifactId}-${project.version}.jar</include>
+                                        </includes>
+                                    </fileset>
+                                </filesets>
+                            </configuration>
                         </execution>
                     </executions>
                 </plugin>
@@ -313,7 +310,7 @@
                     <artifactId>maven-jar-plugin</artifactId>
                     <version>3.1.2</version>
                     <configuration>
-                        <outputDirectory>${maven.multiModuleProjectDirectory}/target/${project.parent.artifactId}/${spark.version}</outputDirectory>
+                        <outputDirectory>${maven.multiModuleProjectDirectory}/target</outputDirectory>
                     </configuration>
                 </plugin>
             </plugins>
@@ -386,6 +383,7 @@
                 </executions>
             </plugin>
             <plugin>
+                <!-- This is so we leave the target directory alone -->
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-clean-plugin</artifactId>
                 <version>3.1.0</version>
@@ -401,69 +399,26 @@
                             <skip>true</skip>
                         </configuration>
                     </execution>
-                    <execution>
-                        <id>parent-clean</id>
-                        <phase>initialize</phase>
-                        <goals>
-                            <goal>clean</goal>
-                        </goals>
-                        <configuration>
-                            <excludeDefaultDirectories>true</excludeDefaultDirectories>
-                            <filesets>
-                                <fileset>
-                                    <directory>target/${project.artifactId}/${spark.version}</directory>
-                                    <includes>
-                                        <include>**</include>
-                                    </includes>
-                                </fileset>
-                            </filesets>
-                        </configuration>
-                    </execution>
                 </executions>
             </plugin>
+
             <!--<plugin>-->
-                <!--<groupId>org.codehaus.mojo</groupId>-->
-                <!--<artifactId>flatten-maven-plugin</artifactId>-->
-                <!--<version>1.1.0</version>-->
-                <!--<configuration>-->
-                    <!--<flattenMode>resolveCiFriendliesOnly</flattenMode>-->
-                <!--</configuration>-->
-                <!--<executions>-->
-                    <!--&lt;!&ndash; enable flattening &ndash;&gt;-->
-                    <!--<execution>-->
-                        <!--<id>flatten</id>-->
-                        <!--<phase>process-resources</phase>-->
-                        <!--<goals>-->
-                            <!--<goal>flatten</goal>-->
-                        <!--</goals>-->
-                    <!--</execution>-->
-                    <!--&lt;!&ndash; ensure proper cleanup &ndash;&gt;-->
-                    <!--<execution>-->
-                        <!--<id>flatten.clean</id>-->
-                        <!--<phase>clean</phase>-->
-                        <!--<goals>-->
-                            <!--<goal>clean</goal>-->
-                        <!--</goals>-->
-                    <!--</execution>-->
-                <!--</executions>-->
+                <!--&lt;!&ndash; see http://davidb.github.com/scala-maven-plugin &ndash;&gt;-->
+                <!--<groupId>net.alchim31.maven</groupId>-->
+                <!--<artifactId>scala-maven-plugin</artifactId>-->
             <!--</plugin>-->
-            <plugin>
-                <!-- see http://davidb.github.com/scala-maven-plugin -->
-                <groupId>net.alchim31.maven</groupId>
-                <artifactId>scala-maven-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.scalatest</groupId>
-                <artifactId>scalatest-maven-plugin</artifactId>
-            </plugin>
+            <!--<plugin>-->
+                <!--<groupId>org.apache.maven.plugins</groupId>-->
+                <!--<artifactId>maven-compiler-plugin</artifactId>-->
+            <!--</plugin>-->
+            <!--<plugin>-->
+                <!--<groupId>org.apache.maven.plugins</groupId>-->
+                <!--<artifactId>maven-surefire-plugin</artifactId>-->
+            <!--</plugin>-->
+            <!--<plugin>-->
+                <!--<groupId>org.scalatest</groupId>-->
+                <!--<artifactId>scalatest-maven-plugin</artifactId>-->
+            <!--</plugin>-->
         </plugins>
     </build>
 </project>
