@@ -3,7 +3,6 @@
 This repository extends the core monitoring functionality of Azure Databricks to send streaming query event information to Azure Log Analytics. It has the following directory structure:
 
 /src  
-&nbsp;&nbsp;/spark-jobs  
 &nbsp;&nbsp;/spark-listeners-loganalytics  
 &nbsp;&nbsp;/spark-listeners  
 &nbsp;&nbsp;/pom.xml
@@ -32,50 +31,48 @@ Before you begin, ensure you have the following prerequisites in place:
 
 To build the Azure Databricks monitoring library, follow these steps:
 
-1. Import the Maven project project object model file, _pom.xml_, located in the **/src** folder into your project. This will import three projects:
+Note: All versions of the library can be built using the official Maven Docker image by executing the following command:
 
-* spark-jobs
+```$bash
+docker run -it --rm -v <local path to the spark-monitoring source>:/spark-monitoring maven:3.6.1-jdk-8 /bin/bash /spark-monitoring/build.sh
+```
+1. Import the Maven project project object model file, _pom.xml_, located in the **/src** folder into your project. This will import two projects:
+
 * spark-listeners
 * spark-listeners-loganalytics
 
-2. Execute the Maven **package** build phase in your Java IDE to build the JAR files for each of the these three projects:
+2. Activate a **single** Maven profile that corresponds to the versions of the Scala/Spark combination that is being used. By default, the Scala 2.11 and Spark 2.4.3 profile is active.
+
+3. Execute the Maven **package** phase in your Java IDE to build the JAR files for each of the these projects:
 
 |Project| JAR file|
 |-------|---------|
-|spark-jobs|spark-jobs-1.0-SNAPSHOT.jar|
-|spark-listeners|spark-listeners-1.0-SNAPSHOT.jar|
-|spark-listeners-loganalytics|spark-listeners-loganalytics-1.0-SNAPSHOT.jar|
+|spark-listeners|spark-listeners_<Scala Version>_<Spark Version>-<Version>.jar|
+|spark-listeners-loganalytics|spark-listeners-loganalytics_<Scala Version>_<Spark Version>-<Version>.jar|
 
-3. Use the Azure Databricks CLI to create a directory named **dbfs:/databricks/monitoring-staging**:  
+4. Use the Azure Databricks CLI to create a directory named **dbfs:/databricks/spark-monitoring**:  
 
   ```bash
-  dbfs mkdirs dbfs:/databricks/monitoring-staging
+  dbfs mkdirs dbfs:/databricks/spark-monitoring
   ```
 
-4. Open the **/src/spark-listeners/scripts/listeners.sh** script file and add your [Log Analytics Workspace ID and Key](/azure/azure-monitor/platform/agent-windows#obtain-workspace-id-and-key) to the lines below:
+5. Open the **/src/spark-listeners/scripts/spark-monitoring.sh** script file and add your [Log Analytics Workspace ID and Key](/azure/azure-monitor/platform/agent-windows#obtain-workspace-id-and-key) to the lines below:
 
 ```bash
 export LOG_ANALYTICS_WORKSPACE_ID=
 export LOG_ANALYTICS_WORKSPACE_KEY=
 ```
   
-5. Use the Azure Databricks CLI to copy **/src/spark-listeners/scripts/listeners.sh** to the directory created in step 3:
+6. Use the Azure Databricks CLI to copy **/src/spark-listeners/scripts/spark-monitoring.sh** to the directory created in step 3:
 
 ```bash
-dbfs cp <local path to listeners.sh> dbfs:/databricks/monitoring-staging/listeners.sh
+dbfs cp <local path to spark-monitoring.sh> dbfs:/databricks/monitoring-staging/spark-monitoring.sh
 ```
 
-6. Use the Azure Databricks CLI to copy **/src/spark-listeners/scripts/metrics.properties** to the directory created in step 3:
+7. Use the Azure Databricks CLI to copy all of the jar files from the spark-monitoring/src/target folder to the directory created in step 3:
 
 ```bash
-dbfs cp <local path to metrics.properties> dbfs:/databricks/monitoring-staging/metrics.properties
-```
-
-7. Use the Azure Databricks CLI to copy **spark-listeners-1.0-SNAPSHOT.jar** and **spark-listeners-loganalytics-1.0-SNAPSHOT.jar** that were built in step 2 to the directory created in step 3:
-
-```bash
-dbfs cp <local path to spark-listeners-1.0-SNAPSHOT.jar> dbfs:/databricks/monitoring-staging/spark-listeners-1.0-SNAPSHOT.jar
-dbfs cp <local path to spark-listeners-loganalytics-1.0-SNAPSHOT.jar> dbfs:/databricks/monitoring-staging/spark-listeners-loganalytics-1.0-SNAPSHOT.jar
+dbfs cp --overwrite --recursive <local path to target folder> dbfs:/databricks/spark-monitoring/
 ```
 
 ### Create and configure the Azure Databricks cluster
@@ -86,7 +83,7 @@ To create and configure the Azure Databricks cluster, follow these steps:
 2. On the home page, click "new cluster".
 3. Choose a name for your cluster and enter it in "cluster name" text box. 
 4. In the "Databricks Runtime Version" dropdown, select **5.0** or later (includes Apache Spark 2.4.0, Scala 2.11).
-5. Under "Advanced Options", click on the "Init Scripts" tab. Go to the last line under the "Init Scripts section" Under the "destination" dropdown, select "DBFS". Enter "dbfs:/databricks/monitoring-staging/listeners.sh" in the text box. Click the "add" button.
+5. Under "Advanced Options", click on the "Init Scripts" tab. Go to the last line under the "Init Scripts section" Under the "destination" dropdown, select "DBFS". Enter "dbfs:/databricks/spark-monitoring/spark-monitoring.sh" in the text box. Click the "add" button.
 6. Click the "create cluster" button to create the cluster. Next, click on the "start" button to start the cluster.
 
 ## More information
