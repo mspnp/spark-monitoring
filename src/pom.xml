@@ -21,7 +21,7 @@
                 <commons-codec.version>1.10</commons-codec.version>
                 <commons.httpclient.version>4.5.4</commons.httpclient.version>
                 <fasterxml.jackson.databind.version>2.6.7.1</fasterxml.jackson.databind.version>
-                <jetty.version>9.3.20.v20170531</jetty.version>
+                <jetty.version>9.4.17.v20190418</jetty.version>
                 <log4j.version>1.2.17</log4j.version>
                 <slf4j.version>1.7.16</slf4j.version>
                 <spark.version>2.4.0</spark.version>
