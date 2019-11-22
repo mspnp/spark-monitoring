@@ -5,13 +5,13 @@
     <parent>
         <artifactId>spark-monitoring</artifactId>
         <groupId>com.microsoft.pnp</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>spark-listeners</artifactId>
+    <artifactId>spark-listeners_${scala.compat.version}_${spark.version}</artifactId>
     <name>${project.artifactId}</name>
-    <version>1.0-SNAPSHOT</version>
+    <version>${spark.listeners.version}</version>
     <packaging>jar</packaging>
     <dependencies>
         <dependency>
@@ -59,36 +59,64 @@
         </dependency>
         <dependency>
             <groupId>com.github.dwickern</groupId>
-            <artifactId>scala-nameof_2.11</artifactId>
+            <artifactId>scala-nameof_${scala.compat.version}</artifactId>
             <version>1.0.3</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.scalatest</groupId>
+            <artifactId>scalatest_${scala.compat.version}</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
         </dependency>
     </dependencies>
     <build>
         <plugins>
+            <!--<plugin>-->
+                <!--<groupId>org.scalatest</groupId>-->
+                <!--<artifactId>scalatest-maven-plugin</artifactId>-->
+                <!--<version>2.0.0</version>-->
+                <!--<configuration>-->
+                    <!--<reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>-->
+                    <!--<junitxml>.</junitxml>-->
+                    <!--<filereports>TestSuiteReport.txt</filereports>-->
+                    <!--<parallel>false</parallel>-->
+                    <!--<forkMode>never</forkMode>-->
+                    <!--<systemProperties>-->
+                        <!--<log4j.configuration>file:src/test/resources/log4j.properties</log4j.configuration>-->
+                    <!--</systemProperties>-->
+                    <!--<skipTests>false</skipTests>-->
+                <!--</configuration>-->
+                <!--<executions>-->
+                    <!--<execution>-->
+                        <!--<id>test</id>-->
+                        <!--<goals>-->
+                            <!--<goal>test</goal>-->
+                        <!--</goals>-->
+                    <!--</execution>-->
+                <!--</executions>-->
+            <!--</plugin>-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-clean-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>net.alchim31.maven</groupId>
+                <artifactId>scala-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+            </plugin>
             <plugin>
                 <groupId>org.scalatest</groupId>
                 <artifactId>scalatest-maven-plugin</artifactId>
-                <version>2.0.0</version>
-                <configuration>
-                    <reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>
-                    <junitxml>.</junitxml>
-                    <filereports>TestSuiteReport.txt</filereports>
-                    <parallel>false</parallel>
-                    <forkMode>never</forkMode>
-                    <systemProperties>
-                        <log4j.configuration>file:src/test/resources/log4j.properties</log4j.configuration>
-                    </systemProperties>
-                    <skipTests>false</skipTests>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>test</id>
-                        <goals>
-                            <goal>test</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>
