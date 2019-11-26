@@ -83,7 +83,7 @@ Copy the JAR files and init scripts to Databricks.
 1. Use the Azure Databricks CLI to copy **/src/spark-listeners/scripts/spark-monitoring.sh** to the directory created in step 3:
 
     ```bash
-    dbfs cp <local path to spark-monitoring.sh> dbfs:/databricks/monitoring-staging/spark-monitoring.sh
+    dbfs cp <local path to spark-monitoring.sh> dbfs:/databricks/spark-monitoring/spark-monitoring.sh
     ```
 
 1. Use the Azure Databricks CLI to copy all of the jar files from the spark-monitoring/src/target folder to the directory created in step 3:
