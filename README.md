@@ -73,7 +73,7 @@ Copy the JAR files and init scripts to Databricks.
     dbfs mkdirs dbfs:/databricks/spark-monitoring
     ```
 
-1. Open the **/src/spark-listeners/scripts/spark-monitoring.sh** script file and add your [Log Analytics Workspace ID and Key](/azure/azure-monitor/platform/agent-windows#obtain-workspace-id-and-key) to the lines below:
+1. Open the **/src/spark-listeners/scripts/spark-monitoring.sh** script file and add your [Log Analytics Workspace ID and Key](http://docs.microsoft.com/azure/azure-monitor/platform/agent-windows#obtain-workspace-id-and-key) to the lines below:
 
     ```bash
     export LOG_ANALYTICS_WORKSPACE_ID=
