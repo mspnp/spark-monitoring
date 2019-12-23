@@ -27,7 +27,7 @@
             <groupId>com.microsoft.pnp</groupId>
             <artifactId>spark-listeners_${spark.version}_${scala.compat.version}</artifactId>
             <version>${spark.listeners.version}</version>
-            <scope>provided</scope>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>

@@ -61,7 +61,7 @@
             <groupId>com.github.dwickern</groupId>
             <artifactId>scala-nameof_${scala.compat.version}</artifactId>
             <version>1.0.3</version>
-            <scope>provided</scope>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.scalatest</groupId>
