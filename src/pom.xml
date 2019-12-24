@@ -17,13 +17,8 @@
         <profile>
             <id>scala-2.11_spark-2.4.0</id>
             <properties>
-                <codahale.metrics.version>3.1.5</codahale.metrics.version>
-                <commons-codec.version>1.10</commons-codec.version>
                 <commons.httpclient.version>4.5.4</commons.httpclient.version>
-                <fasterxml.jackson.databind.version>2.6.7.1</fasterxml.jackson.databind.version>
                 <jetty.version>9.3.20.v20170531</jetty.version>
-                <log4j.version>1.2.17</log4j.version>
-                <slf4j.version>1.7.16</slf4j.version>
                 <spark.version>2.4.0</spark.version>
                 <scala.version>2.11.8</scala.version>
                 <scala.compat.version>2.11</scala.compat.version>
@@ -32,13 +27,8 @@
         <profile>
             <id>scala-2.11_spark-2.4.1</id>
             <properties>
-                <codahale.metrics.version>3.1.5</codahale.metrics.version>
-                <commons-codec.version>1.10</commons-codec.version>
                 <commons.httpclient.version>4.5.4</commons.httpclient.version>
-                <fasterxml.jackson.databind.version>2.6.7.1</fasterxml.jackson.databind.version>
                 <jetty.version>9.3.20.v20170531</jetty.version>
-                <log4j.version>1.2.17</log4j.version>
-                <slf4j.version>1.7.16</slf4j.version>
                 <spark.version>2.4.1</spark.version>
                 <scala.version>2.11.8</scala.version>
                 <scala.compat.version>2.11</scala.compat.version>
@@ -50,13 +40,8 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
-                <codahale.metrics.version>3.1.5</codahale.metrics.version>
-                <commons-codec.version>1.10</commons-codec.version>
                 <commons.httpclient.version>4.5.4</commons.httpclient.version>
-                <fasterxml.jackson.databind.version>2.6.7.1</fasterxml.jackson.databind.version>
                 <jetty.version>9.3.20.v20170531</jetty.version>
-                <log4j.version>1.2.17</log4j.version>
-                <slf4j.version>1.7.16</slf4j.version>
                 <spark.version>2.4.3</spark.version>
                 <scala.version>2.11.8</scala.version>
                 <scala.compat.version>2.11</scala.compat.version>
@@ -99,12 +84,6 @@
             </dependency>
             <dependency>
                 <groupId>org.apache.spark</groupId>
-                <artifactId>spark-core_${scala.compat.version}</artifactId>
-                <version>${spark.version}</version>
-                <scope>compile</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.spark</groupId>
                 <artifactId>spark-sql_${scala.compat.version}</artifactId>
                 <version>${spark.version}</version>
                 <scope>compile</scope>
@@ -113,36 +92,6 @@
                 <groupId>org.apache.spark</groupId>
                 <artifactId>spark-streaming_${scala.compat.version}</artifactId>
                 <version>${spark.version}</version>
-                <scope>compile</scope>
-            </dependency>
-            <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-databind</artifactId>
-                <version>${fasterxml.jackson.databind.version}</version>
-                <scope>compile</scope>
-            </dependency>
-            <dependency>
-                <groupId>commons-codec</groupId>
-                <artifactId>commons-codec</artifactId>
-                <version>${commons-codec.version}</version>
-                <scope>compile</scope>
-            </dependency>
-            <dependency>
-                <groupId>io.dropwizard.metrics</groupId>
-                <artifactId>metrics-core</artifactId>
-                <version>${codahale.metrics.version}</version>
-                <scope>compile</scope>
-            </dependency>
-            <dependency>
-                <groupId>io.dropwizard.metrics</groupId>
-                <artifactId>metrics-json</artifactId>
-                <version>${codahale.metrics.version}</version>
-                <scope>compile</scope>
-            </dependency>
-            <dependency>
-                <groupId>log4j</groupId>
-                <artifactId>log4j</artifactId>
-                <version>${log4j.version}</version>
                 <scope>compile</scope>
             </dependency>
             <dependency>
@@ -155,12 +104,6 @@
                 <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-server</artifactId>
                 <version>${jetty.version}</version>
-                <scope>compile</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-api</artifactId>
-                <version>${slf4j.version}</version>
                 <scope>compile</scope>
             </dependency>
             <dependency>

@@ -4,18 +4,11 @@ import java.util.concurrent.ConcurrentHashMap
 
 import com.codahale.metrics._
 import org.apache.spark.internal.Logging
-import org.apache.spark.rpc.RpcEndpointRef
-import org.apache.spark.sql.SparkSession
-import org.apache.spark.util.RpcUtils
-import org.apache.spark.{SparkContext, SparkEnv, SparkException}
+import org.apache.spark.metrics.Implicits.StringExtensions
+import org.apache.spark.{SparkContext, SparkEnv}
 
-import scala.collection.JavaConverters.mapAsScalaMapConverter
 import scala.collection.JavaConverters.mapAsScalaConcurrentMapConverter
-import scala.collection.concurrent.TrieMap
 import scala.collection.mutable
-import scala.reflect.{ClassTag, classTag}
-import com.github.dwickern.macros.NameOf._
-import Implicits.StringExtensions
 
 trait UserMetricsSystem {
   def counter(metricName: String): Counter
@@ -101,8 +94,8 @@ case class ReceiverMetricSystemBuilder(
                                         val sparkEnv: SparkEnv,
                                         val endpointName: String = RpcMetricsReceiver.DefaultEndpointName
                                       ) {
-  require(sparkEnv != null, s"${nameOf(sparkEnv)} cannot be null")
-  require(!endpointName.isNullOrEmpty, s"${nameOf(endpointName)} cannot be null, empty, or only whitespace")
+  require(sparkEnv != null, "sparkEnv cannot be null")
+  require(!endpointName.isNullOrEmpty, "endpointName cannot be null, empty, or only whitespace")
 
   if (sparkEnv.executorId != SparkContext.DRIVER_IDENTIFIER) {
     throw new IllegalStateException("ReceiverMetricSystemBuilder can only be used on a driver")
