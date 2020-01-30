@@ -16,15 +16,21 @@ SPARK_CONF_DIR=$SPARK_HOME/conf
 # Log Analytics Workspace
 tee -a "$SPARK_CONF_DIR/spark-env.sh" << EOF
 export DB_CLUSTER_ID=$DB_CLUSTER_ID
-export LOG_ANALYTICS_WORKSPACE_ID=
-export LOG_ANALYTICS_WORKSPACE_KEY=
+export LOG_ANALYTICS_WORKSPACE_ID=$LOG_ANALYTICS_WORKSPACE_ID
+export LOG_ANALYTICS_WORKSPACE_KEY=$LOG_ANALYTICS_PRIMARY_KEY
 EOF
 
 STAGE_DIR=/dbfs/databricks/spark-monitoring
 SPARK_LISTENERS_VERSION=${SPARK_LISTENERS_VERSION:-1.0.0}
 SPARK_LISTENERS_LOG_ANALYTICS_VERSION=${SPARK_LISTENERS_LOG_ANALYTICS_VERSION:-1.0.0}
+
+# The SPARK_SCALA_VERSION environment variable seems to be incorrect now.
+# Remove the sed bits once it is fixed.
 SPARK_VERSION=$(cat /databricks/spark/VERSION 2> /dev/null || echo "")
-SPARK_VERSION=${SPARK_VERSION:-2.4.3}
+SPARK_VERSION=${SPARK_VERSION:-2.4.4}
+
+SPARK_SCALA_VERSION=$(sed -n "s/\s*spark.databricks.clusterUsageTags.sparkVersion\s*=\s*\"\([^\"]*\)\"/\1/p" /databricks/common/conf/deploy.conf | \
+sed -n "s/.*scala\(.*\)/\1/p")
 SPARK_SCALA_VERSION=${SPARK_SCALA_VERSION:-2.11}
 
 # This variable configures the spark-monitoring library metrics sink.
