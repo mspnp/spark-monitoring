@@ -2,35 +2,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <groupId>com.microsoft.pnp</groupId>
-    <version>1.0.0</version>
-    <artifactId>spark-sample-job_${scala.compat.version}_${spark.version}</artifactId>
+    <parent>
+        <artifactId>spark-monitoring</artifactId>
+        <groupId>com.microsoft.pnp</groupId>
+        <version>1.0.0</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
     <modelVersion>4.0.0</modelVersion>
+    <artifactId>spark-sample-job_${scala.compat.version}_${spark.version}</artifactId>
     <name>${project.artifactId}</name>
-    <packaging>jar</packaging>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>1.8</java.version>
-        <maven.compiler.source>${java.version}</maven.compiler.source>
-        <maven.compiler.target>${java.version}</maven.compiler.target>
-        <maven.version>3.5.4</maven.version>
-        <scala.version>2.11.8</scala.version>
-        <scala.compat.version>2.11</scala.compat.version>
-        <spark.listeners.version>1.0.0</spark.listeners.version>
-        <spark.listeners.loganalytics.version>1.0.0</spark.listeners.loganalytics.version>
-        <!-- Make sure you build with the matching version of Spark -->
-        <codahale.metrics.version>3.1.5</codahale.metrics.version>
-        <commons-codec.version>1.10</commons-codec.version>
-        <commons.httpclient.version>4.5.4</commons.httpclient.version>
-        <fasterxml.jackson.databind.version>2.6.7.1</fasterxml.jackson.databind.version>
-        <jetty.version>9.3.20.v20170531</jetty.version>
-        <log4j.version>1.2.17</log4j.version>
-        <slf4j.version>1.7.16</slf4j.version>
-        <spark.version>2.4.3</spark.version>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.scala-lang</groupId>

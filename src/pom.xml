@@ -11,6 +11,7 @@
     <modules>
         <module>spark-listeners</module>
         <module>spark-listeners-loganalytics</module>
+        <module>spark-sample-job</module>
     </modules>
 
     <profiles>
