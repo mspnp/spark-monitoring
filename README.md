@@ -110,13 +110,13 @@ The monitoring library includes a sample application that shows how to send appl
     Linux:
 
     ```bash
-    docker run -it --rm -v `pwd`/spark-monitoring/sample/spark-sample-job:/spark-monitoring -v "$HOME/.m2":/root/.m2 -w /spark-monitoring maven:3.6.1-jdk-8 mvn clean package
+    docker run -it --rm -v `pwd`/spark-monitoring:/spark-monitoring -v "$HOME/.m2":/root/.m2 maven:3.6.1-jdk-8 /spark-monitoring/build.sh buildsample
     ```
 
     Windows:
 
-    ```
-    docker run -it --rm -v %cd%/spark-monitoring/sample/spark-sample-job:/spark-monitoring -v "%USERPROFILE%/.m2":/root/.m2 -w /spark-monitoring maven:3.6.1-jdk-8 mvn clean package
+    ```bash
+    docker run -it --rm -v %cd%/spark-monitoring:/spark-monitoring -v "%USERPROFILE%/.m2":/root/.m2 maven:3.6.1-jdk-8 /spark-monitoring/build.sh buildsample
     ```
 
 1. Navigate to your Databricks workspace and create a new job, as described [here](https://docs.azuredatabricks.net/user-guide/jobs.html#create-a-job).
