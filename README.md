@@ -31,14 +31,6 @@ Before you begin, ensure you have the following prerequisites in place:
 
 You can build the library using either Docker or Maven.
 
-When building the library, specify a maven profile compatible with your
-databricks runtime.
-
-| Databricks Runtime(s) | Maven Profile |
-| -- | -- |
-| `5.5`, `6.0` | `scala-2.11_spark-2.4.3` |
-| `6.1` - `6.3` | `scala-2.11_spark-2.4.4` |
-
 ### Option 1: Docker
 
 Make sure to substitute `<maven-profile>` with your maven profile below.
@@ -46,13 +38,14 @@ Make sure to substitute `<maven-profile>` with your maven profile below.
 Linux:
 
 ```bash
-docker run -it --rm -v `pwd`/spark-monitoring:/spark-monitoring -v "$HOME/.m2":/root/.m2 maven:3.6.1-jdk-8 mvn -f /spark-monitoring/src/pom.xml install -P <maven-profile>
+chmod +x spark-monitoring/build.sh
+docker run -it --rm -v `pwd`/spark-monitoring:/spark-monitoring -v "$HOME/.m2":/root/.m2 maven:3.6.1-jdk-8 /spark-monitoring/build.sh
 ```
 
 Windows:
 
 ```bash
-docker run -it --rm -v %cd%/spark-monitoring:/spark-monitoring -v "%USERPROFILE%/.m2":/root/.m2 maven:3.6.1-jdk-8 mvn -f /spark-monitoring/src/pom.xml install -P <maven-profile>
+docker run -it --rm -v %cd%/spark-monitoring:/spark-monitoring -v "%USERPROFILE%/.m2":/root/.m2 maven:3.6.1-jdk-8 /spark-monitoring/build.sh
 ```
 
 ### Option 2: Maven
@@ -112,7 +105,15 @@ Copy the JAR files and init scripts to Databricks.
 
 ## Run the sample job (optional)
 
-The monitoring library includes a sample application that shows how to send application metrics and application logs to Azure Monitor. 
+The monitoring library includes a sample application that shows how to send application metrics and application logs to Azure Monitor.
+
+When building the library, specify a maven profile compatible with your
+databricks runtime.
+
+| Databricks Runtime(s) | Maven Profile |
+| -- | -- |
+| `5.5`, `6.0` | `scala-2.11_spark-2.4.3` |
+| `6.1` - `6.3` | `scala-2.11_spark-2.4.4` |
 
 1. Use Maven to build the POM located at `sample/spark-sample-job/pom.xml` or run the following Docker command:
 
@@ -141,4 +142,3 @@ When the job runs, you can view the application logs and metrics in your Log Ana
 ## More information
 
 For more information about using this library to monitor Azure Databricks, see [Monitoring Azure Databricks](https://docs.microsoft.com/azure/architecture/databricks-monitoring)
-
