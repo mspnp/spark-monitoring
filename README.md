@@ -33,8 +33,6 @@ You can build the library using either Docker or Maven.
 
 ### Option 1: Docker
 
-Make sure to substitute `<maven-profile>` with your maven profile below.
-
 Linux:
 
 ```bash
