@@ -79,7 +79,13 @@ Copy the JAR files and init scripts to Databricks.
     export LOG_ANALYTICS_WORKSPACE_ID=
     export LOG_ANALYTICS_WORKSPACE_KEY=
     ```
-  
+
+If you do not want to add your log analytics workspace id and key into the
+init script in plaintext, you can also [create an Azure Key Vault backed secret
+scope](./docs/keyvault-backed-secrets.md) and reference those secrets through
+your cluster's environment variables. Keep in mind that this feature is still in
+[public preview](https://docs.microsoft.com/en-us/azure/databricks/release-notes/release-types).
+
 1. Use the Azure Databricks CLI to copy **/src/spark-listeners/scripts/spark-monitoring.sh** to the directory created in step 3:
 
     ```bash
@@ -136,6 +142,38 @@ databricks runtime.
 1. For **Main class**, enter `com.microsoft.pnp.samplejob.StreamingQueryListenerSampleJob`.
 
 When the job runs, you can view the application logs and metrics in your Log Analytics workspace. After you verify the metrics appear, stop the sample application job.
+
+### Viewing the Sample Job's Logs in Log Analytics
+
+After your sample job has run for a few minutes, you should be able to query for
+these event types in log analytics:
+
+```sh
+SparkListenerEvent_CL
+SparkLoggingEvent_CL
+SparkListenerEvent_CL
+```
+
+One example of querying logs is:
+
+```sh
+SparkLoggingEvent_CL | where logger_name_s contains "com.microsoft.pnp"
+```
+
+Another example of querying metrics:
+
+```sh
+SparkMetric_CL
+| where name_s contains "executor.cpuTime"
+| extend sname = split(name_s, ".")
+| extend executor=strcat(sname[0], ".", sname[1])
+| project TimeGenerated, cpuTime=count_d / 100000
+```
+
+## Debugging
+
+* If you encounter any issues with the init scipt, you can refer to the docs on
+[debugging](./docs/debugging.md).
 
 ## More information
 
