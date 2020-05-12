@@ -42,7 +42,7 @@ docker run -it --rm -v `pwd`/spark-monitoring:/spark-monitoring -v "$HOME/.m2":/
 
 Windows:
 
-```
+```bash
 docker run -it --rm -v %cd%/spark-monitoring:/spark-monitoring -v "%USERPROFILE%/.m2":/root/.m2 maven:3.6.1-jdk-8 /spark-monitoring/build.sh
 ```
 
@@ -103,20 +103,29 @@ Copy the JAR files and init scripts to Databricks.
 
 ## Run the sample job (optional)
 
-The monitoring library includes a sample application that shows how to send application metrics and application logs to Azure Monitor. 
+The monitoring library includes a sample application that shows how to send application metrics and application logs to Azure Monitor.
 
-1. Use Maven to build the POM located at `sample/spark-sample-job/pm.xml` or run the following Docker command:
+When building the library, specify a maven profile compatible with your
+databricks runtime.
+
+| Databricks Runtime(s) | Maven Profile |
+| -- | -- |
+| `5.5`, `6.0` | `scala-2.11_spark-2.4.3` |
+| `6.1` - `6.3` | `scala-2.11_spark-2.4.4` |
+| `6.4` | `scala-2.11_spark-2.4.5` |
+
+1. Use Maven to build the POM located at `sample/spark-sample-job/pom.xml` or run the following Docker command:
 
     Linux:
 
     ```bash
-    docker run -it --rm -v `pwd`/spark-monitoring/sample/spark-sample-job:/spark-monitoring -v "$HOME/.m2":/root/.m2 -w /spark-monitoring maven:3.6.1-jdk-8 mvn clean package
+    docker run -it --rm -v `pwd`/spark-monitoring/sample/spark-sample-job:/spark-monitoring -v "$HOME/.m2":/root/.m2 -w /spark-monitoring maven:3.6.1-jdk-8 mvn clean install -P <maven-profile>
     ```
 
     Windows:
 
-    ```
-    docker run -it --rm -v %cd%/spark-monitoring/sample/spark-sample-job:/spark-monitoring -v "%USERPROFILE%/.m2":/root/.m2 -w /spark-monitoring maven:3.6.1-jdk-8 mvn clean package
+    ```bash
+    docker run -it --rm -v %cd%/spark-monitoring/sample/spark-sample-job:/spark-monitoring -v "%USERPROFILE%/.m2":/root/.m2 maven:3.6.1-jdk-8 mvn clean install -P <maven-profile>
     ```
 
 1. Navigate to your Databricks workspace and create a new job, as described [here](https://docs.azuredatabricks.net/user-guide/jobs.html#create-a-job).
@@ -132,4 +141,3 @@ When the job runs, you can view the application logs and metrics in your Log Ana
 ## More information
 
 For more information about using this library to monitor Azure Databricks, see [Monitoring Azure Databricks](https://docs.microsoft.com/azure/architecture/databricks-monitoring)
-
