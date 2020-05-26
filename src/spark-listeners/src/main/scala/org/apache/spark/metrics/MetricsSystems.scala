@@ -4,14 +4,13 @@ import com.codahale.metrics._
 import org.apache.spark.SparkException
 import org.apache.spark.internal.Logging
 import scala.collection.JavaConverters.mapAsScalaMapConverter
-import com.github.dwickern.macros.NameOf._
 
 // These will only be created on executors
 private[metrics] class RpcMetricsSystem(
                                          private val metricsSource: MetricsSource
                                        ) extends UserMetricsSystem with Logging {
 
-  require(metricsSource != null, s"${nameOf(metricsSource)} cannot be null")
+  require(metricsSource != null, "metricsSource cannot be null")
 
   private val namespace = metricsSource.sourceName
   private val metricProxies = metricsSource.metricRegistry.getMetrics.asScala
@@ -51,7 +50,7 @@ class LocalMetricsSystem(
                           metricsSource: MetricsSource
                         ) extends UserMetricsSystem {
 
-  require(metricsSource != null, s"${nameOf(metricsSource)} cannot be null")
+  require(metricsSource != null, "metricsSource cannot be null")
 
   private val namespace = metricsSource.sourceName
   private lazy val metrics = metricsSource.metricRegistry.getMetrics.asScala

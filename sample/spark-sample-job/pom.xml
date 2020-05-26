@@ -55,7 +55,7 @@
             </properties>
         </profile>
         <profile>
-            <id>scala-2.11_spark-2.4.4</id>            
+            <id>scala-2.11_spark-2.4.4</id>
             <properties>
                 <codahale.metrics.version>3.1.5</codahale.metrics.version>
                 <commons-codec.version>1.10</commons-codec.version>
@@ -133,7 +133,7 @@
         </dependency>
         <dependency>
             <groupId>com.microsoft.pnp</groupId>
-            <artifactId>spark-listeners_${scala.compat.version}_${spark.version}</artifactId>
+            <artifactId>spark-listeners_${spark.version}_${scala.compat.version}</artifactId>
             <version>${spark.listeners.version}</version>
             <scope>provided</scope>
         </dependency>

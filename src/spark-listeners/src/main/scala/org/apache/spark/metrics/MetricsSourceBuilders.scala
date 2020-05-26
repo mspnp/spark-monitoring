@@ -1,16 +1,14 @@
 package org.apache.spark.metrics
 
 import com.codahale.metrics._
-import org.apache.spark.{SparkContext, SparkEnv, SparkException}
-import org.apache.spark.util.RpcUtils
-import Implicits.StringExtensions
-import com.github.dwickern.macros.NameOf._
 import org.apache.spark.internal.Logging
-import Implicits.StringExtensions
+import org.apache.spark.metrics.Implicits.StringExtensions
+import org.apache.spark.util.RpcUtils
+import org.apache.spark.{SparkContext, SparkEnv, SparkException}
 
 abstract class MetricsSourceBuilder(protected val namespace: String) extends Logging {
 
-  require(!namespace.isNullOrEmpty, s"${nameOf(namespace)} cannot be null, empty, or only whitespace")
+  require(!namespace.isNullOrEmpty, "namespace cannot be null, empty, or only whitespace")
 
   protected val metricRegistry = new MetricRegistry
 
@@ -43,7 +41,7 @@ class LocalMetricsSourceBuilder(override val namespace: String)
   }
 
   def register[T <: Metric](name: String, metric: T)(implicit ev: T <:!< MetricProxy): this.type = {
-    require(!name.isNullOrEmpty, s"${nameOf(name)} cannot be null, empty, or only whitespace")
+    require(!name.isNullOrEmpty, "name cannot be null, empty, or only whitespace")
     this.metricRegistry.register[T](MetricRegistry.name(name), metric)
     this
   }
@@ -104,7 +102,7 @@ class RemoteMetricsSourceBuilder(override val namespace: String,
   }
 
   def register[T <: MetricProxy](name: String, metric: T): this.type = {
-    require(!name.isNullOrEmpty, s"${nameOf(name)} cannot be null, empty, or only whitespace")
+    require(!name.isNullOrEmpty, "name cannot be null, empty, or only whitespace")
     this.metricRegistry.register[T](MetricRegistry.name(name), metric)
     this
   }
