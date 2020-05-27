@@ -322,3 +322,8 @@ buildNumber.properties
 
 # This is to ignore IntelliJ project files, since we use Maven
 *.iml
+
+# eclipse
+.classpath
+.project
+.settings
