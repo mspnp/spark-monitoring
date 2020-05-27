@@ -17,13 +17,8 @@
         <profile>
             <id>scala-2.11_spark-2.4.0</id>
             <properties>
-                <codahale.metrics.version>3.1.5</codahale.metrics.version>
-                <commons-codec.version>1.10</commons-codec.version>
                 <commons.httpclient.version>4.5.4</commons.httpclient.version>
-                <fasterxml.jackson.databind.version>2.6.7.1</fasterxml.jackson.databind.version>
                 <jetty.version>9.3.20.v20170531</jetty.version>
-                <log4j.version>1.2.17</log4j.version>
-                <slf4j.version>1.7.16</slf4j.version>
                 <spark.version>2.4.0</spark.version>
                 <scala.version>2.11.8</scala.version>
                 <scala.compat.version>2.11</scala.compat.version>
@@ -32,13 +27,8 @@
         <profile>
             <id>scala-2.11_spark-2.4.1</id>
             <properties>
-                <codahale.metrics.version>3.1.5</codahale.metrics.version>
-                <commons-codec.version>1.10</commons-codec.version>
                 <commons.httpclient.version>4.5.4</commons.httpclient.version>
-                <fasterxml.jackson.databind.version>2.6.7.1</fasterxml.jackson.databind.version>
                 <jetty.version>9.3.20.v20170531</jetty.version>
-                <log4j.version>1.2.17</log4j.version>
-                <slf4j.version>1.7.16</slf4j.version>
                 <spark.version>2.4.1</spark.version>
                 <scala.version>2.11.8</scala.version>
                 <scala.compat.version>2.11</scala.compat.version>
@@ -47,13 +37,8 @@
         <profile>
             <id>scala-2.11_spark-2.4.3</id>
             <properties>
-                <codahale.metrics.version>3.1.5</codahale.metrics.version>
-                <commons-codec.version>1.10</commons-codec.version>
                 <commons.httpclient.version>4.5.4</commons.httpclient.version>
-                <fasterxml.jackson.databind.version>2.6.7.1</fasterxml.jackson.databind.version>
                 <jetty.version>9.3.20.v20170531</jetty.version>
-                <log4j.version>1.2.17</log4j.version>
-                <slf4j.version>1.7.16</slf4j.version>
                 <spark.version>2.4.3</spark.version>
                 <scala.version>2.11.8</scala.version>
                 <scala.compat.version>2.11</scala.compat.version>
@@ -109,73 +94,31 @@
                 <groupId>org.scala-lang</groupId>
                 <artifactId>scala-library</artifactId>
                 <version>${scala.version}</version>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.spark</groupId>
-                <artifactId>spark-core_${scala.compat.version}</artifactId>
-                <version>${spark.version}</version>
-                <scope>provided</scope>
+                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.spark</groupId>
                 <artifactId>spark-sql_${scala.compat.version}</artifactId>
                 <version>${spark.version}</version>
-                <scope>provided</scope>
+                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.spark</groupId>
                 <artifactId>spark-streaming_${scala.compat.version}</artifactId>
                 <version>${spark.version}</version>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-databind</artifactId>
-                <version>${fasterxml.jackson.databind.version}</version>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>commons-codec</groupId>
-                <artifactId>commons-codec</artifactId>
-                <version>${commons-codec.version}</version>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>io.dropwizard.metrics</groupId>
-                <artifactId>metrics-core</artifactId>
-                <version>${codahale.metrics.version}</version>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>io.dropwizard.metrics</groupId>
-                <artifactId>metrics-json</artifactId>
-                <version>${codahale.metrics.version}</version>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>log4j</groupId>
-                <artifactId>log4j</artifactId>
-                <version>${log4j.version}</version>
-                <scope>provided</scope>
+                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.httpcomponents</groupId>
                 <artifactId>httpclient</artifactId>
                 <version>${commons.httpclient.version}</version>
-                <scope>provided</scope>
+                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-server</artifactId>
                 <version>${jetty.version}</version>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-api</artifactId>
-                <version>${slf4j.version}</version>
-                <scope>provided</scope>
+                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.scalatest</groupId>
@@ -326,6 +269,44 @@
                     <configuration>
                         <outputDirectory>${maven.multiModuleProjectDirectory}/target</outputDirectory>
                     </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>flatten-maven-plugin</artifactId>
+                    <version>1.1.0</version>
+                    <configuration>
+                        <updatePomFile>true</updatePomFile>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>flatten</id>
+                            <phase>process-resources</phase>
+                            <goals>
+                                <goal>flatten</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>flatten.clean</id>
+                            <phase>clean</phase>
+                            <goals>
+                                <goal>clean</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>3.2.0</version>
+                    <executions>
+                        <execution>
+                            <id>attach-sources</id>
+                            <phase>verify</phase>
+                            <goals>
+                                <goal>jar-no-fork</goal>
+                            </goals>
+                        </execution>
+                    </executions>
                 </plugin>
             </plugins>
         </pluginManagement>

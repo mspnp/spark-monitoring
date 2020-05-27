@@ -67,14 +67,20 @@
     "dataSource": {
       "defaultValue": "",
       "type": "string"
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]",
+      "metadata": {
+        "description": "The location in which the resources should be deployed."
+      }
     }
   },
 
   "variables": {
 
     "grafanaVmName": "[toLower( concat( parameters('TelemetrySystemName'),'-vm-','grafana-',uniqueString(resourceGroup().id) ) )]",
-    "storageName": "[toLower( concat( parameters('TelemetrySystemName'),'-storage-', uniqueString(resourceGroup().id) ) )]",
-    "location": "[resourceGroup().location]"
+    "storageName": "[toLower( concat( parameters('TelemetrySystemName'),'-storage-', uniqueString(resourceGroup().id) ) )]"
   },
   "resources": [
     {
@@ -82,7 +88,7 @@
       "type": "Microsoft.Compute/virtualMachines",
       "name": "[variables('grafanaVmName')]",
       "apiVersion": "2018-06-01",
-      "location": "[variables('location')]",
+      "location": "[parameters('location')]",
       "plan": {
         "name": "default",
         "product": "grafana",
@@ -147,7 +153,7 @@
       "type": "Microsoft.Network/networkInterfaces",
       "name": "[parameters('networkInterfaces_grafananic_name')]",
       "apiVersion": "2018-08-01",
-      "location": "[variables('location')]",
+      "location": "[parameters('location')]",
       "tags": {},
       "scale": null,
       "properties": {
@@ -195,7 +201,7 @@
       "type": "Microsoft.Network/networkSecurityGroups",
       "name": "[parameters('networkSecurityGroups_grafanavm_nsg_name')]",
       "apiVersion": "2018-08-01",
-      "location": "[variables('location')]",
+      "location": "[parameters('location')]",
       "tags": {},
       "scale": null,
       "properties": {
@@ -375,7 +381,7 @@
       },
       "name": "[parameters('publicIPAddresses_grafanavm_ip_name')]",
       "apiVersion": "2018-08-01",
-      "location": "[variables('location')]",
+      "location": "[parameters('location')]",
       "tags": {},
       "scale": null,
       "properties": {
@@ -394,7 +400,7 @@
       "type": "Microsoft.Network/virtualNetworks",
       "name": "[parameters('virtualNetworks_grafana_vnet_name')]",
       "apiVersion": "2018-08-01",
-      "location": "[variables('location')]",
+      "location": "[parameters('location')]",
       "tags": {},
       "scale": null,
       "properties": {
@@ -432,7 +438,7 @@
       "kind": "Storage",
       "name": "[parameters('storageAccounts_granasparkdiag_name')]",
       "apiVersion": "2018-07-01",
-      "location": "[variables('location')]",
+      "location": "[parameters('location')]",
       "tags": {},
       "scale": null,
       "properties": {
@@ -525,7 +531,7 @@
     {
       "name": "[concat(variables('grafanaVmName'),'/extension')]",
       "type": "Microsoft.Compute/virtualMachines/extensions",
-      "location": "[resourceGroup().location]",
+      "location": "[parameters('location')]",
       "apiVersion": "2015-06-15",
       "dependsOn": [
         "[concat('Microsoft.Compute/virtualMachines/', variables('grafanaVmName'))]"
