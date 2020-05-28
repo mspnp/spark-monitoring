@@ -86,6 +86,21 @@ scope](./docs/keyvault-backed-secrets.md) and reference those secrets through
 your cluster's environment variables. Keep in mind that this feature is still in
 [public preview](https://docs.microsoft.com/en-us/azure/databricks/release-notes/release-types).
 
+1. In order to add `x-ms-AzureResourceId` [header](https://docs.microsoft.com/en-us/azure/azure-monitor/platform/data-collector-api#request-headers) as part of the http request, modify the following environment
+variables on **/src/spark-listeners/scripts/spark-monitoring.sh**.
+For instance:
+
+```bash
+export AZ_SUBSCRIPTION_ID=11111111-5c17-4032-ae54-fc33d56047c2
+export AZ_RSRC_GRP_NAME=myAzResourceGroup
+export AZ_RSRC_PROV_NAMESPACE=Microsoft.Databricks
+export AZ_RSRC_TYPE=workspaces
+export AZ_RSRC_NAME=myDatabricks
+```
+
+Now the _ResourceId **/subscriptions/11111111-5c17-4032-ae54-fc33d56047c2/resourceGroups/myAzResourceGroup/providers/Microsoft.Databricks/workspaces/myDatabricks** will be part of the header.
+(*Note: If at least one of them is not set the header won't be included.*)
+
 1. Use the Azure Databricks CLI to copy **/src/spark-listeners/scripts/spark-monitoring.sh** to the directory created in step 3:
 
     ```bash
