@@ -14,10 +14,17 @@ SPARK_CONF_DIR=$SPARK_HOME/conf
 
 # Add your Log Analytics Workspace information below so all clusters use the same
 # Log Analytics Workspace
+# Also if it is available use AZ_* variables to include x-ms-AzureResourceId
+# header as part of the request
 tee -a "$SPARK_CONF_DIR/spark-env.sh" << EOF
 export DB_CLUSTER_ID=$DB_CLUSTER_ID
 export LOG_ANALYTICS_WORKSPACE_ID=
 export LOG_ANALYTICS_WORKSPACE_KEY=
+export AZ_SUBSCRIPTION_ID=
+export AZ_RSRC_GRP_NAME=
+export AZ_RSRC_PROV_NAMESPACE=
+export AZ_RSRC_TYPE=
+export AZ_RSRC_NAME=
 EOF
 
 STAGE_DIR=/dbfs/databricks/spark-monitoring
