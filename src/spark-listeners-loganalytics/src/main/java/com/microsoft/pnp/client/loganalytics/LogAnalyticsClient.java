@@ -31,6 +31,8 @@ public class LogAnalyticsClient implements Closeable {
     private static final String DEFAULT_URL_SUFFIX = "ods.opinsights.azure.com";
     private static final String DEFAULT_API_VERSION = "2016-04-01";
     private static final String URL_FORMAT = "https://%s.%s/api/logs?api-version=%s";
+    private static final String RESOURCE_ID =
+        "/subscriptions/%s/resourceGroups/%s/providers/%s/%s/%s";
 
     @Override
     public void close() throws IOException {
@@ -43,6 +45,7 @@ public class LogAnalyticsClient implements Closeable {
         static final String LOG_TYPE = "Log-Type";
         static final String X_MS_DATE = "x-ms-date";
         static final String TIME_GENERATED_FIELD = "time-generated-field";
+        static final String X_MS_AZURE_RESOURCE_ID = "x-ms-AzureResourceId";
     }
 
     private String workspaceId;
@@ -100,6 +103,10 @@ public class LogAnalyticsClient implements Closeable {
         this.send(body, logType, null);
     }
 
+    protected HttpPost getHttpPost() {
+        return new HttpPost(this.url);
+    }
+
     public void send(String body, String logType, String timestampFieldName) throws IOException {
         try {
             if (isNullOrWhitespace(body)) {
@@ -117,7 +124,7 @@ public class LogAnalyticsClient implements Closeable {
             dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
             String xmsDateString = dateFormat.format(xmsDate);
 
-            HttpPost httpPost = new HttpPost(this.url);
+            HttpPost httpPost = getHttpPost();
             String signature = String.format(AuthorizationFormat, this.workspaceId,
                     buildSignature(this.workspaceKey,
                             xmsDateString,
@@ -133,6 +140,10 @@ public class LogAnalyticsClient implements Closeable {
             httpPost.setHeader(HttpHeaders.AUTHORIZATION, signature);
             if (timestampFieldName != null) {
                 httpPost.setHeader(LogAnalyticsHttpHeaders.TIME_GENERATED_FIELD, timestampFieldName);
+            }
+            String resourceId = azResourceId();
+            if (resourceId != null) {
+                httpPost.setHeader(LogAnalyticsHttpHeaders.X_MS_AZURE_RESOURCE_ID, resourceId);
             }
 
             HttpResponse httpResponse = null;
@@ -194,5 +205,44 @@ public class LogAnalyticsClient implements Closeable {
         }
 
         return true;
+    }
+
+    /**
+     * Gets the value of a System.getenv call or null if it is not set or
+     * if the length is 0.
+     * @param key System environment variable.
+     * @return value of System.getenv(key) or null.
+     */
+    private String sysEnvOrNull(final String key) {
+        String val = System.getenv(key);
+        if (val == null || val.length() == 0) {
+            return null;
+        }
+        return val;
+    }
+
+    /**
+     * Gets Azure Resource Id from System Environment variables.
+     * @return ResourceId in the form of:
+     * /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}
+     */
+    private String azResourceId() {
+        final String AZ_SUBSCRIPTION_ID = "AZ_SUBSCRIPTION_ID";
+        final String AZ_RSRC_GRP_NAME = "AZ_RSRC_GRP_NAME";
+        final String AZ_RSRC_PROV_NAMESPACE = "AZ_RSRC_PROV_NAMESPACE";
+        final String AZ_RSRC_TYPE = "AZ_RSRC_TYPE";
+        final String AZ_RSRC_NAME = "AZ_RSRC_NAME";
+
+        String id = sysEnvOrNull(AZ_SUBSCRIPTION_ID);
+        String grpName = sysEnvOrNull(AZ_RSRC_GRP_NAME);
+        String provName = sysEnvOrNull(AZ_RSRC_PROV_NAMESPACE);
+        String type = sysEnvOrNull(AZ_RSRC_TYPE);
+        String name = sysEnvOrNull(AZ_RSRC_NAME);
+        if (id == null || grpName == null ||
+            provName == null || type == provName ||
+            name == null) {
+            return null;
+        }
+        return String.format(RESOURCE_ID, id, grpName, provName, type, name);
     }
 }
