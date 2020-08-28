@@ -15,46 +15,11 @@
 
     <profiles>
         <profile>
-            <id>scala-2.11_spark-2.4.0</id>
-            <properties>
-                <commons.httpclient.version>4.5.4</commons.httpclient.version>
-                <jetty.version>9.4.31.v20200723</jetty.version>
-                <spark.version>2.4.0</spark.version>
-                <scala.version>2.11.8</scala.version>
-                <scala.compat.version>2.11</scala.compat.version>
-            </properties>
-        </profile>
-        <profile>
-            <id>scala-2.11_spark-2.4.1</id>
-            <properties>
-                <commons.httpclient.version>4.5.4</commons.httpclient.version>
-                <jetty.version>9.4.31.v20200723</jetty.version>
-                <spark.version>2.4.1</spark.version>
-                <scala.version>2.11.8</scala.version>
-                <scala.compat.version>2.11</scala.compat.version>
-            </properties>
-        </profile>
-        <profile>
             <id>scala-2.11_spark-2.4.3</id>
             <properties>
-                <commons.httpclient.version>4.5.4</commons.httpclient.version>
+                <commons.httpclient.version>4.5.12</commons.httpclient.version>
                 <jetty.version>9.4.31.v20200723</jetty.version>
                 <spark.version>2.4.3</spark.version>
-                <scala.version>2.11.8</scala.version>
-                <scala.compat.version>2.11</scala.compat.version>
-            </properties>
-        </profile>
-        <profile>
-            <id>scala-2.11_spark-2.4.4</id>            
-            <properties>
-                <codahale.metrics.version>3.1.5</codahale.metrics.version>
-                <commons-codec.version>1.10</commons-codec.version>
-                <commons.httpclient.version>4.5.6</commons.httpclient.version>
-                <fasterxml.jackson.databind.version>2.6.7.1</fasterxml.jackson.databind.version>
-                <jetty.version>9.4.31.v20200723</jetty.version>
-                <log4j.version>1.2.17</log4j.version>
-                <slf4j.version>1.7.16</slf4j.version>
-                <spark.version>2.4.4</spark.version>
                 <scala.version>2.11.12</scala.version>
                 <scala.compat.version>2.11</scala.compat.version>
             </properties>
@@ -65,13 +30,8 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
-                <codahale.metrics.version>3.1.5</codahale.metrics.version>
-                <commons-codec.version>1.10</commons-codec.version>
-                <commons.httpclient.version>4.5.6</commons.httpclient.version>
-                <fasterxml.jackson.databind.version>2.6.7.1</fasterxml.jackson.databind.version>
+                <commons.httpclient.version>4.5.12</commons.httpclient.version>
                 <jetty.version>9.4.31.v20200723</jetty.version>
-                <log4j.version>1.2.17</log4j.version>
-                <slf4j.version>1.7.16</slf4j.version>
                 <spark.version>2.4.5</spark.version>
                 <scala.version>2.11.12</scala.version>
                 <scala.compat.version>2.11</scala.compat.version>

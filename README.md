@@ -117,8 +117,8 @@ Now the _ResourceId **/subscriptions/11111111-5c17-4032-ae54-fc33d56047c2/resour
 
 1. Navigate to your Azure Databricks workspace in the Azure Portal.
 1. On the home page, click "new cluster".
-1. Choose a name for your cluster and enter it in "cluster name" text box. 
-1. In the "Databricks Runtime Version" dropdown, select **5.0** or later (includes Apache Spark 2.4.0, Scala 2.11).
+1. Choose a name for your cluster and enter it in "cluster name" text box.
+1. In the "Databricks Runtime Version" dropdown, select **5.5 LTS (includes Apache Spark 2.4.3, Scala 2.11)**.
 1. Under "Advanced Options", click on the "Init Scripts" tab. Go to the last line under the "Init Scripts section" Under the "destination" dropdown, select "DBFS". Enter "dbfs:/databricks/spark-monitoring/spark-monitoring.sh" in the text box. Click the "add" button.
 1. Click the "create cluster" button to create the cluster. Next, click on the "start" button to start the cluster.
 
@@ -131,9 +131,8 @@ databricks runtime.
 
 | Databricks Runtime(s) | Maven Profile |
 | -- | -- |
-| `5.5`, `6.0` | `scala-2.11_spark-2.4.3` |
-| `6.1` - `6.3` | `scala-2.11_spark-2.4.4` |
-| `6.4` | `scala-2.11_spark-2.4.5` |
+| `5.5` | `scala-2.11_spark-2.4.3` |
+| `6.4` - `6.6` | `scala-2.11_spark-2.4.5` |
 
 1. Use Maven to build the POM located at `sample/spark-sample-job/pom.xml` or run the following Docker command:
 
