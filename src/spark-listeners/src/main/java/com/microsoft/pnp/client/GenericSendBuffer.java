@@ -16,6 +16,9 @@ public abstract class GenericSendBuffer<T> implements AutoCloseable {
      */
     static ExecutorService executor = Executors.newCachedThreadPool();
 
+    // Configure whether to throw exception on failed send for oversized event
+    private static final boolean EXCEPTION_ON_FAILED_SEND = true;
+
     // Interface to support event notifications with a parameter.
     public interface Listener<T> {
         void invoke(T o);
@@ -83,7 +86,13 @@ public abstract class GenericSendBuffer<T> implements AutoCloseable {
                     // If the max bytes are too small for the first message, things go
                     // wonky, so let's bail
                     if (!this.sendBufferTask.addEvent(data)) {
-                        throw new RuntimeException("Failed to schedule batch");
+                        String message = String.format("Failed to schedule batch because first message size %d exceeds batch size limit %d (bytes).",
+                        this.sendBufferTask.calculateDataSize(data),
+                        this.sendBufferTask.getMaxBatchSizeBytes());
+                        System.err.println(message);
+                        if(EXCEPTION_ON_FAILED_SEND) {
+                            throw new RuntimeException(message);
+                        }
                     }
                     executor.execute(this.sendBufferTask);
                 }

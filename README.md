@@ -27,6 +27,17 @@ Before you begin, ensure you have the following prerequisites in place:
   * [Scala language SDK 2.11](https://www.scala-lang.org/download/)
   * [Apache Maven 3.5.4](http://maven.apache.org/download.cgi)
 
+## Logging Event Size Limit
+
+This library currently has a size limit per event of 25MB, based on the [Log Analytics limit of 30MB per API Call](https://docs.microsoft.com/rest/api/loganalytics/create-request#data-limits) with additional overhead for formatting. The default behavior when hitting this limit is to throw an exception. This can be changed by modifying the value of `EXCEPTION_ON_FAILED_SEND` in [GenericSendBuffer.java](src/spark-listeners/src/main/java/com/microsoft/pnp/client/GenericSendBuffer.java) to `false`.
+
+> Note: You will see an error like: `java.lang.RuntimeException: Failed to schedule batch because first message size nnn exceeds batch size limit 26214400 (bytes).` in the Spark logs if your workload is generating logging messages of greater than 25MB, and your workload may not proceed. You can query Log Analytics for this error condition with:
+> ```kusto
+> SparkLoggingEvent_CL
+> | where TimeGenerated > ago(24h)
+> | where Message contains "java.lang.RuntimeException: Failed to schedule batch because first message size"
+> ```
+
 ## Build the Azure Databricks monitoring library
 
 You can build the library using either Docker or Maven.
@@ -117,8 +128,8 @@ Now the _ResourceId **/subscriptions/11111111-5c17-4032-ae54-fc33d56047c2/resour
 
 1. Navigate to your Azure Databricks workspace in the Azure Portal.
 1. On the home page, click "new cluster".
-1. Choose a name for your cluster and enter it in "cluster name" text box. 
-1. In the "Databricks Runtime Version" dropdown, select **5.0** or later (includes Apache Spark 2.4.0, Scala 2.11).
+1. Choose a name for your cluster and enter it in "cluster name" text box.
+1. In the "Databricks Runtime Version" dropdown, select **5.5 LTS (includes Apache Spark 2.4.3, Scala 2.11)**.
 1. Under "Advanced Options", click on the "Init Scripts" tab. Go to the last line under the "Init Scripts section" Under the "destination" dropdown, select "DBFS". Enter "dbfs:/databricks/spark-monitoring/spark-monitoring.sh" in the text box. Click the "add" button.
 1. Click the "create cluster" button to create the cluster. Next, click on the "start" button to start the cluster.
 
@@ -131,9 +142,8 @@ databricks runtime.
 
 | Databricks Runtime(s) | Maven Profile |
 | -- | -- |
-| `5.5`, `6.0` | `scala-2.11_spark-2.4.3` |
-| `6.1` - `6.3` | `scala-2.11_spark-2.4.4` |
-| `6.4` | `scala-2.11_spark-2.4.5` |
+| `5.5` | `scala-2.11_spark-2.4.3` |
+| `6.4` - `6.6` | `scala-2.11_spark-2.4.5` |
 
 1. Use Maven to build the POM located at `sample/spark-sample-job/pom.xml` or run the following Docker command:
 
