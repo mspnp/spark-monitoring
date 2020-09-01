@@ -92,6 +92,15 @@ public abstract class GenericSendBufferTask<T> implements Runnable {
     }
 
     /**
+     * Returns the max batch size for the implementation
+     *
+     * @return maximum batch size
+     */
+    protected int getMaxBatchSizeBytes() {
+        return (maxBatchSizeBytes);
+    }
+
+    /**
      * A hook to be run when an event is successfully added to this buffer. Called by
      * {@code addIfAllowed} with a lock on {@code this} held.
      *
