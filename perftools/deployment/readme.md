@@ -99,7 +99,7 @@ az ad sp create-for-rbac --name http://NameOfSp --role "Log Analytics Reader"
 
 ### Step 5: Import Spark Metrics Dashboard
 
-1. Open a bash shell command prompt, move to the directory containing sparkMetricsDashboard.json file and execute commands below, replacing YOUR_WORKSPACEID with the workspace id of Log Analytics and SparkListenerEvent_CL with the log type if a non default logtype is used for spark monitoring.
+1. Open a bash shell command prompt, move to the directory containing SparkMetricsDashboardTemplate.json file and execute commands below, replacing YOUR_WORKSPACEID with the workspace id of Log Analytics and SparkListenerEvent_CL with the log type if a non default logtype is used for spark monitoring.
 The workspace id for Log Analytics can be found at the **advanced settings** blade of Log Analytics resource.
 
 
@@ -107,7 +107,7 @@ The workspace id for Log Analytics can be found at the **advanced settings** bla
 export WORKSPACE=YOUR_WORKSPACEID
 export LOGTYPE=SparkListenerEvent_CL
 
-sed  "/workspace/c\   \t\t\t\"workspace\" : \"${WORKSPACE}\"" "sparkMetricsDashboard.json"  | sed  "s/SparkListenerEvent_CL/${LOGTYPE}/g"    > sparkMetricsImport.json
+sed "s/YOUR_WORKSPACEID/${WORKSPACE}/g" "SparkMetricsDashboardTemplate.json"  | sed  "s/SparkListenerEvent_CL/${LOGTYPE}/g"    > SparkMetricsDash.json
 ```
 
 or execute below script from same directory location
@@ -119,5 +119,5 @@ export LOGTYPE=SparkListenerEvent_CL
 sh DashGen.sh
 ```
 
-2. On grafana move mouse on the settings icon located to the left then click on **Manage** then **Import**, browse to directory /spark-monitoring/performance/dashboards/grafana click on  open SparkMonitoringDash.json. Then select your azure monitor data source that was create before
+2. On grafana move mouse on the settings icon located to the left then click on **Manage** then **Import**, browse to directory /spark-monitoring/perftools/dashboards/grafana click on  open SparkMetricsDash.json. Then select your azure monitor data source that was create before
 ![change user Logo](./images/Import.png)
