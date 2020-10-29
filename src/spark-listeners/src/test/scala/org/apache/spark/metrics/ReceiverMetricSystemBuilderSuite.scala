@@ -2,8 +2,8 @@ package org.apache.spark.metrics
 
 import org.apache.spark._
 import org.apache.spark.rpc.{RpcEndpoint, RpcEndpointRef, RpcEnv}
-import org.mockito.Matchers
-import org.mockito.Matchers.{any, argThat}
+import org.mockito.ArgumentMatchers
+import org.mockito.ArgumentMatchers.{any, argThat}
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 
@@ -15,6 +15,7 @@ object ReceiverMetricSystemBuilderSuite {
 
 class ReceiverMetricSystemBuilderSuite extends SparkFunSuite
   with BeforeAndAfterEach {
+  import TestImplicits._
 
   private var env: SparkEnv = null
   private var rpcEnv: RpcEnv = null
@@ -95,13 +96,12 @@ class ReceiverMetricSystemBuilderSuite extends SparkFunSuite
       builder.registerCounter(ReceiverMetricSystemBuilderSuite.CounterName)
     })
     builder.build
-    import TestImplicits.matcher
     ///verify(this.rpcMetricsReceiverRef).send(argThat((message: CounterMessage) => message.value === 1))
     verify(metricsSystem, times(1)).registerSource(
       argThat((source: org.apache.spark.metrics.source.Source) => source.metricRegistry.counter(
         ReceiverMetricSystemBuilderSuite.CounterName
       ) != null))
-    verify(rpcEnv, times(1)).setupEndpoint(Matchers.eq(
+    verify(rpcEnv, times(1)).setupEndpoint(ArgumentMatchers.eq(
       ReceiverMetricSystemBuilderSuite.EndpointName), any[RpcMetricsReceiver]
     )
   }

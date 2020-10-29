@@ -3,13 +3,16 @@ package org.apache.spark.metrics
 import java.util.concurrent.TimeUnit
 
 import com.codahale.metrics._
+import com.codahale.metrics.Clock._
 import org.apache.spark._
 import org.apache.spark.rpc.RpcEndpointRef
 import org.apache.spark.scheduler.TaskSchedulerImpl
-import org.mockito.Matchers
-import org.mockito.Matchers._
+import org.mockito.ArgumentMatchers
+import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalatest.{BeforeAndAfterEach, PrivateMethodTester}
+
+import scala.util.Try
 
 class CustomMetric extends Metric {
   def foo(value: Int) = {
@@ -56,7 +59,13 @@ class RpcMetricsReceiverSuite extends SparkFunSuite
   private var meter: Meter = null
   private var timer: Timer = null
   private var settableGauge: SettableGauge[Long] = null
+  import TestImplicits._
 
+  val ClockClass: Class[_<:Clock] = Try{
+    Class.forName("com.codahale.metrics.jvm.CpuTimeClock")
+  }
+    .getOrElse(Class.forName("com.codahale.metrics.Clock.CpuTimeClock"))
+    .asInstanceOf[Class[_<:Clock]]
   /**
     * Before each test, set up the SparkContext and a custom [[RpcMetricsReceiver]]
     * that uses a manual clock.
@@ -155,7 +164,7 @@ class RpcMetricsReceiverSuite extends SparkFunSuite
       RpcMetricsReceiverSuite.CounterName,
       value
     ))
-    verify(counter, timeout(RpcMetricsReceiverSuite.DefaultRpcEventLoopTimeout)).inc(Matchers.eq(value))
+    verify(counter, timeout(RpcMetricsReceiverSuite.DefaultRpcEventLoopTimeout)).inc(ArgumentMatchers.eq(value))
   }
 
   test("CounterMessage received with invalid name and inc() not called") {
@@ -177,7 +186,7 @@ class RpcMetricsReceiverSuite extends SparkFunSuite
       value,
       classOf[ExponentiallyDecayingReservoir]
     ))
-    verify(histogram, timeout(RpcMetricsReceiverSuite.DefaultRpcEventLoopTimeout)).update(Matchers.eq(value))
+    verify(histogram, timeout(RpcMetricsReceiverSuite.DefaultRpcEventLoopTimeout)).update(ArgumentMatchers.eq(value))
   }
 
   test("HistogramMessage received with invalid name and update() not called") {
@@ -210,7 +219,7 @@ class RpcMetricsReceiverSuite extends SparkFunSuite
       value,
       classOf[Clock.UserTimeClock]
     ))
-    verify(meter, timeout(RpcMetricsReceiverSuite.DefaultRpcEventLoopTimeout)).mark(Matchers.eq(value))
+    verify(meter, timeout(RpcMetricsReceiverSuite.DefaultRpcEventLoopTimeout)).mark(ArgumentMatchers.eq(value))
   }
 
   test("MeterMessage received with invalid name and mark() not called") {
@@ -230,7 +239,7 @@ class RpcMetricsReceiverSuite extends SparkFunSuite
       RpcMetricsReceiverSuite.MetricNamespace,
       RpcMetricsReceiverSuite.MeterName,
       value,
-      classOf[Clock.CpuTimeClock]
+      clockClass = ClockClass
     ))
     verify(meter, timeout(RpcMetricsReceiverSuite.DefaultRpcEventLoopTimeout).times(0)).mark(any[Long])
   }
@@ -246,8 +255,8 @@ class RpcMetricsReceiverSuite extends SparkFunSuite
       classOf[Clock.UserTimeClock]
     ))
     verify(timer, timeout(RpcMetricsReceiverSuite.DefaultRpcEventLoopTimeout)).update(
-      Matchers.eq(value),
-      Matchers.eq(TimeUnit.NANOSECONDS)
+      ArgumentMatchers.eq(value),
+      ArgumentMatchers.eq(TimeUnit.NANOSECONDS)
     )
   }
 
@@ -291,7 +300,7 @@ class RpcMetricsReceiverSuite extends SparkFunSuite
       value,
       TimeUnit.NANOSECONDS,
       classOf[ExponentiallyDecayingReservoir],
-      classOf[Clock.CpuTimeClock]
+      clockClass = ClockClass
     ))
     verify(timer, timeout(RpcMetricsReceiverSuite.DefaultRpcEventLoopTimeout).times(0)).update(
       any[Long],
@@ -306,7 +315,7 @@ class RpcMetricsReceiverSuite extends SparkFunSuite
       RpcMetricsReceiverSuite.SettableGaugeName,
       value
     ))
-    verify(settableGauge, timeout(RpcMetricsReceiverSuite.DefaultRpcEventLoopTimeout)).set(Matchers.eq(value))
+    verify(settableGauge, timeout(RpcMetricsReceiverSuite.DefaultRpcEventLoopTimeout)).set(ArgumentMatchers.eq(value))
   }
 
   test("SettableGaugeMessage received with invalid name and set() not called") {
@@ -335,7 +344,7 @@ class RpcMetricsReceiverSuite extends SparkFunSuite
     ))
 
     verify(rpcMetricsReceiver, timeout(RpcMetricsReceiverSuite.DefaultRpcEventLoopTimeout).times(2)).receive
-    verify(counter, timeout(RpcMetricsReceiverSuite.DefaultRpcEventLoopTimeout)).inc(Matchers.eq(value))
+    verify(counter, timeout(RpcMetricsReceiverSuite.DefaultRpcEventLoopTimeout)).inc(ArgumentMatchers.eq(value))
   }
 
 }

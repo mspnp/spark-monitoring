@@ -3,7 +3,7 @@ package org.apache.spark.metrics
 import com.codahale.metrics._
 import org.apache.spark._
 import org.apache.spark.rpc.{RpcAddress, RpcEnv}
-import org.mockito.Matchers.any
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{doAnswer, mock, when}
 import org.mockito.invocation.InvocationOnMock
 import org.mockito.stubbing.Answer

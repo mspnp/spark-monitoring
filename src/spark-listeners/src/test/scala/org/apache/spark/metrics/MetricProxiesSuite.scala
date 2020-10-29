@@ -5,9 +5,11 @@ import java.util.concurrent.TimeUnit
 import com.codahale.metrics.{Clock, ExponentiallyDecayingReservoir, UniformReservoir}
 import org.apache.spark.SparkFunSuite
 import org.apache.spark.rpc.RpcEndpointRef
-import org.mockito.Matchers._
+import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
+
+import scala.util.Try
 
 
 
@@ -26,6 +28,11 @@ class MetricProxiesSuite extends SparkFunSuite
   import TestImplicits._
 
   private var rpcMetricsReceiverRef: RpcEndpointRef = null
+
+  val ClockClass = Try{
+    Class.forName("com.codahale.metrics.jvm.CpuTimeClock")
+  }
+    .getOrElse(Class.forName("com.codahale.metrics.Clock.CpuTimeClock"))
 
   override def beforeEach(): Unit = {
     super.beforeEach
@@ -138,10 +145,10 @@ class MetricProxiesSuite extends SparkFunSuite
       this.rpcMetricsReceiverRef,
       MetricProxiesSuite.MetricNamespace,
       MetricProxiesSuite.HistogramName,
-      new Clock.CpuTimeClock)
+      ClockClass.newInstance().asInstanceOf[Clock])
     proxy.mark(value)
     verify(this.rpcMetricsReceiverRef).send(argThat(
-      (message: MeterMessage) => message.value === value && message.clockClass === classOf[Clock.CpuTimeClock]))
+      (message: MeterMessage) => message.value === value && message.clockClass === ClockClass))
   }
 
   test("TimerProxy calls sendMetric with a TimerMessage for update(Long, TimeUnit)") {
@@ -183,7 +190,7 @@ class MetricProxiesSuite extends SparkFunSuite
       MetricProxiesSuite.MetricNamespace,
       MetricProxiesSuite.TimerName,
       new UniformReservoir,
-      new Clock.CpuTimeClock
+      ClockClass.newInstance().asInstanceOf[Clock]
     )
 
     proxy.update(value, TimeUnit.SECONDS)
@@ -191,7 +198,7 @@ class MetricProxiesSuite extends SparkFunSuite
       (message: TimerMessage) => message.value === value &&
         message.timeUnit === TimeUnit.SECONDS &&
         message.reservoirClass === classOf[UniformReservoir] &&
-        message.clockClass === classOf[Clock.CpuTimeClock]))
+        message.clockClass === ClockClass))
   }
 
   test("SettableGaugeProxy calls sendMetric with a SettableGaugeMessage for set(Long)") {

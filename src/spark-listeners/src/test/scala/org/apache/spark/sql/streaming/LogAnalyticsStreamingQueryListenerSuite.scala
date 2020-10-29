@@ -3,38 +3,71 @@ package org.apache.spark.sql.streaming
 import java.util.UUID
 
 import org.apache.spark.listeners.ListenerSuite
+import org.apache.spark.metrics.TestUtils
 import org.apache.spark.sql.streaming.StreamingQueryListener.{QueryProgressEvent, QueryStartedEvent, QueryTerminatedEvent}
 import org.scalatest.BeforeAndAfterEach
 
-import scala.collection.JavaConversions.mapAsJavaMap
-
 object LogAnalyticsStreamingQueryListenerSuite {
-  val queryStartedEvent = new QueryStartedEvent(UUID.randomUUID, UUID.randomUUID, "name")
+  val queryStartedEvent = TestUtils.conditionalCode(
+    "new QueryStartedEvent(UUID.randomUUID, UUID.randomUUID, \"name\")",
+    "new QueryStartedEvent(UUID.randomUUID, UUID.randomUUID, \"name\", (System.currentTimeMillis()/1000).toString)"
+  ).asInstanceOf[QueryStartedEvent]
   val queryTerminatedEvent = new QueryTerminatedEvent(UUID.randomUUID, UUID.randomUUID, None)
-  val queryProgressEvent = new QueryProgressEvent(
-    new StreamingQueryProgress(
-      UUID.randomUUID,
-      UUID.randomUUID,
-      null,
-      ListenerSuite.EPOCH_TIME_AS_ISO8601,
-      2L,
-      mapAsJavaMap(Map("total" -> 0L)),
-      mapAsJavaMap(Map.empty[String, String]),
-      Array(new StateOperatorProgress(
-        0, 1, 2)),
-      Array(
-        new SourceProgress(
-          "source",
-          "123",
-          "456",
-          678,
-          Double.NaN,
-          Double.NegativeInfinity
-        )
-      ),
-      new SinkProgress("sink")
-    )
-  )
+  val queryProgressEvent = TestUtils.conditionalCode(
+    """
+      |new QueryProgressEvent(
+      |    new StreamingQueryProgress(
+      |      UUID.randomUUID,
+      |      UUID.randomUUID,
+      |      null,
+      |      ListenerSuite.EPOCH_TIME_AS_ISO8601,
+      |      2L,
+      |      mapAsJavaMap(Map("total" -> 0L)),
+      |      mapAsJavaMap(Map.empty[String, String]),
+      |      Array(new StateOperatorProgress(
+      |        0, 1, 2)),
+      |      Array(
+      |        new SourceProgress(
+      |          "source",
+      |          "123",
+      |          "456",
+      |          678,
+      |          Double.NaN,
+      |          Double.NegativeInfinity
+      |        )
+      |      ),
+      |      new SinkProgress("sink"),mapAsJavaMap(Map[String,Row]())
+      |    )
+      |  )
+      |""".stripMargin,
+    """
+      |new QueryProgressEvent(
+      |    new StreamingQueryProgress(
+      |      UUID.randomUUID,
+      |      UUID.randomUUID,
+      |      null,
+      |      ListenerSuite.EPOCH_TIME_AS_ISO8601,
+      |      1234L,
+      |      2L,
+      |      mapAsJavaMap(Map("total" -> 0L)),
+      |      mapAsJavaMap(Map.empty[String, String]),
+      |      Array(new StateOperatorProgress(
+      |        0, 1, 2)),
+      |      Array(
+      |        new SourceProgress(
+      |          "source",
+      |          "123",
+      |          "456",
+      |          678,
+      |          Double.NaN,
+      |          Double.NegativeInfinity
+      |        )
+      |      ),
+      |      new SinkProgress("sink"),mapAsJavaMap(Map[String,Row]())
+      |    )
+      |  )
+      |""".stripMargin
+  ).asInstanceOf[QueryProgressEvent]
 }
 
 class LogAnalyticsStreamingQueryListenerSuite extends ListenerSuite
