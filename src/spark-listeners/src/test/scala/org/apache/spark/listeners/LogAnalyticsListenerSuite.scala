@@ -6,12 +6,12 @@ import org.apache.spark.scheduler._
 import org.apache.spark.scheduler.cluster.ExecutorInfo
 import org.apache.spark.storage.{BlockManagerId, BlockUpdatedInfo, RDDBlockId, StorageLevel}
 import org.apache.spark.util.{AccumulatorMetadata, LongAccumulator}
-import org.apache.spark.{SparkConf, TaskState}
+import org.apache.spark.{SparkConf, Success, TaskEndReason, TaskState}
 import org.json4s.JsonAST.JValue
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito._
 import org.scalatest.{BeforeAndAfterEach, PrivateMethodTester}
-
+import org.apache.spark.executor.TaskMetrics
 import org.apache.spark.metrics.TestUtils._
 
 case class TestOtherEvent(
@@ -44,30 +44,16 @@ object LogAnalyticsListenerSuite {
   )
 
   //Spark 3 requires an additional parameter. This is the best way to not duplicate code and support both.
-  val sparkListenerTaskEnd = conditionalCode(
-    """
-      | SparkListenerTaskEnd(
-      |    stageId = 0,
-      |    stageAttemptId = 0,
-      |    taskType = "",
-      |    reason = Success,
-      |    createTaskInfo(0, 0),
-      |    taskMetrics=null)
-      |""".stripMargin,
+   val sparkListenerTaskEnd = {
+     import org.apache.spark.metrics.TestImplicits._
+     val spark2args= List[Any](0,0,"",Success.asInstanceOf[TaskEndReason],LogAnalyticsListenerSuite.createTaskInfo(0, 0),new TaskMetrics())
 
-    """
-      | import org.apache.spark.executor.ExecutorMetrics
-      |
-      | SparkListenerTaskEnd(
-      |    stageId = 0,
-      |    stageAttemptId = 0,
-      |    taskType = "",
-      |    reason = Success,
-      |    createTaskInfo(0, 0),
-      |    taskMetrics=null,
-      |    taskExecutorMetrics=new ExecutorMetrics())
-      |""".stripMargin
-  ).asInstanceOf[SparkListenerTaskEnd]
+     val spark3args = spark2args.insertAt(5, loadOneOf("org.apache.spark.executor.ExecutorMetrics").map(_.newInstance()).orNull)
+
+     newInstance(classOf[SparkListenerTaskEnd], spark2args:_*)
+         .orElse(newInstance(classOf[SparkListenerTaskEnd], spark3args:_*))
+         .get
+   }
 
 
   val sparkListenerStageSubmitted = SparkListenerStageSubmitted(createStageInfo(0, 0))

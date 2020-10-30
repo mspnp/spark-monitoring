@@ -3,7 +3,6 @@ package org.apache.spark.metrics
 import java.util.concurrent.TimeUnit
 
 import com.codahale.metrics._
-import com.codahale.metrics.Clock._
 import org.apache.spark._
 import org.apache.spark.rpc.RpcEndpointRef
 import org.apache.spark.scheduler.TaskSchedulerImpl
@@ -11,8 +10,7 @@ import org.mockito.ArgumentMatchers
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalatest.{BeforeAndAfterEach, PrivateMethodTester}
-
-import scala.util.Try
+import TestUtils._
 
 class CustomMetric extends Metric {
   def foo(value: Int) = {
@@ -59,13 +57,11 @@ class RpcMetricsReceiverSuite extends SparkFunSuite
   private var meter: Meter = null
   private var timer: Timer = null
   private var settableGauge: SettableGauge[Long] = null
-  import TestImplicits._
 
-  val ClockClass: Class[_<:Clock] = Try{
-    Class.forName("com.codahale.metrics.jvm.CpuTimeClock")
-  }
-    .getOrElse(Class.forName("com.codahale.metrics.Clock.CpuTimeClock"))
+
+  val clockClazz = loadOneOf("com.codahale.metrics.jvm.CpuTimeClock","com.codahale.metrics.Clock.CpuTimeClock").get
     .asInstanceOf[Class[_<:Clock]]
+
   /**
     * Before each test, set up the SparkContext and a custom [[RpcMetricsReceiver]]
     * that uses a manual clock.
@@ -239,7 +235,7 @@ class RpcMetricsReceiverSuite extends SparkFunSuite
       RpcMetricsReceiverSuite.MetricNamespace,
       RpcMetricsReceiverSuite.MeterName,
       value,
-      clockClass = ClockClass
+      clockClass = clockClazz
     ))
     verify(meter, timeout(RpcMetricsReceiverSuite.DefaultRpcEventLoopTimeout).times(0)).mark(any[Long])
   }
@@ -300,7 +296,7 @@ class RpcMetricsReceiverSuite extends SparkFunSuite
       value,
       TimeUnit.NANOSECONDS,
       classOf[ExponentiallyDecayingReservoir],
-      clockClass = ClockClass
+      clockClass = clockClazz
     ))
     verify(timer, timeout(RpcMetricsReceiverSuite.DefaultRpcEventLoopTimeout).times(0)).update(
       any[Long],

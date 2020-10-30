@@ -8,8 +8,8 @@ import org.apache.spark.rpc.RpcEndpointRef
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
+import TestUtils._
 
-import scala.util.Try
 
 
 
@@ -25,14 +25,11 @@ object MetricProxiesSuite {
 class MetricProxiesSuite extends SparkFunSuite
   with BeforeAndAfterEach {
 
-  import TestImplicits._
+
 
   private var rpcMetricsReceiverRef: RpcEndpointRef = null
 
-  val ClockClass = Try{
-    Class.forName("com.codahale.metrics.jvm.CpuTimeClock")
-  }
-    .getOrElse(Class.forName("com.codahale.metrics.Clock.CpuTimeClock"))
+  val clockClazz = loadOneOf("com.codahale.metrics.jvm.CpuTimeClock", "com.codahale.metrics.Clock.CpuTimeClock").get
 
   override def beforeEach(): Unit = {
     super.beforeEach
@@ -145,10 +142,10 @@ class MetricProxiesSuite extends SparkFunSuite
       this.rpcMetricsReceiverRef,
       MetricProxiesSuite.MetricNamespace,
       MetricProxiesSuite.HistogramName,
-      ClockClass.newInstance().asInstanceOf[Clock])
+      clockClazz.newInstance().asInstanceOf[Clock])
     proxy.mark(value)
     verify(this.rpcMetricsReceiverRef).send(argThat(
-      (message: MeterMessage) => message.value === value && message.clockClass === ClockClass))
+      (message: MeterMessage) => message.value === value && message.clockClass === clockClazz))
   }
 
   test("TimerProxy calls sendMetric with a TimerMessage for update(Long, TimeUnit)") {
@@ -168,7 +165,8 @@ class MetricProxiesSuite extends SparkFunSuite
     val clock = mock(classOf[Clock])
     // Make our clock return different values the second time so we can verify
     // The internal Meter inside the Timer calls getTick() in it's constructor, so we need to add an extra return
-    when(clock.getTick()).thenReturn(1000, 1000, 2000)
+    // Spark3 for some reason, calls it once more, so I need to add a further value to the list
+    when(clock.getTick()).thenReturn(1000, 1000, 2000, 3000)
     val proxy = new TimerProxy(
       this.rpcMetricsReceiverRef,
       MetricProxiesSuite.MetricNamespace,
@@ -190,7 +188,7 @@ class MetricProxiesSuite extends SparkFunSuite
       MetricProxiesSuite.MetricNamespace,
       MetricProxiesSuite.TimerName,
       new UniformReservoir,
-      ClockClass.newInstance().asInstanceOf[Clock]
+      clockClazz.newInstance().asInstanceOf[Clock]
     )
 
     proxy.update(value, TimeUnit.SECONDS)
@@ -198,7 +196,7 @@ class MetricProxiesSuite extends SparkFunSuite
       (message: TimerMessage) => message.value === value &&
         message.timeUnit === TimeUnit.SECONDS &&
         message.reservoirClass === classOf[UniformReservoir] &&
-        message.clockClass === ClockClass))
+        message.clockClass === clockClazz))
   }
 
   test("SettableGaugeProxy calls sendMetric with a SettableGaugeMessage for set(Long)") {
