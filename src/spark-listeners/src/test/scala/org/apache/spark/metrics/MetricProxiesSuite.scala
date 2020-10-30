@@ -25,11 +25,11 @@ object MetricProxiesSuite {
 class MetricProxiesSuite extends SparkFunSuite
   with BeforeAndAfterEach {
 
-
+  import TestImplicits._
 
   private var rpcMetricsReceiverRef: RpcEndpointRef = null
 
-  val clockClazz = loadOneOf("com.codahale.metrics.jvm.CpuTimeClock", "com.codahale.metrics.Clock.CpuTimeClock").get
+  val clockClazz = loadOneOf("com.codahale.metrics.jvm.CpuTimeClock", "com.codahale.metrics.Clock$CpuTimeClock").get
 
   override def beforeEach(): Unit = {
     super.beforeEach

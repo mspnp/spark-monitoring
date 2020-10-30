@@ -59,7 +59,7 @@ class RpcMetricsReceiverSuite extends SparkFunSuite
   private var settableGauge: SettableGauge[Long] = null
 
 
-  val clockClazz = loadOneOf("com.codahale.metrics.jvm.CpuTimeClock","com.codahale.metrics.Clock.CpuTimeClock").get
+  val clockClazz = loadOneOf("com.codahale.metrics.jvm.CpuTimeClock","com.codahale.metrics.Clock$CpuTimeClock").get
     .asInstanceOf[Class[_<:Clock]]
 
   /**

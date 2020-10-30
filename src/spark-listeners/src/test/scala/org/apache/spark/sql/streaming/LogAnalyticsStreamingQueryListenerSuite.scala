@@ -24,7 +24,7 @@ object LogAnalyticsStreamingQueryListenerSuite {
     val spark2args = List[Any](
       UUID.randomUUID,
       UUID.randomUUID,
-      null,
+      "test",
       ListenerSuite.EPOCH_TIME_AS_ISO8601,
       2L,
       mapAsJavaMap(Map("total" -> 0L)),
@@ -41,10 +41,10 @@ object LogAnalyticsStreamingQueryListenerSuite {
           Double.NegativeInfinity
         )
       ),
-      new SinkProgress("sink"), mapAsJavaMap(Map[String, Row]())
+      new SinkProgress("sink")
     )
 
-    val spark3args = spark2args.insertAt(4, 1234L)
+    val spark3args = spark2args.insertAt(4, 1234L) ::: List(mapAsJavaMap(Map[String, Row]()))
 
     val streamingQueryProgress = TestUtils.newInstance(classOf[StreamingQueryProgress], spark2args:_*)
       .orElse(TestUtils.newInstance(classOf[StreamingQueryProgress], spark3args:_*))
