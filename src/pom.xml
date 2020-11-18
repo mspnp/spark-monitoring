@@ -26,15 +26,35 @@
         </profile>
         <profile>
             <id>scala-2.11_spark-2.4.5</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
             <properties>
                 <commons.httpclient.version>4.5.12</commons.httpclient.version>
                 <jetty.version>9.4.31.v20200723</jetty.version>
                 <spark.version>2.4.5</spark.version>
                 <scala.version>2.11.12</scala.version>
                 <scala.compat.version>2.11</scala.compat.version>
+            </properties>
+        </profile>
+        <profile>
+            <id>scala-2.12_spark-3.0.0</id>
+            <properties>
+                <commons.httpclient.version>4.5.12</commons.httpclient.version>
+                <jetty.version>9.4.31.v20200723</jetty.version>
+                <spark.version>3.0.0</spark.version>
+                <scala.version>2.12.12</scala.version>
+                <scala.compat.version>2.12</scala.compat.version>
+            </properties>
+        </profile>
+        <profile>
+            <id>scala-2.12_spark-3.0.1</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <commons.httpclient.version>4.5.12</commons.httpclient.version>
+                <jetty.version>9.4.31.v20200723</jetty.version>
+                <spark.version>3.0.1</spark.version>
+                <scala.version>2.12.12</scala.version>
+                <scala.compat.version>2.12</scala.compat.version>
             </properties>
         </profile>
     </profiles>
@@ -81,15 +101,26 @@
                 <scope>compile</scope>
             </dependency>
             <dependency>
+                <groupId>org.scala-lang</groupId>
+                <artifactId>scala-reflect</artifactId>
+                <version>${scala.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.scalatest</groupId>
                 <artifactId>scalatest_${scala.compat.version}</artifactId>
-                <version>3.0.3</version>
+                <version>3.0.9</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.scala-lang</groupId>
+                <artifactId>scala-compiler</artifactId>
+                <version>${scala.version}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-core</artifactId>
-                <version>1.10.19</version>
+                <version>3.5.15</version>
                 <scope>test</scope>
             </dependency>
             <dependency>

@@ -3,19 +3,28 @@ package org.apache.spark.sql.streaming
 import java.util.UUID
 
 import org.apache.spark.listeners.ListenerSuite
+import org.apache.spark.metrics.TestImplicits._
+import org.apache.spark.metrics.TestUtils
+import org.apache.spark.sql.Row
 import org.apache.spark.sql.streaming.StreamingQueryListener.{QueryProgressEvent, QueryStartedEvent, QueryTerminatedEvent}
 import org.scalatest.BeforeAndAfterEach
 
 import scala.collection.JavaConversions.mapAsJavaMap
 
 object LogAnalyticsStreamingQueryListenerSuite {
-  val queryStartedEvent = new QueryStartedEvent(UUID.randomUUID, UUID.randomUUID, "name")
+  //Spark3 requires 1 more argument than spark 2.4
+  val queryStartedEvent = TestUtils
+    .newInstance(classOf[QueryStartedEvent], UUID.randomUUID, UUID.randomUUID, "name")
+    .orElse(TestUtils.newInstance(classOf[QueryStartedEvent], UUID.randomUUID, UUID.randomUUID, "name", (System.currentTimeMillis() / 1000).toString))
+    .get
+
   val queryTerminatedEvent = new QueryTerminatedEvent(UUID.randomUUID, UUID.randomUUID, None)
-  val queryProgressEvent = new QueryProgressEvent(
-    new StreamingQueryProgress(
+  val queryProgressEvent = {
+
+    val spark2args = List[Any](
       UUID.randomUUID,
       UUID.randomUUID,
-      null,
+      "test",
       ListenerSuite.EPOCH_TIME_AS_ISO8601,
       2L,
       mapAsJavaMap(Map("total" -> 0L)),
@@ -34,7 +43,15 @@ object LogAnalyticsStreamingQueryListenerSuite {
       ),
       new SinkProgress("sink")
     )
-  )
+
+    val spark3args = spark2args.insertAt(4, 1234L) ::: List(mapAsJavaMap(Map[String, Row]()))
+
+    val streamingQueryProgress = TestUtils.newInstance(classOf[StreamingQueryProgress], spark2args:_*)
+      .orElse(TestUtils.newInstance(classOf[StreamingQueryProgress], spark3args:_*))
+      .get
+
+    new QueryProgressEvent(streamingQueryProgress)
+  }
 }
 
 class LogAnalyticsStreamingQueryListenerSuite extends ListenerSuite

@@ -3,7 +3,7 @@ package org.apache.spark.metrics
 import org.apache.spark._
 import org.apache.spark.rpc.RpcEnv
 import org.mockito.AdditionalAnswers
-import org.mockito.Matchers.{any, argThat}
+import org.mockito.ArgumentMatchers.{any, argThat}
 import org.mockito.Mockito.{mock, times, verify, when}
 import org.scalatest.BeforeAndAfterEach
 
@@ -33,6 +33,8 @@ class MetricsSystemsSuite extends SparkFunSuite
 
   private var env: SparkEnv = null
   private var rpcEnv: RpcEnv = null
+
+  import TestImplicits._
 
   override def beforeEach(): Unit = {
     super.beforeEach
@@ -67,7 +69,6 @@ class MetricsSystemsSuite extends SparkFunSuite
     )
 
     assert(metricsSystem !== null)
-    import TestImplicits.matcher
     verify(envMetricsSystem, times(1)).registerSource(
       argThat((source: org.apache.spark.metrics.source.Source) => source.metricRegistry.counter(
         MetricsSystemsSuite.CounterName
@@ -86,7 +87,6 @@ class MetricsSystemsSuite extends SparkFunSuite
     )
 
     assert(metricsSystem !== null)
-    import TestImplicits.matcher
     verify(envMetricsSystem, times(1)).registerSource(
       argThat((source: org.apache.spark.metrics.source.Source) => source.metricRegistry.counter(
         MetricsSystemsSuite.CounterName
