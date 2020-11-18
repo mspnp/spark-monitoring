@@ -26,9 +26,6 @@
         </profile>
         <profile>
             <id>scala-2.11_spark-2.4.5</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
             <properties>
                 <commons.httpclient.version>4.5.12</commons.httpclient.version>
                 <jetty.version>9.4.31.v20200723</jetty.version>
@@ -39,9 +36,6 @@
         </profile>
         <profile>
             <id>scala-2.12_spark-3.0.0</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
             <properties>
                 <commons.httpclient.version>4.5.12</commons.httpclient.version>
                 <jetty.version>9.4.31.v20200723</jetty.version>
