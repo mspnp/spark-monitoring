@@ -64,7 +64,7 @@ docker run -it --rm -v %cd%/spark-monitoring:/spark-monitoring -v "%USERPROFILE%
     * spark-listeners
     * spark-listeners-loganalytics
 
-1. Activate a **single** Maven profile that corresponds to the versions of the Scala/Spark combination that is being used. By default, the Scala 2.11 and Spark 2.4.3 profile is active.
+1. Activate a **single** Maven profile that corresponds to the versions of the Scala/Spark combination that is being used. By default, the Scala 2.12 and Spark 3.0.1 profile is active.
 
 1. Execute the Maven **package** phase in your Java IDE to build the JAR files for each of the these projects:
 
