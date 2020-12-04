@@ -13,10 +13,23 @@ import org.apache.log4j.spi.LoggingEvent;
 import static com.microsoft.pnp.logging.JSONLayout.TIMESTAMP_FIELD_NAME;
 
 public class LogAnalyticsAppender extends AppenderSkeleton {
-    private static final Filter ORG_APACHE_HTTP_FILTER = new Filter() {
+    private static final String LA_SPARKLOGGINGEVENT_NAME_REGEX=System.getenv().getOrDefault("LA_SPARKLOGGINGEVENT_NAME_REGEX", "");
+    private static final String LA_SPARKLOGGINGEVENT_MESSAGE_REGEX=System.getenv().getOrDefault("LA_SPARKLOGGINGEVENT_MESSAGE_REGEX", "");
+
+    private static final Filter DEFAULT_FILTER = new Filter() {
         @Override
         public int decide(LoggingEvent loggingEvent) {
-            if (loggingEvent.getLoggerName().startsWith("org.apache.http")) {
+            String loggerName=loggingEvent.getLoggerName();
+            // ignore logs from org.apache.http to avoid infinite loop on logger error
+            if (loggerName.startsWith("org.apache.http")) {
+                return Filter.DENY;
+            }
+            // if LA_SPARKLOGGINGEVENT_NAME_REGEX is not empty, deny logs where the name doesn't match the regex
+            if (!LA_SPARKLOGGINGEVENT_NAME_REGEX.isEmpty() && !loggerName.matches(LA_SPARKLOGGINGEVENT_NAME_REGEX)) {
+                return Filter.DENY;
+            }
+            // if LA_SPARKLOGGINGEVENT_MESSAGE_REGEX is not empty, deny logs where the message doesn't match the regex
+            if (!LA_SPARKLOGGINGEVENT_MESSAGE_REGEX.isEmpty() && !loggingEvent.getRenderedMessage().matches(LA_SPARKLOGGINGEVENT_MESSAGE_REGEX)) {
                 return Filter.DENY;
             }
 
@@ -32,7 +45,7 @@ public class LogAnalyticsAppender extends AppenderSkeleton {
     private LogAnalyticsSendBufferClient client;
 
     public LogAnalyticsAppender() {
-        this.addFilter(ORG_APACHE_HTTP_FILTER);
+        this.addFilter(DEFAULT_FILTER);
         // Add a default layout so we can simplify config
         this.setLayout(new JSONLayout());
     }
@@ -81,7 +94,7 @@ public class LogAnalyticsAppender extends AppenderSkeleton {
     public void clearFilters() {
         super.clearFilters();
         // We need to make sure to add the filter back so we don't get stuck in a loop
-        this.addFilter(ORG_APACHE_HTTP_FILTER);
+        this.addFilter(DEFAULT_FILTER);
     }
 
     public String getWorkspaceId() {
