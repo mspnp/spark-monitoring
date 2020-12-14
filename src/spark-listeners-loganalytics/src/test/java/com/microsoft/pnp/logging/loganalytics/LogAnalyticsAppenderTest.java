@@ -69,6 +69,9 @@ public class LogAnalyticsAppenderTest {
     public void FilterShouldDenyNameRegex() throws IllegalAccessException {
         nameregex.set(null,"12.*34");
         messageregex.set(null,"");
+        when(test.getLoggerName()).thenReturn("x12_This_is_a_test_34x");
+        when(test.getRenderedMessage()).thenReturn("This is a generic log message");
+        assertEquals(sut.getFilter().decide(test),Filter.DENY);
         when(test.getLoggerName()).thenReturn("12_This_is_a_test_3456789");
         when(test.getRenderedMessage()).thenReturn("This is a generic log message");
         assertEquals(sut.getFilter().decide(test),Filter.DENY);
@@ -78,9 +81,9 @@ public class LogAnalyticsAppenderTest {
         nameregex.set(null,"");
         messageregex.set(null,"(?i)((?!password).)*");// Only match if the message does not contain the word password
         when(test.getLoggerName()).thenReturn("12_This_is_a_test_34");
-        when(test.getRenderedMessage()).thenReturn("This message is pretending to return a logged password: not_a_password");
+        when(test.getRenderedMessage()).thenReturn("This message is pretending to return a logged password: randomstring");
         assertEquals(sut.getFilter().decide(test),Filter.DENY);
-        when(test.getRenderedMessage()).thenReturn("This message is pretending to return a logged Password: not_a_password");
+        when(test.getRenderedMessage()).thenReturn("This message is pretending to return a logged Password: randomstring");
         assertEquals(sut.getFilter().decide(test),Filter.DENY);
     }
     @Test
@@ -90,5 +93,22 @@ public class LogAnalyticsAppenderTest {
         when(test.getLoggerName()).thenReturn("12_This_is_a_test_34");
         when(test.getRenderedMessage()).thenReturn("This message is pretending to return a logged Username: not_a_user");
         assertEquals(sut.getFilter().decide(test),Filter.NEUTRAL);
+    }
+     @Test
+    public void FilterShouldDenyNameMessageRegex() throws IllegalAccessException {
+        nameregex.set(null,"12.*34");
+        messageregex.set(null,"(?i)((?!password).)*");// Only match if the message does not contain the word password
+        // message does not match
+        when(test.getLoggerName()).thenReturn("12_This_is_a_test_34");
+        when(test.getRenderedMessage()).thenReturn("This message is pretending to return a logged password: randomstring");
+        assertEquals(sut.getFilter().decide(test),Filter.DENY);
+        // name doesn't match
+        when(test.getLoggerName()).thenReturn("12_This_is_a_test_3456789");
+        when(test.getRenderedMessage()).thenReturn("This is a generic log message");
+        assertEquals(sut.getFilter().decide(test),Filter.DENY);
+        // name and message do not match
+        when(test.getLoggerName()).thenReturn("12_This_is_a_test_3456789");
+        when(test.getRenderedMessage()).thenReturn("This message is pretending to return a logged password: randomstring");
+        assertEquals(sut.getFilter().decide(test),Filter.DENY);
     }
 }

@@ -32,8 +32,8 @@ export AZ_RSRC_NAME=
 
 # Add a quoted regex value to filter the events for SparkListenerEvent_CL, the log will only include events where Event_s matches the regex.
 # Commented example below will only log events for SparkListenerJobStart, SparkListenerJobEnd, or where "org.apache.spark.sql.execution.ui."
-# is in the event name.
-# export LA_SPARKLISTENEREVENT_REGEX="SparkListenerJobEnd|SparkListenerTaskEnd|org\.apache\.spark\.sql\.execution\.ui\..*"
+# is is the start of the event name.
+# export LA_SPARKLISTENEREVENT_REGEX="SparkListenerJobStart|SparkListenerJobEnd|org\.apache\.spark\.sql\.execution\.ui\..*"
 
 # Add a quoted regex value to filter the events for SparkMetric_CL, the log will only include events where name_s matches the regex.
 # Commented example below will only log metrics where the name begins with app and ends in .jvmCpuTime or .heap.max.
