@@ -197,6 +197,9 @@ SparkMetric_CL
 | extend executor=strcat(sname[0], ".", sname[1])
 | project TimeGenerated, cpuTime=count_d / 100000
 ```
+## Filtering
+
+The library is configurable to limit the volume of logs that are sent to each of the different Azure Monitor log types.  See [filtering](./docs/filtering.md) for more details.
 
 ## Debugging
 

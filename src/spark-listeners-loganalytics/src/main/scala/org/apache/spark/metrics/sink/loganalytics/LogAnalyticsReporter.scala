@@ -36,6 +36,14 @@ object LogAnalyticsReporter {
     private var rateUnit = TimeUnit.SECONDS
     private var durationUnit = TimeUnit.MILLISECONDS
     private var filter = MetricFilter.ALL
+    private var filterRegex = sys.env.getOrElse("LA_SPARKMETRIC_REGEX", "")
+    if(filterRegex != "") {
+      filter = new MetricFilter() {
+        override def matches(name: String, metric: Metric): Boolean = {
+          name.matches(filterRegex)
+        }
+      }
+    }
     private var logType = "SparkMetrics"
     private var workspaceId: String = null
     private var workspaceKey: String = null
