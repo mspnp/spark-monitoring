@@ -10,7 +10,7 @@ The Spark Monitoring Library can generate large volumes of logging and metrics d
 
 ## Limiting events in SparkListenerEvent_CL
 
-You can uncomment and edit the `LA_SPARKLISTENEREVENT_REGEX` environment variable that included included in [spark-monitoring.sh](../src/spark-listeners/scripts/spark-monitoring.sh) to limit the logging to only include events where Event_s matches the regex.
+You can uncomment and edit the `LA_SPARKLISTENEREVENT_REGEX` environment variable that is included in [spark-monitoring.sh](../src/spark-listeners/scripts/spark-monitoring.sh) to limit the logging to only include events where Event_s matches the regex.
 
 The example below will only log events for `SparkListenerJobStart`, `SparkListenerJobEnd`, or where `org.apache.spark.sql.execution.ui.` is in the event name.
 
@@ -44,7 +44,7 @@ SparkListenerEvent_CL
 
 ## Limiting Metrics in SparkMetric_CL
 
-You can uncomment and edit the `LA_SPARKMETRIC_REGEX` environment variable that included included in [spark-monitoring.sh](../src/spark-listeners/scripts/spark-monitoring.sh) to limit the logging to only include events where name_s matches the regex.
+You can uncomment and edit the `LA_SPARKMETRIC_REGEX` environment variable that is included in [spark-monitoring.sh](../src/spark-listeners/scripts/spark-monitoring.sh) to limit the logging to only include events where name_s matches the regex.
 
 The example below will only log metrics where the name begins with `app` and ends in `.jvmCpuTime` or `.heap.max`.
 
@@ -92,13 +92,13 @@ The logs that propagate to SparkLoggingEvent_CL do so through a log4j appender. 
 
 ## Limiting Logs in SparkLoggingEvent_CL (Advanced)
 
-You can uncomment and edit the `LA_SPARKLOGGINGEVENT_NAME_REGEX` environment variable that included included in [spark-monitoring.sh](../src/spark-listeners/scripts/spark-monitoring.sh) to limit the logging to only include events where logger_name_s matches the regex.
+You can uncomment and edit the `LA_SPARKLOGGINGEVENT_NAME_REGEX` environment variable that is included in [spark-monitoring.sh](../src/spark-listeners/scripts/spark-monitoring.sh) to limit the logging to only include events where logger_name_s matches the regex.
 
 The example below will only log events from logger `com.microsoft.pnp.samplejob.StreamingQueryListenerSampleJob` or where the logger name starts with `org.apache.spark.util.Utils`.
 
 `export LA_SPARKLOGGINGEVENT_NAME_REGEX="com\.microsoft\.pnp\.samplejob\.StreamingQueryListenerSampleJob|org\.apache\.spark\.util\.Utils.*"`
 
-You can uncomment and edit the `LA_SPARKLOGGINGEVENT_MESSAGE_REGEX` environment variable that included included in [spark-monitoring.sh](../src/spark-listeners/scripts/spark-monitoring.sh) to limit the logging to only include events where the message matches the regex.
+You can uncomment and edit the `LA_SPARKLOGGINGEVENT_MESSAGE_REGEX` environment variable that is included in [spark-monitoring.sh](../src/spark-listeners/scripts/spark-monitoring.sh) to limit the logging to only include events where the message matches the regex.
 
 The example below will only log events where the message ends with the string `StreamingQueryListenerSampleJob` or begins with the string `FS_CONF_COMPAT`.
 
