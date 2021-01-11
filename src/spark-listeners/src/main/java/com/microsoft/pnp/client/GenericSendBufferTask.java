@@ -151,6 +151,11 @@ public abstract class GenericSendBufferTask<T> implements Runnable {
 
             process(datas);
         } catch (InterruptedException e) {
+            // If the thread is interrupted, we should make a best effort to deliver the messages in the buffer.
+            // This may result in duplicated messages if the thread is interrupted late in the execution of process(...)
+            // but this is better than missing messages that might have information on an important error.
+            process(new ArrayList<>(this.datas));
+            this.datas.clear();
         } catch (RuntimeException e) {
             throw e;
         } catch (Error e) {

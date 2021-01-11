@@ -58,7 +58,6 @@ class RpcMetricsReceiverSuite extends SparkFunSuite
   private var timer: Timer = null
   private var settableGauge: SettableGauge[Long] = null
 
-
   val clockClazz = loadOneOf("com.codahale.metrics.jvm.CpuTimeClock","com.codahale.metrics.Clock$CpuTimeClock").get
     .asInstanceOf[Class[_<:Clock]]
 
@@ -72,6 +71,7 @@ class RpcMetricsReceiverSuite extends SparkFunSuite
       .setMaster("local[2]")
       .setAppName("test")
       .set("spark.dynamicAllocation.testing", "true")
+      .set("spark.driver.allowMultipleContexts", "true")
     sc = spy(new SparkContext(conf))
     scheduler = mock(classOf[TaskSchedulerImpl])
     when(sc.taskScheduler).thenReturn(scheduler)

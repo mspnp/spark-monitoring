@@ -42,6 +42,7 @@ class MetricsSystemsSuite extends SparkFunSuite
       .setMaster("local[2]")
       .setAppName("test")
       .set("spark.dynamicAllocation.testing", "true")
+      .set("spark.driver.allowMultipleContexts", "true")
     sc = new SparkContext(conf)
     env = mock(classOf[SparkEnv])
     rpcEnv = mock(classOf[RpcEnv])
