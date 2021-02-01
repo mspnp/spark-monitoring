@@ -86,8 +86,8 @@ docker run -it --rm -v %cd%:/spark-monitoring -v "%USERPROFILE%/.m2":/root/.m2 -
 
     |Project| JAR file|
     |-------|---------|
-    |spark-listeners|spark-listeners_<Spark Version>_<Scala Version>-<Version>.jar|
-    |spark-listeners-loganalytics|spark-listeners-loganalytics_<Spark Version>_<Scala Version>-<Version>.jar|
+    |spark-listeners|`spark-listeners_<Spark Version>_<Scala Version>-<Version>.jar`|
+    |spark-listeners-loganalytics|`spark-listeners-loganalytics_<Spark Version>_<Scala Version>-<Version>.jar`|
 
 
 ## Configure the Databricks workspace
