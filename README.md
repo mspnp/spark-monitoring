@@ -40,6 +40,7 @@ Before you begin, ensure you have the following prerequisites in place:
 This library currently has a size limit per event of 25MB, based on the [Log Analytics limit of 30MB per API Call](https://docs.microsoft.com/rest/api/loganalytics/create-request#data-limits) with additional overhead for formatting. The default behavior when hitting this limit is to throw an exception. This can be changed by modifying the value of `EXCEPTION_ON_FAILED_SEND` in [GenericSendBuffer.java](src/spark-listeners/src/main/java/com/microsoft/pnp/client/GenericSendBuffer.java) to `false`.
 
 > Note: You will see an error like: `java.lang.RuntimeException: Failed to schedule batch because first message size nnn exceeds batch size limit 26214400 (bytes).` in the Spark logs if your workload is generating logging messages of greater than 25MB, and your workload may not proceed. You can query Log Analytics for this error condition with:
+
 > ```kusto
 > SparkLoggingEvent_CL
 > | where TimeGenerated > ago(24h)
@@ -89,7 +90,6 @@ docker run -it --rm -v %cd%:/spark-monitoring -v "%USERPROFILE%/.m2":/root/.m2 -
     |spark-listeners|`spark-listeners_<Spark Version>_<Scala Version>-<Version>.jar`|
     |spark-listeners-loganalytics|`spark-listeners-loganalytics_<Spark Version>_<Scala Version>-<Version>.jar`|
 
-
 ## Configure the Databricks workspace
 
 Copy the JAR files and init scripts to Databricks.
@@ -109,7 +109,7 @@ Copy the JAR files and init scripts to Databricks.
 
 If you do not want to add your Log Analytics workspace id and key into the init script in plaintext, you can also [create an Azure Key Vault backed secret scope](./docs/keyvault-backed-secrets.md) and reference those secrets through your cluster's environment variables.
 
-1. In order to add `x-ms-AzureResourceId` [header](https://docs.microsoft.com/en-us/azure/azure-monitor/platform/data-collector-api#request-headers) as part of the http request, modify the following environment
+1. In order to add `x-ms-AzureResourceId` [header](https://docs.microsoft.com/azure/azure-monitor/platform/data-collector-api#request-headers) as part of the http request, modify the following environment
 variables on **/src/spark-listeners/scripts/spark-monitoring.sh**.
 For instance:
 
@@ -209,13 +209,16 @@ SparkMetric_CL
 | extend executor=strcat(sname[0], ".", sname[1])
 | project TimeGenerated, cpuTime=count_d / 100000
 ```
+
+> Note: For more details on how to use the saved search queries in [logAnalyticsDeploy.json](/perftools/deployment/loganalytics/logAnalyticsDeploy.json) to understand and troubleshoot performance, see [Observability patterns and metrics for performance tuning](https://docs.microsoft.com/azure/architecture/databricks-monitoring/databricks-observability).
+
 ## Filtering
 
 The library is configurable to limit the volume of logs that are sent to each of the different Azure Monitor log types.  See [filtering](./docs/filtering.md) for more details.
 
 ## Debugging
 
-If you encounter any issues with the init scipt, you can refer to the docs on [debugging](./docs/debugging.md).
+If you encounter any issues with the init script, you can refer to the docs on [debugging](./docs/debugging.md).
 
 ## Contributing
 
