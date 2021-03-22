@@ -4,7 +4,7 @@ import java.util.Properties
 import java.util.concurrent.TimeUnit
 
 import com.microsoft.pnp.LogAnalyticsEnvironment
-import org.apache.spark.LogAnalyticsConfiguration
+import org.apache.spark.com.microsoft.pnp.LogAnalyticsConfiguration
 
 private[spark] object LogAnalyticsSinkConfiguration {
   private[spark] val LOGANALYTICS_KEY_WORKSPACEID = "workspaceId"

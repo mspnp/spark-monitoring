@@ -1,7 +1,8 @@
 package org.apache.spark.listeners.sink.loganalytics
 
 import com.microsoft.pnp.LogAnalyticsEnvironment
-import org.apache.spark.{LogAnalyticsConfiguration, SparkConf}
+import org.apache.spark.SparkConf
+import org.apache.spark.com.microsoft.pnp.LogAnalyticsConfiguration
 
 private[spark] object LogAnalyticsListenerSinkConfiguration {
   private val CONFIG_PREFIX = "spark.logAnalytics"

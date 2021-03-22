@@ -4,7 +4,7 @@ import org.apache.log4j.spi.Filter;
 import org.apache.log4j.spi.LoggingEvent;
 import org.apache.spark.SparkConf;
 import org.apache.spark.SparkEnv;
-import org.apache.spark.SparkInformation;
+import com.microsoft.pnp.SparkInformation;
 
 import java.util.Map;
 
