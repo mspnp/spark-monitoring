@@ -1,4 +1,6 @@
-package org.apache.spark
+package com.microsoft.pnp
+
+import org.apache.spark.SparkEnv
 
 object SparkInformation {
   // Spark Configuration

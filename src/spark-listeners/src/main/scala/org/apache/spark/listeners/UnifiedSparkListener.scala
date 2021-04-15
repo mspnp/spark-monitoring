@@ -2,7 +2,8 @@ package org.apache.spark.listeners
 
 import java.time.Instant
 
-import org.apache.spark.{SparkConf, SparkException, SparkInformation}
+import com.microsoft.pnp.SparkInformation
+import org.apache.spark.{SparkConf, SparkException}
 import org.apache.spark.internal.Logging
 import org.apache.spark.listeners.sink.SparkListenerSink
 import org.apache.spark.scheduler._

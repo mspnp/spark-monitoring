@@ -7,8 +7,8 @@ import com.codahale.metrics.{Timer, _}
 import com.codahale.metrics.json.MetricsModule
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
+import com.microsoft.pnp.SparkInformation
 import com.microsoft.pnp.client.loganalytics.{LogAnalyticsClient, LogAnalyticsSendBufferClient}
-import org.apache.spark.SparkInformation
 import org.apache.spark.internal.Logging
 import org.json4s.JsonAST.JValue
 import org.json4s.JsonDSL._
