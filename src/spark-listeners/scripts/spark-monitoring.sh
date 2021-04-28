@@ -18,6 +18,7 @@ SPARK_CONF_DIR=$SPARK_HOME/conf
 # header as part of the request
 tee -a "$SPARK_CONF_DIR/spark-env.sh" << EOF
 export DB_CLUSTER_ID=$DB_CLUSTER_ID
+export DB_CLUSTER_NAME=$DB_CLUSTER_NAME
 export LOG_ANALYTICS_WORKSPACE_ID=
 export LOG_ANALYTICS_WORKSPACE_KEY=
 export AZ_SUBSCRIPTION_ID=
