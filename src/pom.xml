@@ -18,7 +18,7 @@
             <id>scala-2.11_spark-2.4.3</id>
             <properties>
                 <commons.httpclient.version>4.5.12</commons.httpclient.version>
-                <jetty.version>9.4.31.v20200723</jetty.version>
+                <jetty.version>9.4.40.v20210413</jetty.version>
                 <spark.version>2.4.3</spark.version>
                 <scala.version>2.11.12</scala.version>
                 <scala.compat.version>2.11</scala.compat.version>
@@ -28,7 +28,7 @@
             <id>scala-2.11_spark-2.4.5</id>
             <properties>
                 <commons.httpclient.version>4.5.12</commons.httpclient.version>
-                <jetty.version>9.4.31.v20200723</jetty.version>
+                <jetty.version>9.4.40.v20210413</jetty.version>
                 <spark.version>2.4.5</spark.version>
                 <scala.version>2.11.12</scala.version>
                 <scala.compat.version>2.11</scala.compat.version>
@@ -38,7 +38,7 @@
             <id>scala-2.12_spark-3.0.0</id>
             <properties>
                 <commons.httpclient.version>4.5.12</commons.httpclient.version>
-                <jetty.version>9.4.31.v20200723</jetty.version>
+                <jetty.version>9.4.40.v20210413</jetty.version>
                 <spark.version>3.0.0</spark.version>
                 <scala.version>2.12.12</scala.version>
                 <scala.compat.version>2.12</scala.compat.version>
@@ -51,7 +51,7 @@
             </activation>
             <properties>
                 <commons.httpclient.version>4.5.12</commons.httpclient.version>
-                <jetty.version>9.4.31.v20200723</jetty.version>
+                <jetty.version>9.4.40.v20210413</jetty.version>
                 <spark.version>3.0.1</spark.version>
                 <scala.version>2.12.12</scala.version>
                 <scala.compat.version>2.12</scala.compat.version>
