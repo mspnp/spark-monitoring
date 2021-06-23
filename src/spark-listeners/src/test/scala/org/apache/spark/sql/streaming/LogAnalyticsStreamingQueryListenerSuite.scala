@@ -4,7 +4,7 @@ import java.util.UUID
 
 import org.apache.spark.listeners.ListenerSuite
 import org.apache.spark.metrics.TestImplicits._
-import org.apache.spark.metrics.TestUtils
+import org.apache.spark.metrics.TestUtils._
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.streaming.StreamingQueryListener.{QueryProgressEvent, QueryStartedEvent, QueryTerminatedEvent}
 import org.scalatest.BeforeAndAfterEach
@@ -13,13 +13,21 @@ import scala.collection.JavaConversions.mapAsJavaMap
 
 object LogAnalyticsStreamingQueryListenerSuite {
   //Spark3 requires 1 more argument than spark 2.4
-  val queryStartedEvent = TestUtils
-    .newInstance(classOf[QueryStartedEvent], UUID.randomUUID, UUID.randomUUID, "name")
-    .orElse(TestUtils.newInstance(classOf[QueryStartedEvent], UUID.randomUUID, UUID.randomUUID, "name", (System.currentTimeMillis() / 1000).toString))
+  val queryStartedEvent =
+    newInstance(classOf[QueryStartedEvent], UUID.randomUUID, UUID.randomUUID, "name")
+    .orElse(newInstance(classOf[QueryStartedEvent], UUID.randomUUID, UUID.randomUUID, "name", (System.currentTimeMillis() / 1000).toString))
     .get
 
   val queryTerminatedEvent = new QueryTerminatedEvent(UUID.randomUUID, UUID.randomUUID, None)
   val queryProgressEvent = {
+    // Note - this workaround will no longer be needed once versions before 3.1.1 are no longer supported
+    // v3.0.1-: StateOperatorProgress: (numRowsTotal: Long, numRowsUpdated: Long, memoryUsedBytes: Long, customMetrics: java.util.Map[String,Long])
+    // v3.1.1+: StateOperatorProgress: (numRowsTotal: Long, numRowsUpdated: Long, memoryUsedBytes: Long, numRowsDroppedByWatermark: Long, customMetrics: java.util.Map[String,Long])
+    val v30args = List[Any](0, 1, 2, new java.util.HashMap())
+    val v31args = List[Any](0, 1, 2, 3, new java.util.HashMap())
+    val stateOperatorProgress = newInstance(classOf[StateOperatorProgress], v30args:_*)
+      .orElse(newInstance(classOf[StateOperatorProgress], v31args:_*))
+      .get
 
     val spark2args = List[Any](
       UUID.randomUUID,
@@ -29,8 +37,7 @@ object LogAnalyticsStreamingQueryListenerSuite {
       2L,
       mapAsJavaMap(Map("total" -> 0L)),
       mapAsJavaMap(Map.empty[String, String]),
-      Array(new StateOperatorProgress(
-        0, 1, 2)),
+      Array(stateOperatorProgress),
       Array(
         new SourceProgress(
           "source",
@@ -46,8 +53,8 @@ object LogAnalyticsStreamingQueryListenerSuite {
 
     val spark3args = spark2args.insertAt(4, 1234L) ::: List(mapAsJavaMap(Map[String, Row]()))
 
-    val streamingQueryProgress = TestUtils.newInstance(classOf[StreamingQueryProgress], spark2args:_*)
-      .orElse(TestUtils.newInstance(classOf[StreamingQueryProgress], spark3args:_*))
+    val streamingQueryProgress = newInstance(classOf[StreamingQueryProgress], spark2args:_*)
+      .orElse(newInstance(classOf[StreamingQueryProgress], spark3args:_*))
       .get
 
     new QueryProgressEvent(streamingQueryProgress)
