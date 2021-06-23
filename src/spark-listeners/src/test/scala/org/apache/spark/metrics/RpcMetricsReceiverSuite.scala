@@ -75,7 +75,6 @@ class RpcMetricsReceiverSuite extends SparkFunSuite
     sc = spy(new SparkContext(conf))
     scheduler = mock(classOf[TaskSchedulerImpl])
     when(sc.taskScheduler).thenReturn(scheduler)
-    when(scheduler.nodeBlacklist).thenReturn(Predef.Set[String]())
     when(scheduler.sc).thenReturn(sc)
     val metricRegistry = new MetricRegistry()
     counter = mock(classOf[Counter])

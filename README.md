@@ -60,7 +60,7 @@ Linux:
 chmod +x ./build.sh
 docker run -it --rm -v `pwd`:/spark-monitoring -v "$HOME/.m2":/root/.m2 maven:3.6.3-jdk-8 /spark-monitoring/build.sh
 
-# To build a single profile (latest):
+# To build a single profile (latest long term support version):
 docker run -it --rm -v `pwd`:/spark-monitoring -v "$HOME/.m2":/root/.m2 -w /spark-monitoring/src maven:3.6.3-jdk-8 mvn install -P "scala-2.12_spark-3.0.1"
 ```
 
@@ -70,7 +70,7 @@ Windows:
 # To build all profiles:
 docker run -it --rm -v %cd%:/spark-monitoring -v "%USERPROFILE%/.m2":/root/.m2 maven:3.6.3-jdk-8 /spark-monitoring/build.sh
 
-# To build a single profile (latest):
+# To build a single profile (latest long term support version):
 docker run -it --rm -v %cd%:/spark-monitoring -v "%USERPROFILE%/.m2":/root/.m2 -w /spark-monitoring/src maven:3.6.3-jdk-8 mvn install -P "scala-2.12_spark-3.0.1"
 ```
 
@@ -155,9 +155,9 @@ databricks runtime.
 | Databricks Runtime(s) | Maven Profile |
 | -- | -- |
 | `5.5` | `scala-2.11_spark-2.4.3` |
-| `6.4` - `6.6` | `scala-2.11_spark-2.4.5` |
-| `7.0` - `7.2` | `scala-2.12_spark-3.0.0` |
-| `7.3` - `7.5` | `scala-2.12_spark-3.0.1` |
+| `6.4` | `scala-2.11_spark-2.4.5` |
+| `7.3` - `7.6` | `scala-2.12_spark-3.0.1` |
+| `8.0` - `8.3` | `scala-2.12_spark-3.1.1` |
 
 1. Use Maven to build the POM located at `sample/spark-sample-job/pom.xml` or run the following Docker command:
 

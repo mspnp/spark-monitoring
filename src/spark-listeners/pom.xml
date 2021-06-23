@@ -40,6 +40,13 @@
         <dependency>
             <groupId>org.scalatest</groupId>
             <artifactId>scalatest_${scala.compat.version}</artifactId>
+                <version>${scalatest.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.scalatest</groupId>
+            <artifactId>scalatest-funsuite_${scala.compat.version}</artifactId>
+            <scope>test</scope>
+            <version>3.2.9</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
