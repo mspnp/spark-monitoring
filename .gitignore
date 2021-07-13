@@ -215,7 +215,7 @@ ModelManifest.xml
 .DS_Store
 
 #Not to include target files
-*/target/**
+#*/target/**
 .idea
 project
 
@@ -297,7 +297,7 @@ fabric.properties
 .mtj.tmp/
 
 # Package Files #
-*.jar
+#*.jar
 *.war
 *.nar
 *.ear
@@ -309,7 +309,7 @@ fabric.properties
 hs_err_pid*
 
 # Maven
-target/
+#target/
 pom.xml.tag
 pom.xml.releaseBackup
 pom.xml.versionsBackup
