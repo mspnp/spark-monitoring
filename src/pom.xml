@@ -61,6 +61,17 @@
                 <scalatest.version>3.2.9</scalatest.version>
             </properties>
         </profile>
+        <profile>
+            <id>scala-2.12_spark-3.1.2</id>
+            <properties>
+                <commons.httpclient.version>4.5.13</commons.httpclient.version>
+                <jetty.version>9.4.40.v20210413</jetty.version>
+                <spark.version>3.1.2</spark.version>
+                <scala.version>2.12.12</scala.version>
+                <scala.compat.version>2.12</scala.compat.version>
+                <scalatest.version>3.2.9</scalatest.version>
+            </properties>
+        </profile>
     </profiles>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
