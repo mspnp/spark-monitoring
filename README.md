@@ -180,11 +180,17 @@ databricks runtime.
 
 1. Navigate to your Databricks workspace and create a new job, as described [here](https://docs.azuredatabricks.net/user-guide/jobs.html#create-a-job).
 
-1. In the job detail page, select **Set JAR**.
-
-1. Upload the JAR file from `/src/spark-jobs/target/spark-jobs-1.0-SNAPSHOT.jar`.
+1. In the job detail page, set **Type** to `JAR`.
 
 1. For **Main class**, enter `com.microsoft.pnp.samplejob.StreamingQueryListenerSampleJob`.
+
+1. Upload the JAR file from `/src/spark-jobs/target/spark-jobs-1.0-SNAPSHOT.jar` in the **Dependent Libraries** section.
+
+1. Select the cluster you created previously in the **Cluster** section.
+
+1. Select **Create**.
+
+1. Click the **Run Now** button to launch the job.
 
 When the job runs, you can view the application logs and metrics in your Log Analytics workspace. After you verify the metrics appear, stop the sample application job.
 
