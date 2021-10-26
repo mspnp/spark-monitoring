@@ -57,7 +57,6 @@ Linux:
 
 ```bash
 # To build all profiles:
-chmod +x ./build.sh
 docker run -it --rm -v `pwd`:/spark-monitoring -v "$HOME/.m2":/root/.m2 maven:3.6.3-jdk-8 /spark-monitoring/build.sh
 ```
 
