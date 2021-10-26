@@ -16,16 +16,19 @@ SPARK_CONF_DIR=$SPARK_HOME/conf
 # Log Analytics Workspace
 # Also if it is available use AZ_* variables to include x-ms-AzureResourceId
 # header as part of the request
+#
+# ECB: I´m only using LOG_ANALYTICS_WORKSPACE_ID and LOG_ANALYTICS_WORKSPACE_KEY
+#
 tee -a "$SPARK_CONF_DIR/spark-env.sh" << EOF
 export DB_CLUSTER_ID=$DB_CLUSTER_ID
 export DB_CLUSTER_NAME=$DB_CLUSTER_NAME
-export LOG_ANALYTICS_WORKSPACE_ID=
-export LOG_ANALYTICS_WORKSPACE_KEY=
-export AZ_SUBSCRIPTION_ID=
-export AZ_RSRC_GRP_NAME=
-export AZ_RSRC_PROV_NAMESPACE=
-export AZ_RSRC_TYPE=
-export AZ_RSRC_NAME=
+export LOG_ANALYTICS_WORKSPACE_ID=${LOG_ANALYTICS_WORKSPACE_ID}
+export LOG_ANALYTICS_WORKSPACE_KEY=${LOG_ANALYTICS_WORKSPACE_KEY}
+export AZ_SUBSCRIPTION_ID=${AZ_SUBSCRIPTION_ID}
+export AZ_RSRC_GRP_NAME=${AZ_RSRC_GRP_NAME}
+export AZ_RSRC_PROV_NAMESPACE=${AZ_RSRC_PROV_NAMESPACE}
+export AZ_RSRC_TYPE=${AZ_RSRC_TYPE}
+export AZ_RSRC_NAME=${AZ_RSRC_NAME}
 
 # Note: All REGEX filters below are implemented with java.lang.String.matches(...).  This implementation essentially appends ^...$ around
 # the regular expression, so the entire string must match the regex.  If you need to allow for other values you should include .* before and/or
