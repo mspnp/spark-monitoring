@@ -9,9 +9,10 @@ For more details on how to use Grafana to monitor Spark performance, visit: [Use
 Open an Azure bash cloud shell or a bash command shell and execute the azure cli command,  Replacing yourResourceGroupName and yourLocation.
 
 ```
-export RGNAME=yourResourceGroupName
-# location example "East Us"
-export RGLOCATION=yourLocation
+# Your resource group name
+export RGNAME="Databricks"
+# location example "North Europe"
+export RGLOCATION=northeurope
 
 az group create --name "${RGNAME}" --location "${RGLOCATION}"
 
@@ -25,6 +26,14 @@ if you run the command *az group deployment create --resource-group $RGNAME --te
 
 
 ## Deployment of Grafana
+
+### Prerequisite
+Use the Azure CLI to accept the Azure Marketplace image terms for Grafana.
+
+```bash
+az vm image accept-terms --publisher bitnami --offer grafana --plan default
+```
+
 
 ### Step 1: Deploy Certified Grafana From Azure
 For Grafana deployment a bitnami certified image will be used. You can find more information about bitnami applications on azure at https://docs.bitnami.com/azure/get-started-marketplace/
@@ -76,7 +85,7 @@ az account set --subscription yourSubscriptionId
 
 
 ```
-az ad sp create-for-rbac --name http://NameOfSp --role "Log Analytics Reader"
+az ad sp create-for-rbac --name http://GrafanaDatabricksLogAnalyticsReader --role "Log Analytics Reader"
 ```
 4. Take note of appId, password and tenant
 
@@ -106,6 +115,7 @@ The workspace id for Log Analytics can be found at the **advanced settings** bla
 
 
 ```
+# your workspace_id
 export WORKSPACE=YOUR_WORKSPACEID
 export LOGTYPE=SparkListenerEvent_CL
 
