@@ -112,6 +112,12 @@
             <version>${spark.listeners.version}</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>com.microsoft.pnp</groupId>
+            <artifactId>spark-listeners-loganalytics_${spark.version}_${scala.compat.version}</artifactId>
+            <version>${spark.listeners.loganalytics.version}</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
