@@ -9,7 +9,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>spark-listeners</artifactId>
+    <artifactId>spark-listeners_${spark.version}_${scala.compat.version}</artifactId>
     <name>${project.artifactId}</name>
     <packaging>jar</packaging>
     <dependencies>
@@ -70,7 +70,7 @@
         </dependency>
     </dependencies>
     <build>
-        <finalName>${project.artifactId}_${spark.version}_${scala.compat.version}-${project.version}</finalName>
+        <finalName>${project.artifactId}-${project.version}</finalName>
         <plugins>
             <!--<plugin>-->
             <!--<groupId>org.scalatest</groupId>-->
