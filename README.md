@@ -83,6 +83,18 @@ docker run -it --rm -v %cd%:/spark-monitoring -v "%USERPROFILE%/.m2":/root/.m2 m
 docker run -it --rm -v %cd%:/spark-monitoring -v "%USERPROFILE%/.m2":/root/.m2 -w /spark-monitoring/src maven:3.6.3-jdk-8 mvn install -P "scala-2.12_spark-3.1.2"
 ```
 
+Windows Powershell:
+
+```powershell
+# To build all profiles:
+docker run -it --rm -v ${pwd}:/spark-monitoring -v ${env:userprofile}\.m2:/root/.m2 maven:3.6.3-jdk-8 /spark-monitoring/build.sh
+```
+
+```powershell
+# To build a single profile (latest long term support version):
+docker run -it --rm -v ${pwd}:/spark-monitoring -v ${env:userprofile}\.m2:/root/.m2 -w /spark-monitoring/src maven:3.6.3-jdk-8 mvn install -P "scala-2.12_spark-3.1.2"
+```
+
 ### Option 2: Maven
 
 1. Import the Maven project project object model file, _pom.xml_, located in the **/src** folder into your project. This will import two projects:
@@ -181,6 +193,12 @@ databricks runtime.
 
     ```bash
     docker run -it --rm -v %cd%/sample/spark-sample-job:/spark-sample-job -v "%USERPROFILE%/.m2":/root/.m2 -w /spark-sample-job maven:3.6.3-jdk-8 mvn install -P <maven-profile>
+    ```
+    
+    Windows Powershell:
+    
+    ```powershell
+    docker run -it --rm -v ${pwd}/sample/spark-sample-job:/spark-sample-job -v ${env:userprofile}\.m2:/root/.m2 -w /spark-sample-job maven:3.6.3-jdk-8 mvn install -P <maven-profile>
     ```
 
 1. Navigate to your Databricks workspace and create a new job, as described [here](https://docs.azuredatabricks.net/user-guide/jobs.html#create-a-job).
