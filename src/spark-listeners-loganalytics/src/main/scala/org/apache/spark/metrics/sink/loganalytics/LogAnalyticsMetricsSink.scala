@@ -14,6 +14,15 @@ private class LogAnalyticsMetricsSink(
                                 securityMgr: SecurityManager)
   extends Sink with Logging {
 
+  // This additional constructor allows the library to be used on Spark 3.2.x clusters
+  // without the fix for https://issues.apache.org/jira/browse/SPARK-37078
+  def this(
+        property: Properties,
+        registry: MetricRegistry)
+  {
+    this(property, registry, null)
+  }
+
   private val config = new LogAnalyticsSinkConfiguration(property)
 
   org.apache.spark.metrics.MetricsSystem.checkMinimalPollingPeriod(config.pollUnit, config.pollPeriod)
