@@ -21,7 +21,7 @@ object LogAnalyticsStreamingQueryListenerSuite {
   val queryTerminatedEvent = new QueryTerminatedEvent(UUID.randomUUID, UUID.randomUUID, None)
   val queryProgressEvent = {
     // v3.0.1-: StateOperatorProgress: (numRowsTotal: Long, numRowsUpdated: Long, memoryUsedBytes: Long, customMetrics: java.util.Map[String,Long])
-    // v3.1.* : StateOperatorProgress: (numRowsTotal:                       Long, numRowsUpdated: Long, memoryUsedBytes: Long, numRowsDroppedByWatermark: Long, customMetrics: java.util.Map[String,Long])
+    // v3.1.* : StateOperatorProgress: (numRowsTotal: Long, numRowsUpdated: Long, memoryUsedBytes: Long, numRowsDroppedByWatermark: Long, customMetrics: java.util.Map[String,Long])
     // v3.2.0+: StateOperatorProgress: (operatorName: String, numRowsTotal: Long, numRowsUpdated: Long, allUpdatesTimeMs: Long, numRowsRemoved: Long, allRemovalsTimeMs: Long, commitTimeMs: Long, memoryUsedBytes: Long, numRowsDroppedByWatermark: Long, numShufflePartitions: Long, numStateStoreInstances: Long, customMetrics: java.util.Map[String,Long])
     val v30argsStateOperatorProgress = List[Any](0, 1, 2, new java.util.HashMap())
     val v31argsStateOperatorProgress = List[Any](0, 1, 2, 3, new java.util.HashMap())
