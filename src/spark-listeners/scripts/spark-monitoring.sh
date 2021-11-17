@@ -43,7 +43,7 @@ export AZ_RSRC_NAME=
 # Add a quoted regex value to filter the events for SparkLoggingEvent_CL, the log will only include events where logger_name_s matches the name regex
 # or where the Message matches the message regex.  If both are specified, then both must be matched for the log to be sent.
 # Commented examples below will only log messages where the logger name is com.microsoft.pnp.samplejob.StreamingQueryListenerSampleJob or begins with
-# org.apache.spark.util.Utils, or where the Message ends with the string `StreamingQueryListenerSampleJob` or begins with the string `FS_CONF_COMPAT`.
+# org.apache.spark.util.Utils, or where the Message ends with the string 'StreamingQueryListenerSampleJob' or begins with the string 'FS_CONF_COMPAT'.
 # export LA_SPARKLOGGINGEVENT_NAME_REGEX="com\.microsoft\.pnp\.samplejob\.StreamingQueryListenerSampleJob|org\.apache\.spark\.util\.Utils.*"
 # export LA_SPARKLOGGINGEVENT_MESSAGE_REGEX=".*StreamingQueryListenerSampleJob|FS_CONF_COMPAT.*"
 EOF
