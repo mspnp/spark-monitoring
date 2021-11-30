@@ -10,9 +10,9 @@ Open an Azure bash cloud shell or a bash command shell and execute the azure cli
 
 ```
 # Your resource group name
-export RGNAME="Databricks"
-# location example "North Europe"
-export RGLOCATION=northeurope
+export RGNAME="yourResourceGroupName"
+# location example "East Us"
+export RGLOCATION=yourLocation
 
 az group create --name "${RGNAME}" --location "${RGLOCATION}"
 
