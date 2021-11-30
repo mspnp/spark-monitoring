@@ -48,7 +48,7 @@ export AZ_RSRC_NAME=${AZ_RSRC_NAME}
 # Add a quoted regex value to filter the events for SparkLoggingEvent_CL, the log will only include events where logger_name_s matches the name regex
 # or where the Message matches the message regex.  If both are specified, then both must be matched for the log to be sent.
 # Commented examples below will only log messages where the logger name is com.microsoft.pnp.samplejob.StreamingQueryListenerSampleJob or begins with
-# org.apache.spark.util.Utils, or where the Message ends with the string `StreamingQueryListenerSampleJob` or begins with the string `FS_CONF_COMPAT`.
+# org.apache.spark.util.Utils, or where the Message ends with the string 'StreamingQueryListenerSampleJob' or begins with the string 'FS_CONF_COMPAT'.
 # export LA_SPARKLOGGINGEVENT_NAME_REGEX="com\.microsoft\.pnp\.samplejob\.StreamingQueryListenerSampleJob|org\.apache\.spark\.util\.Utils.*"
 # export LA_SPARKLOGGINGEVENT_MESSAGE_REGEX=".*StreamingQueryListenerSampleJob|FS_CONF_COMPAT.*"
 EOF
@@ -57,9 +57,9 @@ STAGE_DIR=/dbfs/databricks/spark-monitoring
 SPARK_LISTENERS_VERSION=${SPARK_LISTENERS_VERSION:-1.0.0}
 SPARK_LISTENERS_LOG_ANALYTICS_VERSION=${SPARK_LISTENERS_LOG_ANALYTICS_VERSION:-1.0.0}
 SPARK_VERSION=$(cat /databricks/spark/VERSION 2> /dev/null || echo "")
-SPARK_VERSION=${SPARK_VERSION:-3.0.1}
+SPARK_VERSION=${SPARK_VERSION:-3.1.2}
 SPARK_SCALA_VERSION=$(ls /databricks/spark/assembly/target | cut -d '-' -f2 2> /dev/null || echo "")
-SPARK_SCALA_VERSION=${SPARK_SCALA_VERSION:-2.11}
+SPARK_SCALA_VERSION=${SPARK_SCALA_VERSION:-2.12}
 
 # This variable configures the spark-monitoring library metrics sink.
 # Any valid Spark metric.properties entry can be added here as well.
