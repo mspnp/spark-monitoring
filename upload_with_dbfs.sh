@@ -12,3 +12,10 @@ dbfs --profile $1 cp --overwrite src/spark-listeners/scripts/spark-monitoring.sh
 echo 'Uploaded to dbfs:/databricks/spark-monitoring/'
 echo 'Showing the content of the folder dbfs:/databricks/spark-monitoring/'
 dbfs --profile $1 ls dbfs:/databricks/spark-monitoring/
+echo '************************************************************************************'
+echo 'To install the library, add the following init script:'
+echo '    dbfs:/databricks/spark-monitoring/spark-monitoring.sh'
+echo ' And include the following Environment Variables:'
+echo '    LOG_ANALYTICS_WORKSPACE_KEY={{secrets/your-scope-linked-to-keyvault/databricksloganalytics-key}}'
+echo '    LOG_ANALYTICS_WORKSPACE_ID={{secrets/your-scope-linked-to-keyvault/databricksloganalytics-workspace-id}}'
+echo '************************************************************************************'
