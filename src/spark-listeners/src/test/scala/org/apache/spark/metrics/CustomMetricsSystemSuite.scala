@@ -54,6 +54,7 @@ class MetricsSystemsSuite extends SparkFunSuite
 
   override def afterEach(): Unit = {
     super.afterEach
+    sc=null
     env = null
     rpcEnv = null
   }

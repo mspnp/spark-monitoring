@@ -108,6 +108,7 @@ class RpcMetricsReceiverSuite extends SparkFunSuite
     meter = null
     timer = null
     settableGauge = null
+    sc=null
   }
 
   test("getMetric returns valid metric") {

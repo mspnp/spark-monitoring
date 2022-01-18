@@ -151,6 +151,7 @@ class RemoteMetricsSourceBuilderSuite extends SparkFunSuite
       .setMaster("local[2]")
       .setAppName("test")
       .set("spark.dynamicAllocation.testing", "true")
+      .set("spark.driver.allowMultipleContexts", "true")
     env = mock(classOf[SparkEnv])
     rpcEnv = mock(classOf[RpcEnv])
     when(env.conf).thenReturn(conf)
