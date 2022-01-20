@@ -31,6 +31,8 @@ export AZ_RSRC_GRP_NAME=${AZ_RSRC_GRP_NAME}
 export AZ_RSRC_PROV_NAMESPACE=${AZ_RSRC_PROV_NAMESPACE}
 export AZ_RSRC_TYPE=${AZ_RSRC_TYPE}
 export AZ_RSRC_NAME=${AZ_RSRC_NAME}
+export LA_SPARKMETRIC_REGEX="${LA_SPARKMETRIC_REGEX}"
+export LA_SPARKLISTENEREVENT_REGEX="${LA_SPARKLISTENEREVENT_REGEX}"
 
 # Note: All REGEX filters below are implemented with java.lang.String.matches(...).  This implementation essentially appends ^...$ around
 # the regular expression, so the entire string must match the regex.  If you need to allow for other values you should include .* before and/or
@@ -40,7 +42,7 @@ export AZ_RSRC_NAME=${AZ_RSRC_NAME}
 # Commented example below will only log events for SparkListenerJobStart, SparkListenerJobEnd, or where "org.apache.spark.sql.execution.ui."
 # is is the start of the event name.
 # export LA_SPARKLISTENEREVENT_REGEX="SparkListenerJobStart|SparkListenerJobEnd|org\.apache\.spark\.sql\.execution\.ui\..*"
-
+# export LA_SPARKLISTENEREVENT_REGEX="SparkListenerTaskEnd|SparkListenerExecutorAdded|SparkListenerBlockManagerAdded|SparkListenerJobStart|SparkListenerStageSubmitted|SparkListenerTaskGettingResult|SparkListenerTaskStart"
 # Add a quoted regex value to filter the events for SparkMetric_CL, the log will only include events where name_s matches the regex.
 # Commented example below will only log metrics where the name begins with app and ends in .jvmCpuTime or .heap.max.
 # export LA_SPARKMETRIC_REGEX="app.*\.jvmCpuTime|app.*\.heap.max"
