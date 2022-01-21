@@ -21,6 +21,6 @@ echo '    LOG_ANALYTICS_WORKSPACE_ID={{secrets/your-scope-linked-to-keyvault/dat
 echo '  If you want to filter the logs, add the following Environment Variables: (optional)'
 echo '    LA_SPARKMETRIC_REGEX=app.*\.ExternalShuffle\.shuffle-client\.usedDirectMemory|app.*\.jvm\.pools\.PS-Eden-Space\.used|app.*\.jvm\.pools\.PS-Old-Gen\.used|app.*\.jvm\.total\.used|app.*\.jvm\.pools\.PS-Survivor-Space\.used|app.*\.jvm\.pools\.PS-Old-Gen\.used-after-gc|app.*\.jvm\.pools\.Code-Cache\.used|app.*\.jvm\.pools\.Metaspace\.used    '
 echo '    LA_SPARKLISTENEREVENT_REGEX=SparkListenerTaskEnd|SparkListenerExecutorAdded|SparkListenerBlockManagerAdded|SparkListenerJobStart|SparkListenerStageSubmitted|SparkListenerTaskGettingResult|SparkListenerTaskStart   '
-echo '    LA_SPARKLOGGINGEVENT_NAME_REGEX=xxxx     '
-echo '    LA_SPARKLOGGINGEVENT_MESSAGE_REGEX=Gb    '
+echo '    LA_SPARKLOGGINGEVENT_NAME_REGEX=org\.apache\.spark\.deploy\.master\.Master     '
+echo '    LA_SPARKLOGGINGEVENT_MESSAGE_REGEX=Registering worker.*    '
 echo '************************************************************************************'
