@@ -33,6 +33,8 @@ export AZ_RSRC_TYPE=${AZ_RSRC_TYPE}
 export AZ_RSRC_NAME=${AZ_RSRC_NAME}
 export LA_SPARKMETRIC_REGEX="${LA_SPARKMETRIC_REGEX}"
 export LA_SPARKLISTENEREVENT_REGEX="${LA_SPARKLISTENEREVENT_REGEX}"
+export LA_SPARKLOGGINGEVENT_NAME_REGEX="${LA_SPARKLOGGINGEVENT_NAME_REGEX}"
+export LA_SPARKLOGGINGEVENT_MESSAGE_REGEX="${LA_SPARKLOGGINGEVENT_MESSAGE_REGEX}"
 
 # Note: All REGEX filters below are implemented with java.lang.String.matches(...).  This implementation essentially appends ^...$ around
 # the regular expression, so the entire string must match the regex.  If you need to allow for other values you should include .* before and/or
