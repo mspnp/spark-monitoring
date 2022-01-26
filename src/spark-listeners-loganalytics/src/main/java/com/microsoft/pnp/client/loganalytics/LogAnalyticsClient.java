@@ -9,6 +9,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
+import org.apache.http.impl.client.DefaultServiceUnavailableRetryStrategy;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -61,6 +62,7 @@ public class LogAnalyticsClient implements Closeable {
                 .disableContentCompression()
                 .disableCookieManagement()
                 .setRetryHandler(new DefaultHttpRequestRetryHandler())
+                .setServiceUnavailableRetryStrategy(new DefaultServiceUnavailableRetryStrategy(3,1000))
                 .setDefaultRequestConfig(RequestConfig.custom().setConnectTimeout(15000).setSocketTimeout(120000).build())
                 .build());
     }

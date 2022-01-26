@@ -46,7 +46,7 @@ public abstract class GenericSendBuffer<T> implements AutoCloseable {
     private final Semaphore inflightBatches;
 
     // Make configurable
-    private final int maxInflightBatches = 1;
+    private final int maxInflightBatches = 4;
 
     protected GenericSendBuffer() {
         this.inflightBatches = new Semaphore(this.maxInflightBatches);
