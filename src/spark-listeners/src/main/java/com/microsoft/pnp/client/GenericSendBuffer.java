@@ -91,6 +91,8 @@ public abstract class GenericSendBuffer<T> implements AutoCloseable {
                         this.sendBufferTask.getMaxBatchSizeBytes());
                         System.err.println(message);
                         if(EXCEPTION_ON_FAILED_SEND) {
+                            // If we are throwing before we call execute on the sendBufferTask, we should release the semaphore.
+                            inflightBatches.release();
                             throw new RuntimeException(message);
                         }
                     }
