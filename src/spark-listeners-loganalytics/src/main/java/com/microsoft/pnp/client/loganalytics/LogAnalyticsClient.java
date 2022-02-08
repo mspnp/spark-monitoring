@@ -3,10 +3,13 @@ package com.microsoft.pnp.client.loganalytics;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
+import org.apache.http.impl.client.DefaultServiceUnavailableRetryStrategy;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -58,6 +61,9 @@ public class LogAnalyticsClient implements Closeable {
                 .disableAuthCaching()
                 .disableContentCompression()
                 .disableCookieManagement()
+                .setRetryHandler(new DefaultHttpRequestRetryHandler())
+                .setServiceUnavailableRetryStrategy(new DefaultServiceUnavailableRetryStrategy(3,1000))
+                .setDefaultRequestConfig(RequestConfig.custom().setConnectTimeout(15000).setSocketTimeout(120000).build())
                 .build());
     }
 
@@ -97,6 +103,10 @@ public class LogAnalyticsClient implements Closeable {
         this.workspaceKey = workspaceKey;
         this.httpClient = httpClient;
         this.url = String.format(URL_FORMAT, this.workspaceId, urlSuffix, apiVersion);
+    }
+
+    public boolean ready() {
+        return(this.workspaceId != null && this.workspaceKey != null);
     }
 
     public void send(String body, String logType) throws IOException {

@@ -46,6 +46,9 @@ export AZ_RSRC_NAME=
 # org.apache.spark.util.Utils, or where the Message ends with the string 'StreamingQueryListenerSampleJob' or begins with the string 'FS_CONF_COMPAT'.
 # export LA_SPARKLOGGINGEVENT_NAME_REGEX="com\.microsoft\.pnp\.samplejob\.StreamingQueryListenerSampleJob|org\.apache\.spark\.util\.Utils.*"
 # export LA_SPARKLOGGINGEVENT_MESSAGE_REGEX=".*StreamingQueryListenerSampleJob|FS_CONF_COMPAT.*"
+
+# Uncomment the following line to enable local logging to stderr of buffer contents when an exception is hit when sending a buffer to Log Analytics
+# export LA_LOGFAILEDBUFFERSEND=TRUE
 EOF
 
 STAGE_DIR=/dbfs/databricks/spark-monitoring
