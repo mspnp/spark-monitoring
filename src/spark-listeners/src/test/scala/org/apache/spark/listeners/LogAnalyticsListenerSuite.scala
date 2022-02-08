@@ -325,8 +325,9 @@ class LogAnalyticsListenerSuite extends ListenerSuite
 
   test("should not invoke onBlockUpdated when logBlockUpdates is set to false ") {
     val conf = new SparkConf()
-    conf.set("spark.unifiedListener.sink", classOf[TestSparkListenerSink].getName)
-    conf.set("spark.unifiedListener.logBlockUpdates", "false")
+        .set("spark.driver.allowMultipleContexts", "true")
+        .set("spark.unifiedListener.sink", classOf[TestSparkListenerSink].getName)
+        .set("spark.unifiedListener.logBlockUpdates", "false")
     this.listener = spy(new UnifiedSparkListener(conf))
     this.listener.onBlockUpdated(LogAnalyticsListenerSuite.sparkListenerBlockUpdated)
     verify(this.listener, times(0)).sendToSink(any(classOf[Option[JValue]]))
@@ -334,8 +335,9 @@ class LogAnalyticsListenerSuite extends ListenerSuite
 
   test("should invoke onBlockUpdated when logBlockUpdates is set to true ") {
     val conf = new SparkConf()
-    conf.set("spark.unifiedListener.sink", classOf[TestSparkListenerSink].getName)
-    conf.set("spark.unifiedListener.logBlockUpdates", "true")
+        .set("spark.driver.allowMultipleContexts", "true")
+        .set("spark.unifiedListener.sink", classOf[TestSparkListenerSink].getName)
+        .set("spark.unifiedListener.logBlockUpdates", "true")
     this.listener = spy(new UnifiedSparkListener(conf))
     this.onSparkListenerEvent(
       this.listener.onBlockUpdated,

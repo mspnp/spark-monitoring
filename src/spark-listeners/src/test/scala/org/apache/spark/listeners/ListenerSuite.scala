@@ -36,7 +36,8 @@ class ListenerSuite extends SparkFunSuite
     super.beforeEach()
     // We will use a mock sink
     val conf = new SparkConf()
-    conf.set("spark.unifiedListener.sink", classOf[TestSparkListenerSink].getName)
+        .set("spark.driver.allowMultipleContexts", "true")
+        .set("spark.unifiedListener.sink", classOf[TestSparkListenerSink].getName)
     this.logEventCaptor = ArgumentCaptor.forClass(classOf[Option[JValue]])
     this.listener = spy(new UnifiedSparkListener(conf))
   }

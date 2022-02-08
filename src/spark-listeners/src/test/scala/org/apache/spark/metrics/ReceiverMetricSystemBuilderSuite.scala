@@ -26,6 +26,7 @@ class ReceiverMetricSystemBuilderSuite extends SparkFunSuite
       .setMaster("local[2]")
       .setAppName("test")
       .set("spark.dynamicAllocation.testing", "true")
+      .set("spark.driver.allowMultipleContexts", "true")
     env = mock(classOf[SparkEnv])
     rpcEnv = mock(classOf[RpcEnv])
     when(env.executorId).thenReturn(SparkContext.DRIVER_IDENTIFIER)
