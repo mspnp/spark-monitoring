@@ -167,6 +167,7 @@ databricks runtime.
 | `7.3 LTS` | `scala-2.12_spark-3.0.1` |
 | `9.0` - `9.1 LTS` | `scala-2.12_spark-3.1.2` |
 | `10.0` - `10.2` | `scala-2.12_spark-3.2.0` |
+| `10.3` - `10.4 LTS` | `scala-2.12_spark-3.2.1` |
 
 1. Use Maven to build the POM located at `sample/spark-sample-job/pom.xml` or run the following Docker command:
 
