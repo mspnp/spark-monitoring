@@ -67,8 +67,8 @@ docker run -it --rm -v `pwd`:/spark-monitoring -v "$HOME/.m2":/root/.m2 mcr.micr
 ```
 
 ```bash
-# To build a single profile (latest long term support version):
-docker run -it --rm -v `pwd`:/spark-monitoring -v "$HOME/.m2":/root/.m2 -w /spark-monitoring/src mcr.microsoft.com/java/maven:8-zulu-debian10 mvn install -P "scala-2.12_spark-3.1.2"
+# To build a single profile (example for latest long term support version 10.4 LTS):
+docker run -it --rm -v `pwd`:/spark-monitoring -v "$HOME/.m2":/root/.m2 -w /spark-monitoring/src mcr.microsoft.com/java/maven:8-zulu-debian10 mvn install -P "scala-2.12_spark-3.2.1"
 ```
 
 Windows:
@@ -79,8 +79,8 @@ docker run -it --rm -v %cd%:/spark-monitoring -v "%USERPROFILE%/.m2":/root/.m2 m
 ```
 
 ```bash
-# To build a single profile (latest long term support version):
-docker run -it --rm -v %cd%:/spark-monitoring -v "%USERPROFILE%/.m2":/root/.m2 -w /spark-monitoring/src mcr.microsoft.com/java/maven:8-zulu-debian10 mvn install -P "scala-2.12_spark-3.1.2"
+# To build a single profile (example for latest long term support version 10.4 LTS):
+docker run -it --rm -v %cd%:/spark-monitoring -v "%USERPROFILE%/.m2":/root/.m2 -w /spark-monitoring/src mcr.microsoft.com/java/maven:8-zulu-debian10 mvn install -P "scala-2.12_spark-3.2.1"
 ```
 
 ### Option 2: Maven
@@ -148,11 +148,11 @@ Now the _ResourceId **/subscriptions/11111111-5c17-4032-ae54-fc33d56047c2/resour
 ### Create and configure the Azure Databricks cluster
 
 1. Navigate to your Azure Databricks workspace in the Azure Portal.
-1. On the home page, click "new cluster".
-1. Choose a name for your cluster and enter it in "cluster name" text box.
-1. In the "Databricks Runtime Version" dropdown, select **9.1 LTS (includes Apache Spark 3.1.2, Scala 2.12)**.
+1. Under "Compute", click "Create Cluster".
+1. Choose a name for your cluster and enter it in "Cluster name" text box.
+1. In the "Databricks Runtime Version" dropdown, select **Runtime: 10.4 LTS (Scala 2.12, Spark 3.2.1)**.
 1. Under "Advanced Options", click on the "Init Scripts" tab. Go to the last line under the "Init Scripts section" Under the "destination" dropdown, select "DBFS". Enter "dbfs:/databricks/spark-monitoring/spark-monitoring.sh" in the text box. Click the "add" button.
-1. Click the "create cluster" button to create the cluster. Next, click on the "start" button to start the cluster.
+1. Click the "Create Cluster" button to create the cluster. Next, click on the "start" button to start the cluster.
 
 ## Run the sample job (optional)
 
@@ -167,6 +167,7 @@ databricks runtime.
 | `7.3 LTS` | `scala-2.12_spark-3.0.1` |
 | `9.0` - `9.1 LTS` | `scala-2.12_spark-3.1.2` |
 | `10.0` - `10.2` | `scala-2.12_spark-3.2.0` |
+| `10.3` - `10.4 LTS` | `scala-2.12_spark-3.2.1` |
 
 1. Use Maven to build the POM located at `sample/spark-sample-job/pom.xml` or run the following Docker command:
 
