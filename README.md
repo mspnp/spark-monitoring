@@ -35,6 +35,16 @@ Before you begin, ensure you have the following prerequisites in place:
   * [Scala language SDK 2.11 and/or 2.12](https://www.scala-lang.org/download/)
   * [Apache Maven 3.6.3](https://maven.apache.org/download.html)
 
+### Supported configurations
+
+| Databricks Runtime(s) | Maven Profile |
+| -- | -- |
+| `6.4 Extended Support` | `scala-2.11_spark-2.4.5` |
+| `7.3 LTS` | `scala-2.12_spark-3.0.1` |
+| `9.1 LTS` | `scala-2.12_spark-3.1.2` |
+| `10.1` - `10.2` | `scala-2.12_spark-3.2.0` |
+| `10.3` - `10.5` | `scala-2.12_spark-3.2.1` |
+
 ## Logging Event Size Limit
 
 This library currently has a size limit per event of 25MB, based on the [Log Analytics limit of 30MB per API Call](https://docs.microsoft.com/rest/api/loganalytics/create-request#data-limits) with additional overhead for formatting. The default behavior when hitting this limit is to throw an exception. This can be changed by modifying the value of `EXCEPTION_ON_FAILED_SEND` in [GenericSendBuffer.java](src/spark-listeners/src/main/java/com/microsoft/pnp/client/GenericSendBuffer.java) to `false`.
@@ -159,15 +169,7 @@ Now the _ResourceId **/subscriptions/11111111-5c17-4032-ae54-fc33d56047c2/resour
 The repository includes a sample application that shows how to send application metrics and application logs to Azure Monitor.
 
 When building the sample job, specify a maven profile compatible with your
-databricks runtime.
-
-| Databricks Runtime(s) | Maven Profile |
-| -- | -- |
-| `6.4 Extended Support` | `scala-2.11_spark-2.4.5` |
-| `7.3 LTS` | `scala-2.12_spark-3.0.1` |
-| `9.0` - `9.1 LTS` | `scala-2.12_spark-3.1.2` |
-| `10.0` - `10.2` | `scala-2.12_spark-3.2.0` |
-| `10.3` - `10.4 LTS` | `scala-2.12_spark-3.2.1` |
+databricks runtime from the [supported configurations section](#supported-configurations).
 
 1. Use Maven to build the POM located at `sample/spark-sample-job/pom.xml` or run the following Docker command:
 
