@@ -16,28 +16,29 @@ stages:
 - stage: BuildPublish SparkListener Jars
   displayName: Build Pyspark Dev Image if Needed
   jobs:
-- job: BuildPublishJARs
-  steps:
-  - script: |
-      docker run -it --rm -v "$(pwd):/spark-monitoring" -v "$HOME/.m2":/root/.m2 -w /spark-monitoring/src mcr.microsoft.com/java/maven:8-zulu-debian10 mvn install -P "scala-$ScalaVersion_spark-$SparkVersion"
-    displayName: Build jars in docker image
+  - job: BuildPublishJARs
+    steps:
+    - script: |
+        cd src
+        docker run -it --rm -v "$(pwd):/spark-monitoring" mcr.microsoft.com/java/maven:8-zulu-debian10 mvn install -P "scala-$ScalaVersion_spark-$SparkVersion"
+      displayName: Build jars in docker image
 
-  - task: UniversalPackages@0
-    displayName: Universal Publish Spark-Listeners
-    inputs:
-      command: publish
-      publishDirectory: '$(Pipeline.Workspace)/src/target/spark-listeners_${{ parameters.SparkVersion }}_${{ parameters.ScalaVersion }}-1.0.0.jar'
-      vstsFeedPublish: 'Devops/test-feed'
-      vstsFeedPackagePublish: 'spark-listeners_${{ parameters.SparkVersion }}_${{ parameters.ScalaVersion }}-1.0.0.jar'
-      versionOption: major
-      packagePublishDescription: 'NHT Custom Log Analytic JARs'
+    - task: UniversalPackages@0
+      displayName: Universal Publish Spark-Listeners
+      inputs:
+        command: publish
+        publishDirectory: '$(Pipeline.Workspace)/src/target/spark-listeners_${{ parameters.SparkVersion }}_${{ parameters.ScalaVersion }}-1.0.0.jar'
+        vstsFeedPublish: 'Devops/test-feed'
+        vstsFeedPackagePublish: 'spark-listeners_${{ parameters.SparkVersion }}_${{ parameters.ScalaVersion }}-1.0.0.jar'
+        versionOption: major
+        packagePublishDescription: 'NHT Custom Log Analytic JARs'
 
-  - task: UniversalPackages@0
-    displayName: Universal Publish Spark-Listeners-Loganalytics
-    inputs:
-      command: publish
-      publishDirectory: '$(Pipeline.Workspace)/src/target/spark-listeners-loganalytics_${{ parameters.SparkVersion }}_${{ parameters.ScalaVersion }}-1.0.0.jar'
-      vstsFeedPublish: 'Devops/test-feed'
-      vstsFeedPackagePublish: 'spark-listeners-loganalytics_${{ parameters.SparkVersion }}_${{ parameters.ScalaVersion }}-1.0.0.jar'
-      versionOption: major
-      packagePublishDescription: 'NHT Custom Log Analytic JARs'
+    - task: UniversalPackages@0
+      displayName: Universal Publish Spark-Listeners-Loganalytics
+      inputs:
+        command: publish
+        publishDirectory: '$(Pipeline.Workspace)/src/target/spark-listeners-loganalytics_${{ parameters.SparkVersion }}_${{ parameters.ScalaVersion }}-1.0.0.jar'
+        vstsFeedPublish: 'Devops/test-feed'
+        vstsFeedPackagePublish: 'spark-listeners-loganalytics_${{ parameters.SparkVersion }}_${{ parameters.ScalaVersion }}-1.0.0.jar'
+        versionOption: major
+        packagePublishDescription: 'NHT Custom Log Analytic JARs'
