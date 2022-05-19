@@ -13,14 +13,13 @@ parameters:
     default: "3.1.2" # Databricks 9.1 LTS
 
 stages:
-- stage: BuildPublish SparkListener Jars
+- stage: BuildPublishSparkListenerJars
   displayName: Build Pyspark Dev Image if Needed
   jobs:
   - job: BuildPublishJARs
     steps:
     - script: |
-        cd src
-        docker run -it --rm -v "$(pwd):/spark-monitoring" mcr.microsoft.com/java/maven:8-zulu-debian10 mvn install -P "scala-$ScalaVersion_spark-$SparkVersion"
+        docker run --rm -v "$(pwd):/spark-monitoring" -w /spark-monitoring/src mcr.microsoft.com/java/maven:8-zulu-debian10 mvn install -P "scala-$ScalaVersion_spark-$SparkVersion"
       displayName: Build jars in docker image
 
     - task: UniversalPackages@0
