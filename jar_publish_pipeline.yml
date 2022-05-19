@@ -19,7 +19,7 @@ stages:
   - job: BuildPublishJARs
     steps:
     - script: |
-        docker run --rm -v "$(pwd):/spark-monitoring" -w /spark-monitoring/src mcr.microsoft.com/java/maven:8-zulu-debian10 mvn install -P "scala-$ScalaVersion_spark-$SparkVersion"
+        docker run --rm -v "$(pwd):/spark-monitoring" -w /spark-monitoring/src mcr.microsoft.com/java/maven:8-zulu-debian10 mvn install -P "scala-${{ parameters.ScalaVersion }}_spark-${{ parameters.SparkVersion }}"
       displayName: Build jars in docker image
 
     - task: UniversalPackages@0
