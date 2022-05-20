@@ -24,8 +24,10 @@ stages:
 
     - script: |
         pwd
-        cd $(Pipeline.Workspace)/src/target
-        ls -l
+        ls -l $(Pipeline.Workspace)
+        ls -l $(Pipeline.Workspace)/s
+        ls -l $(Pipeline.Workspace)/s/src
+        ls -l $(Pipeline.Workspace)/s/src/target
 
     - task: UniversalPackages@0
       displayName: Universal Publish Spark-Listeners
