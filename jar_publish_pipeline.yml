@@ -4,11 +4,11 @@ pool: 'NHT Ubuntu 18.04 v2'
 
 parameters:
   - name: ScalaVersion
-    displayName: Version of libraries to build, should match 
+    displayName: Scala version of libraries to build, should match databricks runtime
     type: string
     default: "2.12" # Databricks 9.1 LTS
   - name: SparkVersion
-    displayName: Version of libraries to build, should match 
+    displayName: Spark version of libraries to build, should match databricks runtime
     type: string
     default: "3.1.2" # Databricks 9.1 LTS
 
