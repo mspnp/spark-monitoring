@@ -34,7 +34,7 @@ stages:
       continueOnError: true
       inputs:
         command: 'publish'
-        publishDirectory: '$(Pipeline.Workspace)/src/target'
+        publishDirectory: '$(Pipeline.Workspace)/s/src/target'
         feedsToUsePublish: 'internal'
         vstsFeedPublish: '3c59b87f-2432-4abe-afde-e4027aeaadf8'
         vstsFeedPackagePublish: 'spark-listeners_${{ parameters.SparkVersion }}_${{ parameters.ScalaVersion }}-1.0.0.jar'
@@ -45,7 +45,7 @@ stages:
       continueOnError: true
       inputs:
         command: 'publish'
-        publishDirectory: '$(Pipeline.Workspace)/src/target/spark-listeners_${{ parameters.SparkVersion }}_${{ parameters.ScalaVersion }}-1.0.0.jar'
+        publishDirectory: '$(Pipeline.Workspace)/s/src/target/spark-listeners_${{ parameters.SparkVersion }}_${{ parameters.ScalaVersion }}-1.0.0.jar'
         feedsToUsePublish: 'internal'
         vstsFeedPublish: '3c59b87f-2432-4abe-afde-e4027aeaadf8'
         vstsFeedPackagePublish: 'spark-listeners_${{ parameters.SparkVersion }}_${{ parameters.ScalaVersion }}-1.0.0.jar'
@@ -57,7 +57,7 @@ stages:
       continueOnError: true
       inputs:
         command: 'publish'
-        publishDirectory: '$(Pipeline.Workspace)/src/target'
+        publishDirectory: '$(Pipeline.Workspace)/s/src/target'
         feedsToUsePublish: 'internal'
         vstsFeedPublish: '3c59b87f-2432-4abe-afde-e4027aeaadf8'
         vstsFeedPackagePublish: 'spark-listeners_${{ parameters.SparkVersion }}_${{ parameters.ScalaVersion }}-1.0.0'
