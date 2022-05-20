@@ -25,9 +25,10 @@ stages:
     - task: UniversalPackages@0
       displayName: Universal Publish Spark-Listeners
       inputs:
-        command: publish
+        command: 'publish'
         publishDirectory: '$(Pipeline.Workspace)/src/target/spark-listeners_${{ parameters.SparkVersion }}_${{ parameters.ScalaVersion }}-1.0.0.jar'
-        vstsFeedPublish: 'Devops/test-feed'
+        feedsToUsePublish: 'internal'
+        vstsFeedPublish: '3c59b87f-2432-4abe-afde-e4027aeaadf8'
         vstsFeedPackagePublish: 'spark-listeners_${{ parameters.SparkVersion }}_${{ parameters.ScalaVersion }}-1.0.0.jar'
         versionOption: major
         packagePublishDescription: 'NHT Custom Log Analytic JARs'
@@ -35,9 +36,10 @@ stages:
     - task: UniversalPackages@0
       displayName: Universal Publish Spark-Listeners-Loganalytics
       inputs:
-        command: publish
+        command: 'publish'
         publishDirectory: '$(Pipeline.Workspace)/src/target/spark-listeners-loganalytics_${{ parameters.SparkVersion }}_${{ parameters.ScalaVersion }}-1.0.0.jar'
-        vstsFeedPublish: 'Devops/test-feed'
+        feedsToUsePublish: 'internal'
+        vstsFeedPublish: '3c59b87f-2432-4abe-afde-e4027aeaadf8'
         vstsFeedPackagePublish: 'spark-listeners-loganalytics_${{ parameters.SparkVersion }}_${{ parameters.ScalaVersion }}-1.0.0.jar'
         versionOption: major
         packagePublishDescription: 'NHT Custom Log Analytic JARs'
