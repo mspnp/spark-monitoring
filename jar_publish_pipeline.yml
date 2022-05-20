@@ -24,7 +24,6 @@ stages:
 
     - task: UniversalPackages@0
       displayName: Universal Publish Spark-Listeners
-      continueOnError: true
       inputs:
         command: 'publish'
         publishDirectory: '$(Pipeline.Workspace)/s/src/target'
