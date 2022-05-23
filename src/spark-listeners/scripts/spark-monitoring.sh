@@ -51,7 +51,7 @@ export AZ_RSRC_NAME=
 # export LA_LOGFAILEDBUFFERSEND=TRUE
 EOF
 
-STAGE_DIR=/dbfs/databricks/spark-monitoring
+STAGE_DIR=/environments/spark-monitoring
 SPARK_LISTENERS_VERSION=${SPARK_LISTENERS_VERSION:-1.0.0}
 SPARK_LISTENERS_LOG_ANALYTICS_VERSION=${SPARK_LISTENERS_LOG_ANALYTICS_VERSION:-1.0.0}
 SPARK_VERSION=$(cat /databricks/spark/VERSION 2> /dev/null || echo "")
