@@ -85,10 +85,10 @@ EOF
 echo "Copying Spark Monitoring jars"
 JAR_FILENAME="spark-listeners_${SPARK_VERSION}_${SPARK_SCALA_VERSION}-${SPARK_LISTENERS_VERSION}.jar"
 echo "Copying $JAR_FILENAME"
-cp -f "$STAGE_DIR/$JAR_FILENAME" /mnt/driver-daemon/jars
+cp -f "$STAGE_DIR/$JAR_FILENAME" /databricks/jars
 JAR_FILENAME="spark-listeners-loganalytics_${SPARK_VERSION}_${SPARK_SCALA_VERSION}-${SPARK_LISTENERS_LOG_ANALYTICS_VERSION}.jar"
 echo "Copying $JAR_FILENAME"
-cp -f "$STAGE_DIR/$JAR_FILENAME" /mnt/driver-daemon/jars
+cp -f "$STAGE_DIR/$JAR_FILENAME" /databricks/jars
 echo "Copied Spark Monitoring jars successfully"
 
 echo "Merging metrics.properties"
