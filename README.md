@@ -32,18 +32,17 @@ Before you begin, ensure you have the following prerequisites in place:
   * You can also use the Azure Databricks CLI from the Azure Cloud Shell.
 * A Java IDE, with the following resources:
   * [Java Devlopment Kit (JDK) version 1.8](https://www.oracle.com/technetwork/java/javase/downloads/index.html)
-  * [Scala language SDK 2.11 and/or 2.12](https://www.scala-lang.org/download/)
+  * [Scala language SDK 2.12](https://www.scala-lang.org/download/)
   * [Apache Maven 3.6.3](https://maven.apache.org/download.html)
 
 ### Supported configurations
 
 | Databricks Runtime(s) | Maven Profile |
 | -- | -- |
-| `6.4 Extended Support` | `scala-2.11_spark-2.4.5` |
 | `7.3 LTS` | `scala-2.12_spark-3.0.1` |
 | `9.1 LTS` | `scala-2.12_spark-3.1.2` |
-| `10.1` - `10.2` | `scala-2.12_spark-3.2.0` |
 | `10.3` - `10.5` | `scala-2.12_spark-3.2.1` |
+| `11.0` | Not currently supported due to changes in [Log4j version](https://docs.microsoft.com/azure/databricks/release-notes/runtime/11.0#log4j-is-upgraded-from-log4j-1-to-log4j-2) |
 
 ## Logging Event Size Limit
 
