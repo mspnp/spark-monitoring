@@ -1,6 +1,6 @@
 pr: none
 
-pool: 'NHT Ubuntu 18.04 v2'
+pool: 'vmssAzDevOps113841'
 
 parameters:
   - name: ScalaVersion
