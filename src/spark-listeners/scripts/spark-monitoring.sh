@@ -17,12 +17,11 @@ SPARK_CONF_DIR=$SPARK_HOME/conf
 # Also if it is available use AZ_* variables to include x-ms-AzureResourceId
 # header as part of the request
 # 
-# USE SED TO REPLACE __LOGANALYTICSWORKSPACEID__
 tee -a "$SPARK_CONF_DIR/spark-env.sh" << EOF
 export DB_CLUSTER_ID=$DB_CLUSTER_ID
 export DB_CLUSTER_NAME=$DB_CLUSTER_NAME
-export LOG_ANALYTICS_WORKSPACE_ID=__LOGANALYTICSWORKSPACEID__
-export LOG_ANALYTICS_WORKSPACE_KEY=__LOGANALYTICSWORKSPACEKEY__
+export LOG_ANALYTICS_WORKSPACE_ID=
+export LOG_ANALYTICS_WORKSPACE_KEY=
 export AZ_SUBSCRIPTION_ID=
 export AZ_RSRC_GRP_NAME=
 export AZ_RSRC_PROV_NAMESPACE=
@@ -46,7 +45,7 @@ export AZ_RSRC_NAME=
 # or where the Message matches the message regex.  If both are specified, then both must be matched for the log to be sent.
 # Commented examples below will only log messages where the logger name is com.microsoft.pnp.samplejob.StreamingQueryListenerSampleJob or begins with
 # org.apache.spark.util.Utils, or where the Message ends with the string 'StreamingQueryListenerSampleJob' or begins with the string 'FS_CONF_COMPAT'.
-# export LA_SPARKLOGGINGEVENT_NAME_REGEX="com\.microsoft\.pnp\.samplejob\.StreamingQueryListenerSampleJob|org\.apache\.spark\.util\.Utils.*"
+export LA_SPARKLOGGINGEVENT_NAME_REGEX=${SPARK_LOGGING_EVENT_NAME_REGEX}
 # export LA_SPARKLOGGINGEVENT_MESSAGE_REGEX=".*StreamingQueryListenerSampleJob|FS_CONF_COMPAT.*"
 
 # Uncomment the following line to enable local logging to stderr of buffer contents when an exception is hit when sending a buffer to Log Analytics
