@@ -35,12 +35,12 @@ export AZ_RSRC_NAME=
 # Commented example below will only log events for SparkListenerJobStart, SparkListenerJobEnd, or where "org.apache.spark.sql.execution.ui."
 # is is the start of the event name.
 # export LA_SPARKLISTENEREVENT_REGEX="SparkListenerJobStart|SparkListenerJobEnd|org\.apache\.spark\.sql\.execution\.ui\..*"
-export LA_SPARKLISTENEREVENT_REGEX=${SPARK_LISTENER_EVENT_REGEX}
+# export LA_SPARKLISTENEREVENT_REGEX=${SPARK_LISTENER_EVENT_REGEX}
 
 # Add a quoted regex value to filter the events for SparkMetric_CL, the log will only include events where name_s matches the regex.
 # Commented example below will only log metrics where the name begins with app and ends in .jvmCpuTime or .heap.max.
 # export LA_SPARKMETRIC_REGEX="app.*\.jvmCpuTime|app.*\.heap.max"
-export LA_SPARKMETRIC_REGEX=${SPARK_METRIC_REGEX}
+# export LA_SPARKMETRIC_REGEX=${SPARK_METRIC_REGEX}
 
 # Add a quoted regex value to filter the events for SparkLoggingEvent_CL, the log will only include events where logger_name_s matches the name regex
 # or where the Message matches the message regex.  If both are specified, then both must be matched for the log to be sent.
@@ -49,7 +49,7 @@ export LA_SPARKMETRIC_REGEX=${SPARK_METRIC_REGEX}
 # export LA_SPARKLOGGINGEVENT_NAME_REGEX="com\.microsoft\.pnp\.samplejob\.StreamingQueryListenerSampleJob|org\.apache\.spark\.util\.Utils.*"
 # export LA_SPARKLOGGINGEVENT_MESSAGE_REGEX=".*StreamingQueryListenerSampleJob|FS_CONF_COMPAT.*"
 export LA_SPARKLOGGINGEVENT_NAME_REGEX=${SPARK_LOGGING_EVENT_NAME_REGEX}
-export LA_SPARKLOGGINGEVENT_MESSAGE_REGEX=${SPARK_LOGGING_EVENT_MESSAGE_REGEX}
+# export LA_SPARKLOGGINGEVENT_MESSAGE_REGEX=${SPARK_LOGGING_EVENT_MESSAGE_REGEX}
 
 # Uncomment the following line to enable local logging to stderr of buffer contents when an exception is hit when sending a buffer to Log Analytics
 # export LA_LOGFAILEDBUFFERSEND=TRUE
