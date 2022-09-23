@@ -48,6 +48,9 @@ export AZ_RSRC_NAME=
 export LA_SPARKLOGGINGEVENT_NAME_REGEX=${SPARK_LOGGING_EVENT_NAME_REGEX}
 # export LA_SPARKLOGGINGEVENT_MESSAGE_REGEX=".*StreamingQueryListenerSampleJob|FS_CONF_COMPAT.*"
 
+export LA_SPARKLOGGINGEVENT_NAME_REGEX=${SPARK_MONITORING_EVENT_NAME_REGEX}
+
+
 # Uncomment the following line to enable local logging to stderr of buffer contents when an exception is hit when sending a buffer to Log Analytics
 # export LA_LOGFAILEDBUFFERSEND=TRUE
 EOF
