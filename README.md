@@ -1,5 +1,8 @@
 # Monitoring Azure Databricks in an Azure Log Analytics Workspace
 
+| :warning: | This library supports Azure Databricks 10.x (Spark 3.2.x) and earlier (see [Supported configurations](#supported-configurations)). Azure Databricks 11.0 includes [breaking changes](https://learn.microsoft.com/azure/databricks/release-notes/runtime/11.0#log4j-is-upgraded-from-log4j-1-to-log4j-2) to the logging systems that the spark-monitoring library integrates with. The work required to update the spark-monitoring library to support Azure Databricks 11.0 (Spark 3.3.0) and newer is not currently planned. |
+|-----------|:--------------------------|
+
 This repository extends the core monitoring functionality of Azure Databricks to send streaming query event information to Azure Monitor. For more information about using this library to monitor Azure Databricks, see [Monitoring Azure Databricks](https://docs.microsoft.com/azure/architecture/databricks-monitoring)
 
 The project has the following directory structure:
