@@ -34,7 +34,7 @@ Before you begin, ensure you have the following prerequisites in place:
   * An Azure Databricks personal access token or Azure AD token is required to use the CLI. For instructions, see [Set up authentication](https://docs.microsoft.com/azure/databricks/dev-tools/cli/#--set-up-authentication).
   * You can also use the Azure Databricks CLI from the Azure Cloud Shell.
 * A Java IDE, with the following resources:
-  * [Java Devlopment Kit (JDK) version 1.8](https://www.oracle.com/technetwork/java/javase/downloads/index.html)
+  * [Java Development Kit (JDK) version 1.8](https://www.oracle.com/technetwork/java/javase/downloads/index.html)
   * [Scala language SDK 2.12](https://www.scala-lang.org/download/)
   * [Apache Maven 3.6.3](https://maven.apache.org/download.html)
 
