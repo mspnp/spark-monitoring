@@ -56,6 +56,7 @@ public class LogAnalyticsAppender extends AbstractAppender {
                 new LogAnalyticsClient(this.workspaceId, this.secret),
                 DEFAULT_LOG_TYPE
         );
+        this.setStarted();
     }
 
     @Override
@@ -83,11 +84,8 @@ public class LogAnalyticsAppender extends AbstractAppender {
             return;
         }
         try {
-            String logMessage;
-            if (Objects.nonNull(this.getLayout()) && JsonLayout.class.isAssignableFrom(this.getLayout().getClass())) {
-                logMessage = new String(this.getLayout().toByteArray(logEvent));
-                this.client.sendMessage(logMessage, "timestamp");
-            }
+            String message = new String(this.getLayout().toByteArray(logEvent));
+            this.client.sendMessage(message, "timestamp");
         } catch (Exception e) {
             LOGGER.error(e);
         }

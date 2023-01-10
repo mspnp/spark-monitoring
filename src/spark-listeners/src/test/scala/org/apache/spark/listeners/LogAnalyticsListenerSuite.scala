@@ -162,14 +162,17 @@ object LogAnalyticsListenerSuite {
     // StageInfo 2.4.5-: (stageId: Int, attemptId: Int, name: String, numTasks: Int, rddInfos: Seq[org.apache.spark.storage.RDDInfo], parentIds: Seq[Int], details: String, taskMetrics: org.apache.spark.executor.TaskMetrics, taskLocalityPreferences: Seq[Seq[org.apache.spark.scheduler.TaskLocation]])
     // StageInfo 3.0.1-: (stageId: Int, attemptId: Int, name: String, numTasks: Int, rddInfos: Seq[org.apache.spark.storage.RDDInfo], parentIds: Seq[Int], details: String, taskMetrics: org.apache.spark.executor.TaskMetrics, taskLocalityPreferences: Seq[Seq[org.apache.spark.scheduler.TaskLocation]], shuffleDepId: Option[Int])
     // StageInfo 3.1.1+: (stageId: Int, attemptId: Int, name: String, numTasks: Int, rddInfos: Seq[org.apache.spark.storage.RDDInfo], parentIds: Seq[Int], details: String, taskMetrics: org.apache.spark.executor.TaskMetrics, taskLocalityPreferences: Seq[Seq[org.apache.spark.scheduler.TaskLocation]], shuffleDepId: Option[Int], resourceProfileId: Int)
+    // StageInfo 3.3.1+: (stageId: Int, attemptId: Int, name: String, numTasks: Int, rddInfos: Seq[org.apache.spark.storage.RDDInfo], parentIds: Seq[Int], details: String, taskMetrics: org.apache.spark.executor.TaskMetrics, taskLocalityPreferences: Seq[Seq[org.apache.spark.scheduler.TaskLocation]], shuffleDepId: Option[Int], resourceProfileId: Int, isPushBasedShuffleEnabled: Boolean, shuffleMergerCount: scala.Int)
 
     val v24args = List[Any](stageId,attemptId,"",0,Nil,Nil,"",new TaskMetrics(),Nil)
     val v30args = List[Any](stageId,attemptId,"",0,Nil,Nil,"",new TaskMetrics(),Nil,Option(0))
     val v31args = List[Any](stageId,attemptId,"",0,Nil,Nil,"",new TaskMetrics(),Nil,Option(0),0)
+    val v33args = List[Any](stageId,attemptId,"",0,Nil,Nil,"",new TaskMetrics(),Nil,Option(0),0,true,0)
 
     newInstance(classOf[StageInfo], v31args:_*)
          .orElse(newInstance(classOf[StageInfo], v30args:_*))
          .orElse(newInstance(classOf[StageInfo], v24args:_*))
+         .orElse(newInstance(classOf[StageInfo], v33args:_*))
          .get
   }
 
