@@ -80,6 +80,9 @@ echo "Copying $JAR_FILENAME"
 cp -f "$STAGE_DIR/$JAR_FILENAME" /mnt/driver-daemon/jars
 echo "Copied Spark Monitoring jars successfully"
 
+echo "Copying log4j-layout-template-json-2.17.2.jar"
+wget --quiet -O /mnt/driver-daemon/jars/log4j-layout-template-json-2.17.2.jar https://repo1.maven.org/maven2/org/apache/logging/log4j/log4j-layout-template-json/2.17.2/log4j-layout-template-json-2.17.2.jar
+echo "Copied log4j-layout-template-json-2.17.2.jar"
 
 echo "Merging metrics.properties"
 echo "$(echo "$METRICS_PROPERTIES"; cat "$SPARK_CONF_DIR/metrics.properties")" > "$SPARK_CONF_DIR/metrics.properties" || { echo "Error writing metrics.properties"; exit 1; }
