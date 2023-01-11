@@ -90,19 +90,6 @@ The logs that propagate to SparkLoggingEvent_CL do so through a log4j appender. 
 # log4j.appender.logAnalyticsAppender.Threshold=ERROR
 ```
 
-## Limiting Logs in SparkLoggingEvent_CL (Advanced)
-
-You can uncomment and edit the `LA_SPARKLOGGINGEVENT_NAME_REGEX` environment variable that is included in [spark-monitoring.sh](../src/spark-listeners/scripts/spark-monitoring.sh) to limit the logging to only include events where logger_name_s matches the regex.
-
-The example below will only log events from logger `com.microsoft.pnp.samplejob.StreamingQueryListenerSampleJob` or where the logger name starts with `org.apache.spark.util.Utils`.
-
-`export LA_SPARKLOGGINGEVENT_NAME_REGEX="com\.microsoft\.pnp\.samplejob\.StreamingQueryListenerSampleJob|org\.apache\.spark\.util\.Utils.*"`
-
-You can uncomment and edit the `LA_SPARKLOGGINGEVENT_MESSAGE_REGEX` environment variable that is included in [spark-monitoring.sh](../src/spark-listeners/scripts/spark-monitoring.sh) to limit the logging to only include events where the message matches the regex.
-
-The example below will only log events where the message ends with the string `StreamingQueryListenerSampleJob` or begins with the string `FS_CONF_COMPAT`.
-
-`export LA_SPARKLOGGINGEVENT_MESSAGE_REGEX=".*StreamingQueryListenerSampleJob|FS_CONF_COMPAT.*"`
 
 ## Performance Considerations
 

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?><Configuration status="INFO" packages="com.databricks.logging,com.microsoft.pnp.logging.loganalytics" shutdownHook="disable">
+    <Appenders>
+        <Console name="console">
+            <PatternLayout pattern="%d{yy/MM/dd HH:mm:ss} %p %c{1}: %m%n%ex"/>
+        </Console>
+        <LogAnalyticsAppender name="logAnalyticsAppender">
+            <JsonTemplateLayout eventTemplateUri="classpath:sparkLayout.json"/>
+        </LogAnalyticsAppender>
+    </Appenders>
+    <Loggers>
+        <Root level="INFO">
+            <AppenderRef ref="console"/>
+<!--            <AppenderRef ref="logAnalyticsAppender"/>-->
+        </Root>
+    </Loggers>
+</Configuration>

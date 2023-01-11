@@ -42,10 +42,8 @@ Before you begin, ensure you have the following prerequisites in place:
 
 | Databricks Runtime(s) | Maven Profile |
 | -- | -- |
-| `7.3 LTS` | `scala-2.12_spark-3.0.1` |
-| `9.1 LTS` | `scala-2.12_spark-3.1.2` |
-| `10.3` - `10.5` | `scala-2.12_spark-3.2.1` |
-| `11.0` | Not currently supported due to changes in [Log4j version](https://docs.microsoft.com/azure/databricks/release-notes/runtime/11.0#log4j-is-upgraded-from-log4j-1-to-log4j-2) |
+| `11.0 - 11.3` | `scala-2.12_spark-3.3.0` |
+| `12.0` | `scala-2.12_spark-3.3.1` |
 
 ## Logging Event Size Limit
 
@@ -80,7 +78,7 @@ docker run -it --rm -v `pwd`:/spark-monitoring -v "$HOME/.m2":/root/.m2 mcr.micr
 
 ```bash
 # To build a single profile (example for latest long term support version 10.4 LTS):
-docker run -it --rm -v `pwd`:/spark-monitoring -v "$HOME/.m2":/root/.m2 -w /spark-monitoring/src mcr.microsoft.com/java/maven:8-zulu-debian10 mvn install -P "scala-2.12_spark-3.2.1"
+docker run -it --rm -v `pwd`:/spark-monitoring -v "$HOME/.m2":/root/.m2 -w /spark-monitoring/src mcr.microsoft.com/java/maven:8-zulu-debian10 mvn install -P "scala-2.12_spark-3.3.1"
 ```
 
 Windows:
@@ -92,7 +90,7 @@ docker run -it --rm -v %cd%:/spark-monitoring -v "%USERPROFILE%/.m2":/root/.m2 m
 
 ```bash
 # To build a single profile (example for latest long term support version 10.4 LTS):
-docker run -it --rm -v %cd%:/spark-monitoring -v "%USERPROFILE%/.m2":/root/.m2 -w /spark-monitoring/src mcr.microsoft.com/java/maven:8-zulu-debian10 mvn install -P "scala-2.12_spark-3.2.1"
+docker run -it --rm -v %cd%:/spark-monitoring -v "%USERPROFILE%/.m2":/root/.m2 -w /spark-monitoring/src mcr.microsoft.com/java/maven:8-zulu-debian10 mvn install -P "scala-2.12_spark-3.3.1"
 ```
 
 ### Option 2: Maven
@@ -102,7 +100,7 @@ docker run -it --rm -v %cd%:/spark-monitoring -v "%USERPROFILE%/.m2":/root/.m2 -
     * spark-listeners
     * spark-listeners-loganalytics
 
-1. Activate a **single** Maven profile that corresponds to the versions of the Scala/Spark combination that is being used. By default, the Scala 2.12 and Spark 3.0.1 profile is active.
+1. Activate a **single** Maven profile that corresponds to the versions of the Scala/Spark combination that is being used. By default, the Scala 2.12 and Spark 3.3.1 profile is active.
 
 1. Execute the Maven **package** phase in your Java IDE to build the JAR files for each of the these projects:
 
@@ -162,7 +160,7 @@ Now the _ResourceId **/subscriptions/11111111-5c17-4032-ae54-fc33d56047c2/resour
 1. Navigate to your Azure Databricks workspace in the Azure Portal.
 1. Under "Compute", click "Create Cluster".
 1. Choose a name for your cluster and enter it in "Cluster name" text box.
-1. In the "Databricks Runtime Version" dropdown, select **Runtime: 10.4 LTS (Scala 2.12, Spark 3.2.1)**.
+1. In the "Databricks Runtime Version" dropdown, select **Runtime: 10.4 LTS (Scala 2.12, Spark 3.3.1)**.
 1. Under "Advanced Options", click on the "Init Scripts" tab. Go to the last line under the "Init Scripts section" Under the "destination" dropdown, select "DBFS". Enter "dbfs:/databricks/spark-monitoring/spark-monitoring.sh" in the text box. Click the "add" button.
 1. Click the "Create Cluster" button to create the cluster. Next, click on the "start" button to start the cluster.
 
