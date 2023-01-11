@@ -12,36 +12,6 @@ DB_HOME=/databricks
 SPARK_HOME=$DB_HOME/spark
 SPARK_CONF_DIR=$SPARK_HOME/conf
 
-# Add your Log Analytics Workspace information below so all clusters use the same
-# Log Analytics Workspace
-# Also if it is available use AZ_* variables to include x-ms-AzureResourceId
-# header as part of the request
-tee -a "$SPARK_CONF_DIR/spark-env.sh" << EOF
-export DB_CLUSTER_ID=$DB_CLUSTER_ID
-export DB_CLUSTER_NAME=$DB_CLUSTER_NAME
-export LOG_ANALYTICS_WORKSPACE_ID=
-export LOG_ANALYTICS_WORKSPACE_KEY=
-export AZ_SUBSCRIPTION_ID=
-export AZ_RSRC_GRP_NAME=
-export AZ_RSRC_PROV_NAMESPACE=
-export AZ_RSRC_TYPE=
-export AZ_RSRC_NAME=
-
-# Note: All REGEX filters below are implemented with java.lang.String.matches(...).  This implementation essentially appends ^...$ around
-# the regular expression, so the entire string must match the regex.  If you need to allow for other values you should include .* before and/or
-# after your expression.
-
-# Add a quoted regex value to filter the events for SparkListenerEvent_CL, the log will only include events where Event_s matches the regex.
-# Commented example below will only log events for SparkListenerJobStart, SparkListenerJobEnd, or where "org.apache.spark.sql.execution.ui."
-# is is the start of the event name.
-# export LA_SPARKLISTENEREVENT_REGEX="SparkListenerJobStart|SparkListenerJobEnd|org\.apache\.spark\.sql\.execution\.ui\..*"
-
-# Add a quoted regex value to filter the events for SparkMetric_CL, the log will only include events where name_s matches the regex.
-# Commented example below will only log metrics where the name begins with app and ends in .jvmCpuTime or .heap.max.
-# export LA_SPARKMETRIC_REGEX="app.*\.jvmCpuTime|app.*\.heap.max"
-
-EOF
-
 STAGE_DIR=/dbfs/databricks/spark-monitoring
 SPARK_LISTENERS_VERSION=${SPARK_LISTENERS_VERSION:-1.0.0}
 SPARK_LISTENERS_LOG_ANALYTICS_VERSION=${SPARK_LISTENERS_LOG_ANALYTICS_VERSION:-1.0.0}
