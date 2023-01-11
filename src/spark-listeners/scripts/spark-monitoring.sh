@@ -107,7 +107,7 @@ CONTENT="\ \ \ \ \ \ <AppenderRef ref=\"logAnalyticsAppender\"/>"
 C=$(echo $CONTENT | sed 's/\//\\\//g')
 sed -i "/<\/Root>/ s/.*/${C}\n&/" $LOG4J_CONFIG_FILE
 
-sed -i 's/packages="\([^"]*\)"/packages=\1,com.microsoft.pnp.logging.loganalytics"/' $LOG4J_CONFIG_FILE
+sed -i 's/packages="\([^"]*\)"/packages="\1,com.microsoft.pnp.logging.loganalytics"/' $LOG4J_CONFIG_FILE
 
 echo "END: Updating $LOG4J_CONFIG_FILE with Log Analytics appender"
 
