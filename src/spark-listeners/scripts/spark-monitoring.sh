@@ -41,10 +41,6 @@ executor.source.jvm.class=org.apache.spark.metrics.source.JvmSource
 EOF
 )
 
-echo "Copying Spark Monitoring jars"
-JAR_FILENAME="spark-listeners_${SPARK_VERSION}_${SPARK_SCALA_VERSION}-${SPARK_LISTENERS_VERSION}.jar"
-echo "Copying $JAR_FILENAME"
-cp -f "$STAGE_DIR/$JAR_FILENAME" /mnt/driver-daemon/jars
 JAR_FILENAME="spark-listeners-loganalytics_${SPARK_VERSION}_${SPARK_SCALA_VERSION}-${SPARK_LISTENERS_LOG_ANALYTICS_VERSION}.jar"
 echo "Copying $JAR_FILENAME"
 cp -f "$STAGE_DIR/$JAR_FILENAME" /mnt/driver-daemon/jars
@@ -88,8 +84,7 @@ done
 # If Databricks changes the default value of this property, it needs to be changed here.
 cat << EOF > "$DB_HOME/driver/conf/00-custom-spark-driver-defaults.conf"
 [driver] {
-    "spark.extraListeners" = "com.databricks.backend.daemon.driver.DBCEventLoggingListener,org.apache.spark.listeners.UnifiedSparkListener"
-    "spark.unifiedListener.sink" = "org.apache.spark.listeners.sink.loganalytics.LogAnalyticsListenerSink"
+    "spark.extraListeners" = "com.databricks.backend.daemon.driver.DBCEventLoggingListener,org.apache.spark.databricks.UltimateListener,org.apache.spark.databricks.DatabricksStreamingListener"
 }
 EOF
 

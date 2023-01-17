@@ -36,6 +36,10 @@
             <artifactId>scalatest_${scala.compat.version}</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.scalactic</groupId>
+            <artifactId>scalactic_${scala.compat.version}</artifactId>
+        </dependency>
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
         </dependency>

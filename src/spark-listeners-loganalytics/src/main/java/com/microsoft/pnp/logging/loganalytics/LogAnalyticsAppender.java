@@ -49,14 +49,13 @@ public class LogAnalyticsAppender extends AbstractAppender {
         return new LogAnalyticsAppender(name, layout, filter);
     }
 
-
     @Override
     public void start() {
+        super.start();
         this.client = new LogAnalyticsSendBufferClient(
                 new LogAnalyticsClient(this.workspaceId, this.secret),
                 DEFAULT_LOG_TYPE
         );
-        this.setStarted();
     }
 
     @Override

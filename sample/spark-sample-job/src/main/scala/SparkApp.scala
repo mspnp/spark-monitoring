@@ -9,18 +9,13 @@ object SparkApp {
     def main(args: Array[String]) {
 
       val spark = SparkSession.builder.appName("Simple Application")
-        .config("spark.extraListeners","org.apache.spark.listeners.UnifiedSparkListener")
-        .config("spark.unifiedListener.sink","org.apache.spark.listeners.sink.loganalytics.LogAnalyticsListenerSink")
+        .config("spark.extraListeners","org.apache.spark.databricks.UltimateListener")
         .master("local").getOrCreate()
       import spark.implicits._
 
       LogManager.getLogger.warn("Test message from local application")
 
-      val someDF = Seq(
-        (8, "bat"),
-        (64, "mouse"),
-        (-27, "horse")
-      ).toDF("number", "word")
+      val someDF = spark.read.csv("/Users/william.conti/Projects/spark-monitoring-fb/sample/spark-sample-job/testData.csv")
       someDF.show()
       sleep(10000)
       spark.stop()

@@ -94,6 +94,11 @@
                 <scope>test</scope>
             </dependency>
             <dependency>
+                <groupId>org.scalactic</groupId>
+                <artifactId>scalactic_${scala.compat.version}</artifactId>
+                <version>${scalatest.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.scala-lang</groupId>
                 <artifactId>scala-compiler</artifactId>
                 <version>${scala.version}</version>
