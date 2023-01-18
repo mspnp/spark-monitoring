@@ -1,4 +1,4 @@
-package org.apache.spark.com.microsoft.pnp
+package com.microsoft.pnp.loggings
 
 import org.apache.spark.SparkEnv
 

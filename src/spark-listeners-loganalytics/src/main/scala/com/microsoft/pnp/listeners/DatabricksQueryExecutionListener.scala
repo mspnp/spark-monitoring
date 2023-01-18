@@ -1,0 +1,33 @@
+package com.microsoft.pnp.listeners
+
+import org.apache.logging.log4j.LogManager
+import org.apache.spark.sql.execution.QueryExecution
+import org.apache.spark.sql.util.QueryExecutionListener
+
+class DatabricksQueryExecutionListener  extends QueryExecutionListener {
+  private val LOGGER = LogManager.getLogger();
+
+  private def processStreamingEvent(funcName: String, qe: QueryExecution, durationNs: Long): Unit = {
+    try {
+      ListenerUtils.sendQueryEventToLA(funcName, qe, durationNs)
+    } catch {
+      case e: Exception =>
+        LOGGER.error("Could not parse event " + qe.getClass.getName)
+        LOGGER.error(e.getMessage)
+    }
+  }
+
+  private def processStreamingEvent(funcName: String, qe: QueryExecution, exception: Exception): Unit = {
+    try {
+      ListenerUtils.sendQueryEventToLA(funcName, qe, exception)
+    } catch {
+      case e: Exception =>
+        LOGGER.error("Could not parse event " + qe.getClass.getName)
+        LOGGER.error(e.getMessage)
+    }
+  }
+
+  override def onSuccess(funcName: String, qe: QueryExecution, durationNs: Long): Unit = processStreamingEvent(funcName, qe, durationNs)
+
+  override def onFailure(funcName: String, qe: QueryExecution, exception: Exception): Unit = processStreamingEvent(funcName, qe, exception)
+}

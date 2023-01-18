@@ -84,7 +84,7 @@ done
 # If Databricks changes the default value of this property, it needs to be changed here.
 cat << EOF > "$DB_HOME/driver/conf/00-custom-spark-driver-defaults.conf"
 [driver] {
-    "spark.extraListeners" = "com.databricks.backend.daemon.driver.DBCEventLoggingListener,com.microsoft.pnp.listeners.,org.apache.spark.databricks.DatabricksStreamingListener"
+    "spark.extraListeners" = "com.databricks.backend.daemon.driver.DBCEventLoggingListener,com.microsoft.pnp.listeners.UltimateListener,com.microsoft.pnp.listeners.DatabricksStreamingListener"
 }
 EOF
 

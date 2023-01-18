@@ -1,11 +1,11 @@
-package org.apache.spark.listeners.sink.loganalytics
+package com.microsoft.pnp.loggings
 
 import com.microsoft.pnp.client.loganalytics.{LogAnalyticsClient, LogAnalyticsSendBufferClient}
 import org.apache.spark.SparkConf
 import org.apache.spark.internal.Logging
 import org.apache.spark.listeners.sink.SparkListenerSink
-import org.json4s.{JsonAST, DefaultFormats}
 import org.json4s.jackson.JsonMethods.compact
+import org.json4s.{DefaultFormats, JsonAST}
 
 import scala.util.control.NonFatal
 

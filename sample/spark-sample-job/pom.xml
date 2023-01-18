@@ -83,12 +83,6 @@
         </dependency>
         <dependency>
             <groupId>com.microsoft.pnp</groupId>
-            <artifactId>spark-listeners</artifactId>
-            <version>${spark.listeners.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.microsoft.pnp</groupId>
             <artifactId>spark-listeners-loganalytics</artifactId>
             <version>${spark.listeners.version}</version>
             <scope>provided</scope>

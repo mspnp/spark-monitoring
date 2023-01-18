@@ -1,17 +1,25 @@
-package org.apache.spark.databricks
+package com.microsoft.pnp.listeners
 
 import com.fasterxml.jackson.databind.{DeserializationFeature, ObjectMapper}
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import com.microsoft.pnp.LogAnalyticsEnvironment
 import com.microsoft.pnp.client.loganalytics.{LogAnalyticsClient, LogAnalyticsSendBufferClient}
-import org.apache.spark.com.microsoft.pnp.SparkInformation
+import com.microsoft.pnp.loggings.SparkInformation
 import org.apache.spark.scheduler.SparkListenerEvent
+import org.apache.spark.sql.execution.QueryExecution
+import org.apache.spark.sql.streaming.StreamingQueryListener
 import org.apache.spark.streaming.scheduler.StreamingListenerEvent
 
 import java.time.Instant
 
 object ListenerUtils {
+  def sendStreamingQueryEventToLA(event: StreamingQueryListener.Event): Unit = ???
 
+  def sendQueryEventToLA(funcName: String, qe: QueryExecution, durationNs: Long): Unit = ???
+
+  def sendQueryEventToLA(funcName: String, qe: QueryExecution, exception: Exception): Unit = ???
+
+  
   private val objectMapper = new ObjectMapper().registerModule(DefaultScalaModule)
     .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
 

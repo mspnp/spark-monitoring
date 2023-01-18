@@ -1,8 +1,8 @@
-package org.apache.spark.com.microsoft.pnp
+package com.microsoft.pnp.loggings
 
 import org.apache.spark.internal.Logging
 
-private[spark] trait LogAnalyticsConfiguration extends Logging {
+private[loggings] trait LogAnalyticsConfiguration extends Logging {
   protected def getWorkspaceId: Option[String]
 
   protected def getSecret: Option[String]

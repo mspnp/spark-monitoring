@@ -2,8 +2,8 @@ package org.apache.spark.metrics.sink.loganalytics
 
 import java.util.Properties
 import java.util.concurrent.TimeUnit
-
 import com.codahale.metrics.MetricRegistry
+import com.microsoft.pnp.loggings.LogAnalyticsSinkConfiguration
 import org.apache.spark.internal.Logging
 import org.apache.spark.metrics.sink.Sink
 import org.apache.spark.{SecurityManager, SparkException}
