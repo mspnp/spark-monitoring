@@ -13,11 +13,23 @@ import org.apache.spark.streaming.scheduler.StreamingListenerEvent
 import java.time.Instant
 
 object ListenerUtils {
-  def sendStreamingQueryEventToLA(event: StreamingQueryListener.Event): Unit = ???
+  def sendStreamingQueryEventToLA(event: StreamingQueryListener.Event): Unit = {
+    val eventAsString = parse(objectMapper.convertValue(event, classOf[Map[String, String]]))
+    client.sendMessage(eventAsString, "SparkEventTime")
+  }
 
-  def sendQueryEventToLA(funcName: String, qe: QueryExecution, durationNs: Long): Unit = ???
+  case class QueryExecutionDuration (funcName: String, qe: QueryExecution, val durationNs: Long)
 
-  def sendQueryEventToLA(funcName: String, qe: QueryExecution, exception: Exception): Unit = ???
+  case class QueryExecutionException (val funcName: String, val qe: QueryExecution, val exception: Exception)
+  def sendQueryEventToLA(qe: QueryExecutionDuration): Unit = {
+    val eventAsString = parse(objectMapper.convertValue(qe, classOf[Map[String, String]]))
+    client.sendMessage(eventAsString, "SparkEventTime")
+  }
+
+  def sendQueryEventToLA(qe: QueryExecutionException): Unit = {
+    val eventAsString = parse(objectMapper.convertValue(qe, classOf[Map[String, String]]))
+    client.sendMessage(eventAsString, "SparkEventTime")
+  }
 
   
   private val objectMapper = new ObjectMapper().registerModule(DefaultScalaModule)

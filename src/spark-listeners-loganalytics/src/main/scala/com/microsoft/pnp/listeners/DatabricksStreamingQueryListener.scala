@@ -1,8 +1,11 @@
 package com.microsoft.pnp.listeners
 
+import org.apache.logging.log4j.LogManager
 import org.apache.spark.sql.streaming.StreamingQueryListener
 
 class DatabricksStreamingQueryListener extends StreamingQueryListener{
+
+  private val LOGGER = LogManager.getLogger();
 
   private def processStreamingEvent(event: StreamingQueryListener.Event): Unit = {
     try {
