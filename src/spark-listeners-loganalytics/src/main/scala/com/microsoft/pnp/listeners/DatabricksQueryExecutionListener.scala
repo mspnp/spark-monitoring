@@ -10,7 +10,7 @@ class DatabricksQueryExecutionListener  extends QueryExecutionListener {
 
   private def processStreamingEvent(funcName: String, qe: QueryExecution, durationNs: Long): Unit = {
     try {
-      ListenerUtils.sendQueryEventToLA(new QueryExecutionDuration(funcName, qe, durationNs))
+      ListenerUtils.sendQueryEventToLA(new QueryExecutionDuration(funcName, qe.toString(), durationNs))
     } catch {
       case e: Exception =>
         LOGGER.error("Could not parse event " + qe.getClass.getName)
@@ -20,7 +20,7 @@ class DatabricksQueryExecutionListener  extends QueryExecutionListener {
 
   private def processStreamingEvent(funcName: String, qe: QueryExecution, exception: Exception): Unit = {
     try {
-      ListenerUtils.sendQueryEventToLA(new QueryExecutionException(funcName, qe, exception))
+      ListenerUtils.sendQueryEventToLA(new QueryExecutionException(funcName, qe.toString(), exception))
     } catch {
       case e: Exception =>
         LOGGER.error("Could not parse event " + qe.getClass.getName)

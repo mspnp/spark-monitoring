@@ -18,9 +18,9 @@ object ListenerUtils {
     client.sendMessage(eventAsString, "SparkEventTime")
   }
 
-  case class QueryExecutionDuration (funcName: String, qe: QueryExecution, val durationNs: Long)
+  case class QueryExecutionDuration (funcName: String, qe: String, val durationNs: Long)
 
-  case class QueryExecutionException (val funcName: String, val qe: QueryExecution, val exception: Exception)
+  case class QueryExecutionException (val funcName: String, val qe: String, val exception: Exception)
   def sendQueryEventToLA(qe: QueryExecutionDuration): Unit = {
     val eventAsString = parse(objectMapper.convertValue(qe, classOf[Map[String, String]]))
     client.sendMessage(eventAsString, "SparkEventTime")
@@ -33,7 +33,7 @@ object ListenerUtils {
 
   
   private val objectMapper = new ObjectMapper().registerModule(DefaultScalaModule)
-    .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+    .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false).configure(DeserializationFeature.EAGER_DESERIALIZER_FETCH, false)
 
   private val workspaceId = LogAnalyticsEnvironment.getWorkspaceId
   private val secret = LogAnalyticsEnvironment.getWorkspaceKey
