@@ -25,7 +25,7 @@ SPARK_SCALA_VERSION=${SPARK_SCALA_VERSION:-2.12}
 # It will get merged with the metrics.properties on the cluster.
 METRICS_PROPERTIES=$(cat << EOF
 # This will enable the sink for all of the instances.
-*.sink.loganalytics.class=org.apache.spark.metrics.sink.loganalytics.LogAnalyticsMetricsSink
+*.sink.loganalytics.class=org.apache.spark.metrics.pnp.LogAnalyticsMetricsSink
 *.sink.loganalytics.period=5
 *.sink.loganalytics.unit=seconds
 

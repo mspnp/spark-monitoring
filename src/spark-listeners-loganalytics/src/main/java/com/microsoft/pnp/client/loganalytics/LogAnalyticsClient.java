@@ -3,13 +3,13 @@ package com.microsoft.pnp.client.loganalytics;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
 import org.apache.http.impl.client.DefaultServiceUnavailableRetryStrategy;
+import org.apache.http.impl.client.HttpClients;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -35,50 +35,33 @@ public class LogAnalyticsClient implements Closeable {
     private static final String DEFAULT_API_VERSION = "2016-04-01";
     private static final String URL_FORMAT = "https://%s.%s/api/logs?api-version=%s";
     private static final String RESOURCE_ID =
-        "/subscriptions/%s/resourceGroups/%s/providers/%s/%s/%s";
-
-    @Override
-    public void close() throws IOException {
-        if (this.httpClient instanceof Closeable) {
-            ((Closeable)this.httpClient).close();
-        }
-    }
-
-    private static final class LogAnalyticsHttpHeaders {
-        static final String LOG_TYPE = "Log-Type";
-        static final String X_MS_DATE = "x-ms-date";
-        static final String TIME_GENERATED_FIELD = "time-generated-field";
-        static final String X_MS_AZURE_RESOURCE_ID = "x-ms-AzureResourceId";
-    }
-
+            "/subscriptions/%s/resourceGroups/%s/providers/%s/%s/%s";
     private String workspaceId;
     private String workspaceKey;
     private String url;
     private HttpClient httpClient;
-
     public LogAnalyticsClient(String workspaceId, String workspaceKey) {
         this(workspaceId, workspaceKey, HttpClients.custom()
                 .disableAuthCaching()
                 .disableContentCompression()
                 .disableCookieManagement()
                 .setRetryHandler(new DefaultHttpRequestRetryHandler())
-                .setServiceUnavailableRetryStrategy(new DefaultServiceUnavailableRetryStrategy(3,1000))
+                .setServiceUnavailableRetryStrategy(new DefaultServiceUnavailableRetryStrategy(3, 1000))
                 .setDefaultRequestConfig(RequestConfig.custom().setConnectTimeout(15000).setSocketTimeout(120000).build())
                 .build());
     }
-
     public LogAnalyticsClient(String workspaceId, String workspaceKey,
-                               HttpClient httpClient) {
+                              HttpClient httpClient) {
         this(workspaceId, workspaceKey, httpClient, DEFAULT_URL_SUFFIX);
     }
 
     public LogAnalyticsClient(String workspaceId, String workspaceKey,
-                               HttpClient httpClient, String urlSuffix) {
+                              HttpClient httpClient, String urlSuffix) {
         this(workspaceId, workspaceKey, httpClient, urlSuffix, DEFAULT_API_VERSION);
     }
 
     public LogAnalyticsClient(String workspaceId, String workspaceKey,
-                               HttpClient httpClient, String urlSuffix, String apiVersion) {
+                              HttpClient httpClient, String urlSuffix, String apiVersion) {
         if (isNullOrWhitespace(workspaceId)) {
             throw new IllegalArgumentException("workspaceId cannot be null, empty, or only whitespace");
         }
@@ -105,8 +88,15 @@ public class LogAnalyticsClient implements Closeable {
         this.url = String.format(URL_FORMAT, this.workspaceId, urlSuffix, apiVersion);
     }
 
+    @Override
+    public void close() throws IOException {
+        if (this.httpClient instanceof Closeable) {
+            ((Closeable) this.httpClient).close();
+        }
+    }
+
     public boolean ready() {
-        return(this.workspaceId != null && this.workspaceKey != null);
+        return (this.workspaceId != null && this.workspaceKey != null);
     }
 
     public void send(String body, String logType) throws IOException {
@@ -168,7 +158,7 @@ public class LogAnalyticsClient implements Closeable {
                 }
             } finally {
                 if (httpResponse instanceof Closeable) {
-                    ((Closeable)httpResponse).close();
+                    ((Closeable) httpResponse).close();
                 }
             }
         } catch (Exception ex) {
@@ -220,6 +210,7 @@ public class LogAnalyticsClient implements Closeable {
     /**
      * Gets the value of a System.getenv call or null if it is not set or
      * if the length is 0.
+     *
      * @param key System environment variable.
      * @return value of System.getenv(key) or null.
      */
@@ -233,6 +224,7 @@ public class LogAnalyticsClient implements Closeable {
 
     /**
      * Gets Azure Resource Id from System Environment variables.
+     *
      * @return ResourceId in the form of:
      * /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}
      */
@@ -249,10 +241,17 @@ public class LogAnalyticsClient implements Closeable {
         String type = sysEnvOrNull(AZ_RSRC_TYPE);
         String name = sysEnvOrNull(AZ_RSRC_NAME);
         if (id == null || grpName == null ||
-            provName == null || type == provName ||
-            name == null) {
+                provName == null || type == provName ||
+                name == null) {
             return null;
         }
         return String.format(RESOURCE_ID, id, grpName, provName, type, name);
+    }
+
+    private static final class LogAnalyticsHttpHeaders {
+        static final String LOG_TYPE = "Log-Type";
+        static final String X_MS_DATE = "x-ms-date";
+        static final String TIME_GENERATED_FIELD = "time-generated-field";
+        static final String X_MS_AZURE_RESOURCE_ID = "x-ms-AzureResourceId";
     }
 }

@@ -6,6 +6,8 @@ import java.util.concurrent.Semaphore;
 
 public abstract class GenericSendBuffer<T> implements AutoCloseable {
 
+    // Configure whether to throw exception on failed send for oversized event
+    private static final boolean EXCEPTION_ON_FAILED_SEND = true;
     /**
      * This executor that will be shared among all buffers. We may not need this, since we
      * shouldn't have hundreds of different time generated fields, but we can't have
@@ -15,38 +17,24 @@ public abstract class GenericSendBuffer<T> implements AutoCloseable {
      * as much data as we can.
      */
     static ExecutorService executor = Executors.newCachedThreadPool();
-
-    // Configure whether to throw exception on failed send for oversized event
-    private static final boolean EXCEPTION_ON_FAILED_SEND = true;
-
-    // Interface to support event notifications with a parameter.
-    public interface Listener<T> {
-        void invoke(T o);
-    }
-
-    // making it available to every thread to see if changes happen.
-    // also this value will be set only when shutdown is called.
-    public volatile boolean isClosed = false;
-
-
     /**
      * Object used to serialize sendRequest calls.
      */
     private final Object sendBufferLock = new Object();
-
+    /**
+     * Permits controlling the number of in flight SendMessage batches.
+     */
+    private final Semaphore inflightBatches;
+    // Make configurable
+    private final int maxInflightBatches = 4;
+    // making it available to every thread to see if changes happen.
+    // also this value will be set only when shutdown is called.
+    public volatile boolean isClosed = false;
     /**
      * Current batching task.
      * Synchronized by {@code sendBufferLock}.
      */
     private GenericSendBufferTask<T> sendBufferTask = null;
-
-    /**
-     * Permits controlling the number of in flight SendMessage batches.
-     */
-    private final Semaphore inflightBatches;
-
-    // Make configurable
-    private final int maxInflightBatches = 4;
 
     protected GenericSendBuffer() {
         this.inflightBatches = new Semaphore(this.maxInflightBatches);
@@ -90,7 +78,7 @@ public abstract class GenericSendBuffer<T> implements AutoCloseable {
                                 this.sendBufferTask.calculateDataSize(data),
                                 this.sendBufferTask.getMaxBatchSizeBytes());
                         System.err.println(message);
-                        if(EXCEPTION_ON_FAILED_SEND) {
+                        if (EXCEPTION_ON_FAILED_SEND) {
                             // If we are throwing before we call execute on the sendBufferTask, we should release the semaphore.
                             inflightBatches.release();
                             throw new RuntimeException(message);
@@ -126,7 +114,6 @@ public abstract class GenericSendBuffer<T> implements AutoCloseable {
         }
     }
 
-
     /**
      * makes this buffer closed,
      * flush what is in
@@ -136,6 +123,12 @@ public abstract class GenericSendBuffer<T> implements AutoCloseable {
         this.isClosed = true;
         flush();
         this.executor.shutdown();
+    }
+
+
+    // Interface to support event notifications with a parameter.
+    public interface Listener<T> {
+        void invoke(T o);
     }
 
 

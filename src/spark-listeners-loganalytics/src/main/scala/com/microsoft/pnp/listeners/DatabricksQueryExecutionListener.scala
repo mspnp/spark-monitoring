@@ -5,8 +5,10 @@ import org.apache.logging.log4j.LogManager
 import org.apache.spark.sql.execution.QueryExecution
 import org.apache.spark.sql.util.QueryExecutionListener
 
-class DatabricksQueryExecutionListener  extends QueryExecutionListener {
+class DatabricksQueryExecutionListener extends QueryExecutionListener {
   private val LOGGER = LogManager.getLogger();
+
+  override def onSuccess(funcName: String, qe: QueryExecution, durationNs: Long): Unit = processStreamingEvent(funcName, qe, durationNs)
 
   private def processStreamingEvent(funcName: String, qe: QueryExecution, durationNs: Long): Unit = {
     try {
@@ -18,6 +20,8 @@ class DatabricksQueryExecutionListener  extends QueryExecutionListener {
     }
   }
 
+  override def onFailure(funcName: String, qe: QueryExecution, exception: Exception): Unit = processStreamingEvent(funcName, qe, exception)
+
   private def processStreamingEvent(funcName: String, qe: QueryExecution, exception: Exception): Unit = {
     try {
       ListenerUtils.sendQueryEventToLA(new QueryExecutionException(funcName, qe.toString(), exception))
@@ -27,8 +31,4 @@ class DatabricksQueryExecutionListener  extends QueryExecutionListener {
         LOGGER.error(e.getMessage)
     }
   }
-
-  override def onSuccess(funcName: String, qe: QueryExecution, durationNs: Long): Unit = processStreamingEvent(funcName, qe, durationNs)
-
-  override def onFailure(funcName: String, qe: QueryExecution, exception: Exception): Unit = processStreamingEvent(funcName, qe, exception)
 }

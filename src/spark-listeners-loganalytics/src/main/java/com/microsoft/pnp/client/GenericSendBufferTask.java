@@ -12,16 +12,14 @@ import java.util.concurrent.TimeUnit;
  * are assembled into a single request.
  * <p>
  * Instances of this class (and subclasses) are thread-safe.
- *
  */
 public abstract class GenericSendBufferTask<T> implements Runnable {
 
-    int currentBatchSize = 0;
+    private static final int DEFAULT_MAX_BATCH_OPEN_MILLISECONDS = 10000;
+    protected final List<T> datas;
     private final int maxBatchSizeBytes;
     private final int maxBatchOpenMs;
-    private static final int DEFAULT_MAX_BATCH_OPEN_MILLISECONDS = 10000;
-
-    protected final List<T> datas;
+    int currentBatchSize = 0;
     private boolean closed;
     private volatile GenericSendBuffer.Listener<GenericSendBufferTask<T>> onCompleted;
 
@@ -83,8 +81,7 @@ public abstract class GenericSendBufferTask<T> implements Runnable {
      * Checks whether it's okay to add the event to this buffer. Called by
      * {@code addIfAllowed} with a lock on {@code this} held.
      *
-     * @param data
-     *            the event to add
+     * @param data the event to add
      * @return true if the event is okay to add, otherwise, false
      */
     protected boolean isOkToAdd(T data) {
@@ -104,8 +101,7 @@ public abstract class GenericSendBufferTask<T> implements Runnable {
      * A hook to be run when an event is successfully added to this buffer. Called by
      * {@code addIfAllowed} with a lock on {@code this} held.
      *
-     * @param data
-     *            the event that was added
+     * @param data the event that was added
      */
     protected void onEventAdded(T data) {
         this.currentBatchSize += this.calculateDataSize(data);

@@ -1,28 +1,28 @@
-package com.microsoft.pnp.loggings
+package com.microsoft.pnp.loganalytics
 
 import com.microsoft.pnp.LogAnalyticsEnvironment
 import org.apache.spark.SparkConf
 
-private[loggings] object LogAnalyticsListenerSinkConfiguration {
+private[loganalytics] object LogAnalyticsListenerSinkConfiguration {
   private val CONFIG_PREFIX = "spark.logAnalytics"
 
-  private[loggings] val WORKSPACE_ID = CONFIG_PREFIX + ".workspaceId"
+  private[loganalytics] val WORKSPACE_ID = CONFIG_PREFIX + ".workspaceId"
 
   // We'll name this secret so Spark will redact it.
-  private[loggings] val SECRET = CONFIG_PREFIX + ".secret"
+  private[loganalytics] val SECRET = CONFIG_PREFIX + ".secret"
 
-  private[loggings] val LOG_TYPE = CONFIG_PREFIX + ".logType"
+  private[loganalytics] val LOG_TYPE = CONFIG_PREFIX + ".logType"
 
-  private[loggings] val DEFAULT_LOG_TYPE = "SparkListenerEvent"
+  private[loganalytics] val DEFAULT_LOG_TYPE = "SparkListenerEvent"
 
-  private[loggings] val TIMESTAMP_FIELD_NAME = CONFIG_PREFIX + ".timestampFieldName"
+  private[loganalytics] val TIMESTAMP_FIELD_NAME = CONFIG_PREFIX + ".timestampFieldName"
 
   //private[spark] val ENV_LOG_ANALYTICS_WORKSPACEID = "LOG_ANALYTICS_WORKSPACEID"
 
   ///private[spark] val ENV_LOG_ANALYTICS_SECRET = "LOG_ANALYTICS_SECRET"
 }
 
-private[loggings] class LogAnalyticsListenerSinkConfiguration(sparkConf: SparkConf)
+private[loganalytics] class LogAnalyticsListenerSinkConfiguration(sparkConf: SparkConf)
   extends LogAnalyticsConfiguration {
 
   import LogAnalyticsListenerSinkConfiguration._

@@ -1,4 +1,4 @@
-package com.microsoft.pnp
+package com.microsoft.pnp.loganalytics
 
 import org.apache.spark.SparkEnv
 
@@ -67,6 +67,6 @@ object SparkInformation {
 
     // We will remove None values and convert to Map[String, String] to make conversion
     // less painful.
-    for ((k, Some(v)) <- sparkInfo ) yield k -> v
+    for ((k, Some(v)) <- sparkInfo) yield k -> v
   }
 }

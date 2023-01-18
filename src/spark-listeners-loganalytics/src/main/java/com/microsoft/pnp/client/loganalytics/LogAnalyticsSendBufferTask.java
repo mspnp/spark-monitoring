@@ -3,8 +3,8 @@ package com.microsoft.pnp.client.loganalytics;
 import com.microsoft.pnp.client.GenericSendBufferTask;
 
 import java.time.Instant;
-import java.util.concurrent.TimeUnit;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class LogAnalyticsSendBufferTask extends GenericSendBufferTask<String> {
 
@@ -48,28 +48,28 @@ public class LogAnalyticsSendBufferTask extends GenericSendBufferTask<String> {
         }
         sb.deleteCharAt(sb.lastIndexOf(",")).append("]");
         try {
-            int retry=8;
-            int backoff=1;
-            while(!client.ready() && retry-- > 0){
+            int retry = 8;
+            int backoff = 1;
+            while (!client.ready() && retry-- > 0) {
                 System.err.println("Log Analytics client not ready, waiting: " + backoff + " seconds at time = " + Instant.now());
                 TimeUnit.SECONDS.sleep(backoff);
-                backoff*=2;
+                backoff *= 2;
             }
             client.send(sb.toString(), logType, timeGeneratedField);
         } catch (Exception ioe) {
             // We can't do much here since we might be inside a logger
             ioe.printStackTrace();
             Throwable inner = ioe.getCause();
-            while(inner != null) {
+            while (inner != null) {
                 System.err.println("Details of nested cause:");
                 inner.printStackTrace();
-                inner=inner.getCause();
+                inner = inner.getCause();
             }
             System.err.println("Buffer causing error on send(body, logType, timestampFieldName):");
             System.err.println("clock time = " + Instant.now());
             System.err.println("logType = " + logType);
             System.err.println("timestampFieldName = " + timeGeneratedField);
-            if(System.getenv().getOrDefault("LA_LOGFAILEDBUFFERSEND", "") == "TRUE") {
+            if (System.getenv().getOrDefault("LA_LOGFAILEDBUFFERSEND", "") == "TRUE") {
                 System.err.println("body =");
                 System.err.println(sb.toString());
             }

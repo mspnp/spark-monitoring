@@ -7,16 +7,6 @@ class DatabricksStreamingListener extends StreamingListener {
 
   private val LOGGER = LogManager.getLogger();
 
-  private def processStreamingEvent(listenerEvent: StreamingListenerEvent): Unit = {
-    try {
-      ListenerUtils.sendStreamingEventToLA(listenerEvent)
-    } catch {
-      case e: Exception =>
-        LOGGER.error("Could not parse event " + listenerEvent.getClass.getName)
-        LOGGER.error(e.getMessage)
-    }
-  }
-
   override def onStreamingStarted(streamingStarted: StreamingListenerStreamingStarted): Unit = processStreamingEvent(streamingStarted)
 
   override def onReceiverStarted(receiverStarted: StreamingListenerReceiverStarted): Unit = processStreamingEvent(receiverStarted)
@@ -32,6 +22,16 @@ class DatabricksStreamingListener extends StreamingListener {
   override def onBatchCompleted(batchCompleted: StreamingListenerBatchCompleted): Unit = processStreamingEvent(batchCompleted)
 
   override def onOutputOperationStarted(outputOperationStarted: StreamingListenerOutputOperationStarted): Unit = processStreamingEvent(outputOperationStarted)
+
+  private def processStreamingEvent(listenerEvent: StreamingListenerEvent): Unit = {
+    try {
+      ListenerUtils.sendStreamingEventToLA(listenerEvent)
+    } catch {
+      case e: Exception =>
+        LOGGER.error("Could not parse event " + listenerEvent.getClass.getName)
+        LOGGER.error(e.getMessage)
+    }
+  }
 
   override def onOutputOperationCompleted(outputOperationCompleted: StreamingListenerOutputOperationCompleted): Unit = processStreamingEvent(outputOperationCompleted)
 

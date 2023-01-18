@@ -3,9 +3,13 @@ package com.microsoft.pnp.listeners
 import org.apache.logging.log4j.LogManager
 import org.apache.spark.sql.streaming.StreamingQueryListener
 
-class DatabricksStreamingQueryListener extends StreamingQueryListener{
+class DatabricksStreamingQueryListener extends StreamingQueryListener {
 
   private val LOGGER = LogManager.getLogger();
+
+  override def onQueryStarted(event: StreamingQueryListener.QueryStartedEvent): Unit = processStreamingEvent(event)
+
+  override def onQueryProgress(event: StreamingQueryListener.QueryProgressEvent): Unit = processStreamingEvent(event)
 
   private def processStreamingEvent(event: StreamingQueryListener.Event): Unit = {
     try {
@@ -16,9 +20,6 @@ class DatabricksStreamingQueryListener extends StreamingQueryListener{
         LOGGER.error(e.getMessage)
     }
   }
-  override def onQueryStarted(event: StreamingQueryListener.QueryStartedEvent): Unit = processStreamingEvent(event)
-
-  override def onQueryProgress(event: StreamingQueryListener.QueryProgressEvent): Unit = processStreamingEvent(event)
 
   override def onQueryTerminated(event: StreamingQueryListener.QueryTerminatedEvent): Unit = processStreamingEvent(event)
 }
