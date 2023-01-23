@@ -13,8 +13,7 @@ SPARK_HOME=$DB_HOME/spark
 SPARK_CONF_DIR=$SPARK_HOME/conf
 
 STAGE_DIR=/dbfs/databricks/spark-monitoring
-SPARK_LISTENERS_VERSION=${SPARK_LISTENERS_VERSION:-1.0.0}
-SPARK_LISTENERS_LOG_ANALYTICS_VERSION=${SPARK_LISTENERS_LOG_ANALYTICS_VERSION:-1.0.0}
+SPARK_MONITORING_VERSION=${SPARK_MONITORING_VERSION:-1.0.0}
 SPARK_VERSION=$(cat /databricks/spark/VERSION 2> /dev/null || echo "")
 SPARK_VERSION=${SPARK_VERSION:-3.3.1}
 SPARK_SCALA_VERSION=$(ls /databricks/spark/assembly/target | cut -d '-' -f2 2> /dev/null || echo "")
@@ -41,7 +40,7 @@ executor.source.jvm.class=org.apache.spark.metrics.source.JvmSource
 EOF
 )
 
-JAR_FILENAME="spark-monitoring_${SPARK_VERSION}_${SPARK_SCALA_VERSION}-${SPARK_LISTENERS_LOG_ANALYTICS_VERSION}.jar"
+JAR_FILENAME="spark-monitoring_${SPARK_VERSION}_${SPARK_SCALA_VERSION}-${SPARK_MONITORING_VERSION}.jar"
 echo "Copying $JAR_FILENAME"
 cp -f "$STAGE_DIR/$JAR_FILENAME" /mnt/driver-daemon/jars
 echo "Copied Spark Monitoring jars successfully"
