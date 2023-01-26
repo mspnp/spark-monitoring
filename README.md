@@ -105,7 +105,7 @@ Copy the JAR files and init scripts to Databricks.
     dbfs mkdirs dbfs:/databricks/spark-monitoring
     ```
 
-1. Open the **/src/scripts/spark-monitoring.sh** script file and add your [Log Analytics Workspace ID and Key](http://docs.microsoft.com/azure/azure-monitor/platform/agent-windows#obtain-workspace-id-and-key) to the lines below:
+1. Open the **src/scripts/spark-monitoring.sh** script file and add your [Log Analytics Workspace ID and Key](http://docs.microsoft.com/azure/azure-monitor/platform/agent-windows#obtain-workspace-id-and-key) to the lines below:
 
     ```bash
     export LOG_ANALYTICS_WORKSPACE_ID=
@@ -135,10 +135,10 @@ Now the _ResourceId **/subscriptions/11111111-5c17-4032-ae54-fc33d56047c2/resour
     dbfs cp src/scripts/spark-monitoring.sh dbfs:/databricks/spark-monitoring/spark-monitoring.sh
     ```
 
-1. Use the Azure Databricks CLI to copy all of the jar files from the **src/target** folder to the directory created in step 3:
+1. Use the Azure Databricks CLI to copy the jar file from the **target/** folder to the directory created in step 3:
 
     ```bash
-    dbfs cp --overwrite --recursive src/target/ dbfs:/databricks/spark-monitoring/
+    dbfs cp --overwrite target/spark-monitoring_1.0.0.jar dbfs:/databricks/spark-monitoring/
     ```
 
 ### Create and configure the Azure Databricks cluster
@@ -147,7 +147,7 @@ Now the _ResourceId **/subscriptions/11111111-5c17-4032-ae54-fc33d56047c2/resour
 1. Under "Compute", click "Create Cluster".
 1. Choose a name for your cluster and enter it in "Cluster name" text box.
 1. In the "Databricks Runtime Version" dropdown, select **Runtime: 11.3 LTS (Scala 2.12, Spark 3.3.1)**.
-1. Under "Advanced Options", click on the "Spark" tab. Add env variables for LOG_ANALYTICS_WORKSPACE_KEY and LOG_ANALYTICS_WORKSPACE_KEY
+1. Under "Advanced Options", click on the "Spark" tab. Add env variables for LOG_ANALYTICS_WORKSPACE_KEY and LOG_ANALYTICS_WORKSPACE_KEY. Use this step if you haven't set those variables in the init script
 1. Under "Advanced Options", click on the "Init Scripts" tab. Go to the last line under the "Init Scripts section" Under the "destination" dropdown, select "DBFS". Enter "dbfs:/databricks/spark-monitoring/spark-monitoring.sh" in the text box. Click the "add" button.
 1. Click the "Create Cluster" button to create the cluster. Next, click on the "start" button to start the cluster.
 
