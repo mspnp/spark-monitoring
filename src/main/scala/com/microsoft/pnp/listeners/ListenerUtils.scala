@@ -13,7 +13,6 @@ import java.time.Instant
 
 object ListenerUtils {
   private val objectMapper = new ObjectMapper().registerModule(DefaultScalaModule)
-    .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false).configure(DeserializationFeature.EAGER_DESERIALIZER_FETCH, false)
   private val workspaceId = LogAnalyticsEnvironment.getWorkspaceId
   private val secret = LogAnalyticsEnvironment.getWorkspaceKey
   private val logType = "SparkListenerEvent"
@@ -21,20 +20,20 @@ object ListenerUtils {
 
   def sendStreamingQueryEventToLA(event: StreamingQueryListener.Event): Unit = {
     val eventAsString = parse(objectMapper.convertValue(event, classOf[Map[String, String]]))
-    client.sendMessage(eventAsString, "SparkEventTime")
+    sendEvent(eventAsString)
   }
 
   def sendQueryEventToLA(qe: QueryExecutionDuration): Unit = {
     val eventAsString = parse(objectMapper.convertValue(qe, classOf[Map[String, String]]))
-    client.sendMessage(eventAsString, "SparkEventTime")
+    sendEvent(eventAsString)
   }
 
   def sendQueryEventToLA(qe: QueryExecutionException): Unit = {
     val eventAsString = parse(objectMapper.convertValue(qe, classOf[Map[String, String]]))
-    client.sendMessage(eventAsString, "SparkEventTime")
+    sendEvent(eventAsString)
   }
 
-  private def parse(eventAsMap: Map[String, String]): String = {
+  def parse(eventAsMap: Map[String, String]): String = {
     val enrichedEvent = eventAsMap ++
       SparkInformation.get() +
       ("SparkEventTime" -> Instant.now().toString)
@@ -44,11 +43,15 @@ object ListenerUtils {
 
   def sendListenerEventToLA(event: SparkListenerEvent): Unit = {
     val eventAsString = parse(objectMapper.convertValue(event, classOf[Map[String, String]]))
-    client.sendMessage(eventAsString, "SparkEventTime")
+    sendEvent(eventAsString)
   }
 
   def sendStreamingEventToLA(event: StreamingListenerEvent): Unit = {
     val eventAsString = parse(objectMapper.convertValue(event, classOf[Map[String, String]]))
+    sendEvent(eventAsString)
+  }
+
+  def sendEvent(eventAsString: String): Unit = {
     client.sendMessage(eventAsString, "SparkEventTime")
   }
 

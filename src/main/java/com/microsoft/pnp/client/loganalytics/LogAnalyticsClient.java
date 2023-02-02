@@ -1,7 +1,5 @@
 package com.microsoft.pnp.client.loganalytics;
 
-import org.apache.commons.codec.binary.Base64;
-import org.apache.http.HttpHeaders;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
@@ -10,27 +8,23 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
 import org.apache.http.impl.client.DefaultServiceUnavailableRetryStrategy;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.Closeable;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
-import java.security.GeneralSecurityException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
+import java.util.Base64;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
 public class LogAnalyticsClient implements Closeable {
-    private static final String HashAlgorithm = "HmacSHA256";
-    private static final String HttpVerb = "POST";
-    private static final String ContentType = "application/json";
-    private static final String Resource = "/api/logs";
-    private static final String AuthorizationFormat = "SharedKey %s:%s";
-
     private static final String DEFAULT_URL_SUFFIX = "ods.opinsights.azure.com";
     private static final String DEFAULT_API_VERSION = "2016-04-01";
     private static final String URL_FORMAT = "https://%s.%s/api/logs?api-version=%s";
@@ -40,6 +34,9 @@ public class LogAnalyticsClient implements Closeable {
     private String workspaceKey;
     private String url;
     private HttpClient httpClient;
+
+    private static final Logger logger = LogManager.getLogger();
+
     public LogAnalyticsClient(String workspaceId, String workspaceKey) {
         this(workspaceId, workspaceKey, HttpClients.custom()
                 .disableAuthCaching()
@@ -108,88 +105,75 @@ public class LogAnalyticsClient implements Closeable {
     }
 
     public void send(String body, String logType, String timestampFieldName) throws IOException {
-        try {
-            if (isNullOrWhitespace(body)) {
-                throw new IllegalArgumentException("body cannot be null, empty, or only whitespace");
-            }
 
-            if (isNullOrWhitespace(logType)) {
-                throw new IllegalArgumentException("logType cannot be null, empty, or only whitespace");
-            }
-
-            final Date xmsDate = Calendar.getInstance().getTime();
-
-            SimpleDateFormat dateFormat = new SimpleDateFormat(
-                    "EEE, dd MMM yyyy HH:mm:ss z", Locale.US);
-            dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
-            String xmsDateString = dateFormat.format(xmsDate);
-
-            HttpPost httpPost = getHttpPost();
-            String signature = String.format(AuthorizationFormat, this.workspaceId,
-                    buildSignature(this.workspaceKey,
-                            xmsDateString,
-                            body.length(),
-                            HttpVerb,
-                            ContentType,
-                            Resource));
-
-            httpPost.setEntity(new StringEntity(body));
-            httpPost.setHeader(HttpHeaders.CONTENT_TYPE, ContentType);
-            httpPost.setHeader(LogAnalyticsHttpHeaders.LOG_TYPE, logType);
-            httpPost.setHeader(LogAnalyticsHttpHeaders.X_MS_DATE, xmsDateString);
-            httpPost.setHeader(HttpHeaders.AUTHORIZATION, signature);
-            if (timestampFieldName != null) {
-                httpPost.setHeader(LogAnalyticsHttpHeaders.TIME_GENERATED_FIELD, timestampFieldName);
-            }
-            String resourceId = azResourceId();
-            if (resourceId != null) {
-                httpPost.setHeader(LogAnalyticsHttpHeaders.X_MS_AZURE_RESOURCE_ID, resourceId);
-            }
-
-            HttpResponse httpResponse = null;
-            try {
-                httpResponse = httpClient.execute(httpPost);
-                if (httpResponse.getStatusLine().getStatusCode() != 200) {
-                    throw new IOException(
-                            String.format(
-                                    "Error sending Log Analytics events: %s (%d)",
-                                    httpResponse.getStatusLine().getReasonPhrase(),
-                                    httpResponse.getStatusLine().getStatusCode()));
-                }
-            } finally {
-                if (httpResponse instanceof Closeable) {
-                    ((Closeable) httpResponse).close();
-                }
-            }
-        } catch (Exception ex) {
-            throw new IOException("Error sending to Log Analytics", ex);
+        if (isNullOrWhitespace(body)) {
+            throw new IllegalArgumentException("body cannot be null, empty, or only whitespace");
         }
+
+        if (isNullOrWhitespace(logType)) {
+            throw new IllegalArgumentException("logType cannot be null, empty, or only whitespace");
+        }
+
+        String dateString = getServerTime();
+        String httpMethod = "POST";
+        String contentType = "application/json";
+        String xmsDate = "x-ms-date:" + dateString;
+        String resource = "/api/logs";
+        String stringToHash = String
+                .join("\n", httpMethod, String.valueOf(body.getBytes(StandardCharsets.UTF_8).length), contentType,
+                        xmsDate , resource);
+        String hashedString = getHMAC256(stringToHash, workspaceKey);
+        String signature = "SharedKey " + workspaceId + ":" + hashedString;
+
+        postData(signature, dateString, body, logType, timestampFieldName);
     }
 
-    private String buildSignature(
-            String primaryKey,
-            String xmsDate,
-            int contentLength,
-            String method,
-            String contentType,
-            String resource
-    ) throws UnsupportedEncodingException, GeneralSecurityException {
-        String result = null;
-        String xHeaders = String.format("%s:%s", LogAnalyticsHttpHeaders.X_MS_DATE, xmsDate);
-        //xHeaders = "Fri, 20 Jul 2018 16:28:59 GMT";
-        String stringToHash = String.format(
-                "%s\n%d\n%s\n%s\n%s",
-                method,
-                contentLength,
-                contentType,
-                xHeaders,
-                resource);
-        byte[] decodedBytes = Base64.decodeBase64(primaryKey);
-        Mac mac = Mac.getInstance(HashAlgorithm);
-        mac.init(new SecretKeySpec(decodedBytes, HashAlgorithm));
-        byte[] hash = mac.doFinal(stringToHash.getBytes(StandardCharsets.UTF_8));
-        result = Base64.encodeBase64String(hash);
-        return result;
+    private static final String RFC_1123_DATE = "EEE, dd MMM yyyy HH:mm:ss z";
+
+    private static String getServerTime() {
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat dateFormat = new SimpleDateFormat(RFC_1123_DATE, Locale.US);
+        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+        return dateFormat.format(calendar.getTime());
+    }
+
+    private void postData(String signature, String dateString, String json, String logName, String timefield) throws IOException {
+        HttpPost httpPost = getHttpPost();
+        httpPost.setHeader("Authorization", signature);
+        httpPost.setHeader("content-type", "application/json");
+        httpPost.setHeader("Log-Type", logName);
+        httpPost.setHeader("x-ms-date", dateString);
+        if (timefield != null) {
+            httpPost.setHeader("time-generated-field", timefield);
+        }
+        String resourceId = azResourceId();
+        if (resourceId != null) {
+            httpPost.setHeader("x-ms-AzureResourceId", resourceId);
+        }
+        httpPost.setEntity(new StringEntity(json));
+        HttpResponse response = httpClient.execute(httpPost);
+
+        int statusCode = response.getStatusLine().getStatusCode();
+        if (statusCode != 200){
+            String reason = response.getStatusLine().getReasonPhrase();
+            logger.error("Could not send body to Log Analytics  : " + reason);
+        }
+
+    }
+
+    private static String getHMAC256(String input, String key) {
+        try {
+            String hash;
+            Mac sha256HMAC = Mac.getInstance("HmacSHA256");
+            java.util.Base64.Decoder decoder = java.util.Base64.getDecoder();
+            SecretKeySpec secretKey = new SecretKeySpec(decoder.decode(key.getBytes(StandardCharsets.UTF_8)), "HmacSHA256");
+            sha256HMAC.init(secretKey);
+            java.util.Base64.Encoder encoder = Base64.getEncoder();
+            hash = new String(encoder.encode(sha256HMAC.doFinal(input.getBytes(StandardCharsets.UTF_8))));
+            return hash;
+        } catch (InvalidKeyException | NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private boolean isNullOrWhitespace(String str) {
@@ -214,7 +198,7 @@ public class LogAnalyticsClient implements Closeable {
      * @param key System environment variable.
      * @return value of System.getenv(key) or null.
      */
-    private String sysEnvOrNull(final String key) {
+    private static String sysEnvOrNull(final String key) {
         String val = System.getenv(key);
         if (val == null || val.length() == 0) {
             return null;
@@ -228,7 +212,7 @@ public class LogAnalyticsClient implements Closeable {
      * @return ResourceId in the form of:
      * /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}
      */
-    private String azResourceId() {
+    private static String azResourceId() {
         final String AZ_SUBSCRIPTION_ID = "AZ_SUBSCRIPTION_ID";
         final String AZ_RSRC_GRP_NAME = "AZ_RSRC_GRP_NAME";
         final String AZ_RSRC_PROV_NAMESPACE = "AZ_RSRC_PROV_NAMESPACE";
@@ -248,10 +232,4 @@ public class LogAnalyticsClient implements Closeable {
         return String.format(RESOURCE_ID, id, grpName, provName, type, name);
     }
 
-    private static final class LogAnalyticsHttpHeaders {
-        static final String LOG_TYPE = "Log-Type";
-        static final String X_MS_DATE = "x-ms-date";
-        static final String TIME_GENERATED_FIELD = "time-generated-field";
-        static final String X_MS_AZURE_RESOURCE_ID = "x-ms-AzureResourceId";
-    }
 }

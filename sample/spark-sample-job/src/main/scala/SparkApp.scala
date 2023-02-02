@@ -1,15 +1,13 @@
 import org.apache.logging.log4j.LogManager
-import org.apache.spark.sql.Row
-
-import java.lang.Thread.sleep
+import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.functions._
 
 object SparkApp {
-  import org.apache.spark.sql.SparkSession
 
     def main(args: Array[String]) {
 
       val spark = SparkSession.builder.appName("Simple Application")
-        .config("spark.extraListeners","com.microsoft.pnp.listeners.UltimateListener")
+        .config("spark.extraListeners","com.microsoft.pnp.listeners.DatabricksListener")
         .master("local").getOrCreate()
       import spark.implicits._
 
@@ -21,8 +19,10 @@ object SparkApp {
         (-27, "horse")
       ).toDF("number", "word")
 
+      val frame = someDF.groupBy("number").agg(min("number"))
+      println(frame.count())
+
       someDF.show()
-      sleep(10000)
       spark.stop()
     }
 

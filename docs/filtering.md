@@ -27,20 +27,16 @@ SparkListenerEvent_CL
 
 ### Events Noted in SparkListenerEvent_CL
 
-* SparkListenerExecutorAdded
-* SparkListenerBlockManagerAdded
+* org.apache.spark.scheduler.SparkListenerJobStart
+* org.apache.spark.scheduler.SparkListenerJobEnd
+* org.apache.spark.scheduler.SparkListenerApplicationStart
+* org.apache.spark.scheduler.SparkListenerApplicationEnd
 * org.apache.spark.sql.streaming.StreamingQueryListener$QueryStartedEvent
 * org.apache.spark.sql.execution.ui.SparkListenerSQLExecutionStart
 * org.apache.spark.sql.execution.ui.SparkListenerSQLExecutionEnd
 * org.apache.spark.sql.execution.ui.SparkListenerDriverAccumUpdates
 * org.apache.spark.sql.streaming.StreamingQueryListener$QueryTerminatedEvent
-* SparkListenerJobStart
-* SparkListenerStageSubmitted
-* SparkListenerTaskStart
-* SparkListenerTaskEnd
 * org.apache.spark.sql.streaming.StreamingQueryListener$QueryProgressEvent
-* SparkListenerStageCompleted
-* SparkListenerJobEnd
 
 ## Limiting Metrics in SparkMetric_CL
 
