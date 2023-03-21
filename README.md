@@ -37,9 +37,11 @@ Before you begin, ensure you have the following prerequisites in place:
 ### Supported configurations
 
 | Databricks Runtime(s) | Spark versions |  
-| -- | -- |  
-| `11.0 - 11.3` | `scala-2.12_spark-3.3.0` |  
-| `12.0` | `scala-2.12_spark-3.3.1` |  
+| `10.4LTS` | `scala-2.12_spark-3.2.1` |  
+| `11.3LTS` | `scala-2.12_spark-3.3.0` |  
+| `12.2LTS` | `scala-2.12_spark-3.3.2` |  
+
+To add a new DBR versions, add a new profile in the pom.xml file
 
 ## Logging Event Size Limit
 
@@ -91,7 +93,7 @@ docker run -it --rm -v %cd%:/spark-monitoring -v "%USERPROFILE%/.m2":/root/.m2 -
 
 1. Import the Maven project object model file, _pom.xml_, located in the **/** folder into your project. This will import the project
 
-1. Activate a **single** Maven profile that corresponds to the versions of the Scala/Spark combination that is being used. By default, the Scala 2.12 and Spark 3.3.1 profile is active.
+1. Activate a **single** Maven profile that corresponds to the versions of the DBR version combination that is being used. By default, the DBR version 12.2LTS profile is active.
 
 1. Execute the Maven **package** phase in your Java IDE to build the JAR files for the the project:
 

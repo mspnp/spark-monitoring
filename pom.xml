@@ -9,6 +9,42 @@
     <version>1.0.0</version>
     <packaging>jar</packaging>
 
+
+    <profiles>
+        <profile>
+            <id>dbr-10.4-lts</id>
+            <properties>
+                <commons.httpclient.version>4.5.13</commons.httpclient.version>
+                <jetty.version>9.4.43.v20210629</jetty.version>
+                <spark.version>3.2.1</spark.version>
+                <scala.version>2.12.15</scala.version>
+                <scala.compat.version>2.12</scala.compat.version>
+            </properties>
+        </profile>
+        <profile>
+            <id>dbr-11.3-lts</id>
+            <properties>
+                <commons.httpclient.version>4.5.13</commons.httpclient.version>
+                <jetty.version>9.4.46.v20220331</jetty.version>
+                <spark.version>3.3.0</spark.version>
+                <scala.version>2.12.15</scala.version>
+                <scala.compat.version>2.12</scala.compat.version>
+            </properties>
+        </profile>
+        <profile>
+            <id>dbr-12.2-lts</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <commons.httpclient.version>4.5.13</commons.httpclient.version>
+                <jetty.version>9.4.48.v20220622</jetty.version>
+                <spark.version>3.3.2</spark.version>
+                <scala.version>2.12.15</scala.version>
+                <scala.compat.version>2.12</scala.compat.version>
+            </properties>
+        </profile>
+    </profiles>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -16,11 +52,6 @@
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <maven.version>3.5.4</maven.version>
-        <commons.httpclient.version>4.5.13</commons.httpclient.version>
-        <jetty.version>9.4.44.v20210927</jetty.version>
-        <spark.version>3.3.1</spark.version>
-        <scala.version>2.12.14</scala.version>
-        <scala.compat.version>2.12</scala.compat.version>
         <scalatest.version>3.2.9</scalatest.version>
     </properties>
 
