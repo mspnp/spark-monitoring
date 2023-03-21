@@ -43,7 +43,7 @@ public class SparkLookup implements StrLookup {
                 case "SparkApp":
                     return "driver";
                 default:
-                    return null;
+                    return nodeType;
             }
         }
         SparkEnv sparkEnv = SparkEnv.get();
