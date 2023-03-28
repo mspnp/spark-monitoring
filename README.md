@@ -36,8 +36,7 @@ Before you begin, ensure you have the following prerequisites in place:
 
 ### Supported configurations
 
-| Databricks Runtime(s) | Spark versions |  
-| `10.4LTS` | `scala-2.12_spark-3.2.1` |  
+| Databricks Runtime(s) | Spark versions |
 | `11.3LTS` | `scala-2.12_spark-3.3.0` |  
 | `12.2LTS` | `scala-2.12_spark-3.3.2` |  
 

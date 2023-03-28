@@ -12,16 +12,6 @@
 
     <profiles>
         <profile>
-            <id>dbr-10.4-lts</id>
-            <properties>
-                <commons.httpclient.version>4.5.13</commons.httpclient.version>
-                <jetty.version>9.4.43.v20210629</jetty.version>
-                <spark.version>3.2.1</spark.version>
-                <scala.version>2.12.15</scala.version>
-                <scala.compat.version>2.12</scala.compat.version>
-            </properties>
-        </profile>
-        <profile>
             <id>dbr-11.3-lts</id>
             <properties>
                 <commons.httpclient.version>4.5.13</commons.httpclient.version>
