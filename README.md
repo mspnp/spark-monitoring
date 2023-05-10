@@ -1,6 +1,10 @@
 # Monitoring Azure Databricks in an Azure Log Analytics Workspace
 
-| :warning: | This library supports Azure Databricks 10.x (Spark 3.2.x) and earlier (see [Supported configurations](#supported-configurations)). Azure Databricks 11.0 includes [breaking changes](https://learn.microsoft.com/azure/databricks/release-notes/runtime/11.0#log4j-is-upgraded-from-log4j-1-to-log4j-2) to the logging systems that the spark-monitoring library integrates with. The work required to update the spark-monitoring library to support Azure Databricks 11.0 (Spark 3.3.0) and newer is not currently planned. |
+|   |  |
+|-----------|:--------------------------|
+| :exclamation: | As of **May 10th, 2023** This library now supports Azure Databricks Runtimes 11.0 and above (see [Supported configurations](#supported-configurations)). Please note the 11.0 release is not backwards compatible due to the different logging systems used in the Databricks Runtimes. Be sure to use the correct build for your Databricks Runtime.|
+|-----------|:--------------------------|
+| :warning: | This library and Github repository are in *maintenance mode*. There are no plans for further releases, and issue support will be best-effort only. For any additional questions regarding this library or the roadmap for monitoring and logging of your Azure Databricks environments, please contact [azure-spark-monitoring-help@databricks.com](mailto:azure-spark-monitoring-help@databricks.com). |
 |-----------|:--------------------------|
 
 This repository extends the core monitoring functionality of Azure Databricks to send streaming query event information to Azure Monitor. For more information about using this library to monitor Azure Databricks, see [Monitoring Azure Databricks](https://docs.microsoft.com/azure/architecture/databricks-monitoring)
@@ -45,7 +49,7 @@ Before you begin, ensure you have the following prerequisites in place:
 | `7.3 LTS` | `scala-2.12_spark-3.0.1` |
 | `9.1 LTS` | `scala-2.12_spark-3.1.2` |
 | `10.3` - `10.5` | `scala-2.12_spark-3.2.1` |
-| `11.0` | Not currently supported due to changes in [Log4j version](https://docs.microsoft.com/azure/databricks/release-notes/runtime/11.0#log4j-is-upgraded-from-log4j-1-to-log4j-2) |
+| `11.0+` | `scala-2.12_spark-3.3.0` |
 
 ## Logging Event Size Limit
 
