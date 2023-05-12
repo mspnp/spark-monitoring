@@ -29,7 +29,7 @@ The **perftools** directory contains details on how to use Azure Monitor with Gr
 
 Before you begin, ensure you have the following prerequisites in place:
 
-* Clone or download this GitHub repository.
+* Clone this GitHub repository and switch to this branch (`git switch l4jv2`).
 * An active Azure Databricks workspace. For instructions on how to deploy an Azure Databricks workspace, see [get started with Azure Databricks.](https://docs.microsoft.com/azure/azure-databricks/quickstart-create-databricks-workspace-portal).
 * Install the [Azure Databricks CLI](https://docs.microsoft.com/azure/databricks/dev-tools/cli/#install-the-cli).
   * An Azure Databricks personal access token or Azure AD token is required to use the CLI. For instructions, see [Set up authentication](https://docs.microsoft.com/azure/databricks/dev-tools/cli/#--set-up-authentication).
