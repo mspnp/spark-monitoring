@@ -23,9 +23,6 @@
         </profile>
         <profile>
             <id>dbr-12.2-lts</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
             <properties>
                 <commons.httpclient.version>4.5.13</commons.httpclient.version>
                 <jetty.version>9.4.48.v20220622</jetty.version>
@@ -34,7 +31,21 @@
                 <scala.compat.version>2.12</scala.compat.version>
             </properties>
         </profile>
+        <profile>
+            <id>dbr-13.3-lts</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <commons.httpclient.version>4.5.13</commons.httpclient.version>
+                <jetty.version>9.4.51.v20230217</jetty.version>
+                <spark.version>3.4.1</spark.version>
+                <scala.version>2.12.15</scala.version>
+                <scala.compat.version>2.12</scala.compat.version>
+            </properties>
+        </profile>
     </profiles>
+         
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
