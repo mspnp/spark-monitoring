@@ -30,9 +30,9 @@ The **perftools** directory contains details on how to use Azure Monitor with Gr
 Before you begin, ensure you have the following prerequisites in place:
 
 * Clone this GitHub repository and switch to this branch (`git switch l4jv2`).
-* An active Azure Databricks workspace. For instructions on how to deploy an Azure Databricks workspace, see [get started with Azure Databricks.](https://docs.microsoft.com/azure/azure-databricks/quickstart-create-databricks-workspace-portal).
-* Install the [Azure Databricks CLI](https://docs.microsoft.com/azure/databricks/dev-tools/cli/#install-the-cli).
-  * An Azure Databricks personal access token or Azure AD token is required to use the CLI. For instructions, see [Set up authentication](https://docs.microsoft.com/azure/databricks/dev-tools/cli/#--set-up-authentication).
+* An active Azure Databricks workspace. For instructions on how to deploy an Azure Databricks workspace, see [get started with Azure Databricks.](https://learn.microsoft.com/en-us/azure/databricks/getting-started/#use-the-portal-to-create-an-azure-databricks-workspace).
+* Install the [Azure Databricks CLI](https://learn.microsoft.com/en-us/azure/databricks/dev-tools/cli/databricks-cli#install-the-cli).
+  * Authentication is required to use the CLI. Set up one of the unified authentication methods, such as Azure Databricks personal access token authentication. For instructions, see [Set up authentication](https://learn.microsoft.com/en-us/azure/databricks/dev-tools/cli/databricks-cli#--set-up-authentication).
   * You can also use the Azure Databricks CLI from the Azure Cloud Shell.
 * A Java IDE, with the following resources:
   * [Java Development Kit (JDK) version 1.8](https://www.oracle.com/technetwork/java/javase/downloads/index.html)
@@ -43,9 +43,9 @@ Before you begin, ensure you have the following prerequisites in place:
 
 | Databricks Runtime(s) | Maven Profile |
 | -- | -- |
-| `11.3LTS` | `scala-2.12_spark-3.3.0` |  
-| `12.2LTS` | `scala-2.12_spark-3.3.2` |  
-| `13.3LTS` | `scala-2.12_spark-3.4.1` |  
+| `11.3LTS` | `dbr-11.3-lts` |  
+| `12.2LTS` | `dbr-12.2-lts` |
+| `13.3LTS` | `dbr-13.3-lts` |  
 
 To add a new DBR versions, add a new profile in the pom.xml file
 
@@ -79,8 +79,8 @@ docker run -it --rm -v `pwd`:/spark-monitoring -v "$HOME/.m2":/root/.m2 mcr.micr
 ```
 
 ```bash
-# To build a single profile (example for latest long term support version 10.4 LTS):
-docker run -it --rm -v `pwd`:/spark-monitoring -v "$HOME/.m2":/root/.m2 -w /spark-monitoring/src mcr.microsoft.com/java/maven:8-zulu-debian10 mvn install -P "scala-2.12_spark-3.3.1"
+# To build a single profile (example for latest long term support version 13.3 LTS):
+docker run -it --rm -v `pwd`:/spark-monitoring -v "$HOME/.m2":/root/.m2 -w /spark-monitoring/src mcr.microsoft.com/java/maven:8-zulu-debian10 mvn install -P "dbr-13.3-lts"
 ```
 
 Windows:
@@ -91,26 +91,32 @@ docker run -it --rm -v %cd%:/spark-monitoring -v "%USERPROFILE%/.m2":/root/.m2 m
 ```
 
 ```bash
-# To build a single profile (example for latest long term support version 10.4 LTS):
-docker run -it --rm -v %cd%:/spark-monitoring -v "%USERPROFILE%/.m2":/root/.m2 -w /spark-monitoring/src mcr.microsoft.com/java/maven:8-zulu-debian10 mvn install -P "scala-2.12_spark-3.3.1"
+# To build a single profile (example for latest long term support version 13.3 LTS):
+docker run -it --rm -v %cd%:/spark-monitoring -v "%USERPROFILE%/.m2":/root/.m2 -w /spark-monitoring/src mcr.microsoft.com/java/maven:8-zulu-debian10 mvn install -P "dbr-13.3-lts"
 ```
 
 ### Option 2: Maven
 
 1. Import the Maven project object model file, _pom.xml_, located in the **/** folder into your project. This will import the project
 
-1. Activate a **single** Maven profile that corresponds to the versions of the DBR version combination that is being used. By default, the DBR version 12.2LTS profile is active.
+1. Activate a **single** Maven profile that corresponds to the versions of the DBR version combination that is being used. By default, the DBR version 13.3LTS profile is active.
 
 1. Execute the Maven **package** phase in your Java IDE to build the JAR files for the the project:
 
 ## Configure the Databricks workspace
 
-Copy the JAR files and init scripts to Databricks.
+It is recommended to use a Unity Catalog volume as the source of the init script when using compute with shared or single user access mode. Workspace or ABFSS sources are also options. The JAR files can be stored in DBFS or a volume (if using Unity Catalog). Below are the steps for copying init scripts and JAR files to Databricks.
 
-1. Use the Azure Databricks CLI to create a directory named **dbfs:/databricks/spark-monitoring**:
+1. Use the Azure Databricks CLI to create a DBFS directory named **dbfs:/databricks/spark-monitoring** for the JAR:
 
     ```bash
-    dbfs mkdirs dbfs:/databricks/spark-monitoring
+    databricks fs mkdirs dbfs:/databricks/spark-monitoring
+    ```
+
+1. Use the Azure Databricks CLI to copy the jar file from the **target/** folder to the directory created in step 3:
+
+    ```bash
+    databricks fs cp --overwrite target/spark-monitoring_1.0.0.jar dbfs:/databricks/spark-monitoring/
     ```
 
 1. Open the **src/scripts/spark-monitoring.sh** script file and add your [Log Analytics Workspace ID and Key](http://docs.microsoft.com/azure/azure-monitor/platform/agent-windows#obtain-workspace-id-and-key) to the lines below:
@@ -137,16 +143,45 @@ export AZ_RSRC_NAME=myDatabricks
 Now the _ResourceId **/subscriptions/11111111-5c17-4032-ae54-fc33d56047c2/resourceGroups/myAzResourceGroup/providers/Microsoft.Databricks/workspaces/myDatabricks** will be part of the header.
 (*Note: If at least one of them is not set the header won't be included.*)
 
-1. Use the Azure Databricks CLI to copy **src/scripts/spark-monitoring.sh** to the directory created in step 3:
+### Upload init script
 
+#### Option 1: Volume init script
+A [volume](https://learn.microsoft.com/en-us/azure/databricks/data-governance/unity-catalog/create-volumes) must already be configured via Unity Catalog. Follow steps below to upload the init script to the volume.
+
+1. Use the Azure Databricks CLI to upload to your volume replacing {catalog}, {schema}, and {volume_name} with your values.
     ```bash
-    dbfs cp src/scripts/spark-monitoring.sh dbfs:/databricks/spark-monitoring/spark-monitoring.sh
+    databricks fs cp --overwrite src/scripts/spark-monitoring.sh dbfs:/Volumes/{catalog}/{schema}/{volume_name}/spark-monitoring.sh
+    ``````
+
+1. If using Shared access mode, [add the script to the allowlist](https://learn.microsoft.com/en-us/azure/databricks/data-governance/unity-catalog/manage-privileges/allowlist#how-to-add-items-to-the-allowlist).
+
+1. (Optional) If you would like to store the JAR in a volume instead of DBFS, then upload the JAR to the volume and replace the path in `spark-monitoring.sh`.
+
+    To upload the JAR to your volume, run the following command replacing {catalog}, {schema}, and {volume_name} with your values:
+    ```bash
+    databricks fs cp --overwrite target/spark-monitoring_1.0.0.jar dbfs:/Volumes/{catalog}/{schema}/{volume_name}/spark-monitoring_1.0.0.jar
     ```
 
-1. Use the Azure Databricks CLI to copy the jar file from the **target/** folder to the directory created in step 3:
+    In `spark-monitoring.sh`, replace line
+    ```
+    cp -f "$STAGE_DIR/$JAR_FILENAME" /mnt/driver-daemon/jars
+    ```
+    with the following (replacing {catalog}, {schema}, and {volume_name})
+    ```
+    cp -f "/Volumes/{catalog}/{schema}/{volume_name}/$JAR_FILENAME" /mnt/driver-daemon/jars
+    ```
+
+#### Option 2: Workspace init script
+1. Use the Azure Databricks CLI to create a workspace directory named **/databricks/spark-monitoring** for the init script:
 
     ```bash
-    dbfs cp --overwrite target/spark-monitoring_1.0.0.jar dbfs:/databricks/spark-monitoring/
+    databricks workspace mkdirs /databricks/spark-monitoring
+    ```
+
+1. Use the Azure Databricks CLI to copy **src/scripts/spark-monitoring.sh** to the directory created in the previous step:
+
+    ```bash
+    databricks workspace import --overwrite --format "AUTO" --file src/scripts/spark-monitoring.sh /databricks/spark-monitoring/spark-monitoring.sh
     ```
 
 ### Create and configure the Azure Databricks cluster
@@ -154,10 +189,12 @@ Now the _ResourceId **/subscriptions/11111111-5c17-4032-ae54-fc33d56047c2/resour
 1. Navigate to your Azure Databricks workspace in the Azure Portal.
 1. Under "Compute", click "Create Cluster".
 1. Choose a name for your cluster and enter it in "Cluster name" text box.
-1. In the "Databricks Runtime Version" dropdown, select **Runtime: 11.3 LTS (Scala 2.12, Spark 3.3.0), or Runtime: 12.2 LTS (Scala 2.12, Spark 3.3.2) or Runtime: 13.3 LTS (Scala 2.12, Spark 3.4.1)**.
+1. In the "Databricks Runtime Version" dropdown, select **Runtime: 13.3 LTS (Scala 2.12, Spark 3.4.1)**.
 1. Under "Advanced Options", click on the "Spark" tab. Add env variables for LOG_ANALYTICS_WORKSPACE_KEY and LOG_ANALYTICS_WORKSPACE_KEY. Use this step if you haven't set those variables in the init script
-1. Under "Advanced Options", click on the "Init Scripts" tab. Go to the last line under the "Init Scripts section" Under the "destination" dropdown, select "DBFS". Enter "dbfs:/databricks/spark-monitoring/spark-monitoring.sh" in the text box. Click the "add" button.
-1. Click the "Create Cluster" button to create the cluster. Next, click on the "start" button to start the cluster.
+1. Under "Advanced Options", click on the "Init Scripts" tab. Under the "Source" dropdown, select "Workspace" or "Volumes". Enter the path to the init script in the text box. Click the "add" button.
+
+    > Note: If using a cluster with Shared access mode, you cannot use "Workspace" as a source. For Shared mode you also need to [add the script to the allowlist](https://learn.microsoft.com/en-us/azure/databricks/data-governance/unity-catalog/manage-privileges/allowlist).
+1. Click the "Create Compute" button to create the cluster. If the cluster does not start automatically, click on the "Start" button on the cluster page.
 
 ## Run the sample job (optional)
 

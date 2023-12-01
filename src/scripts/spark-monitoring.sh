@@ -28,7 +28,7 @@ EOF
 STAGE_DIR=/dbfs/databricks/spark-monitoring
 SPARK_MONITORING_VERSION=${SPARK_MONITORING_VERSION:-1.0.0}
 SPARK_VERSION=$(cat /databricks/spark/VERSION 2> /dev/null || echo "")
-SPARK_VERSION=${SPARK_VERSION:-3.3.1}
+SPARK_VERSION=${SPARK_VERSION:-3.4.1}
 SPARK_SCALA_VERSION=$(ls /databricks/spark/assembly/target | cut -d '-' -f2 2> /dev/null || echo "")
 SPARK_SCALA_VERSION=${SPARK_SCALA_VERSION:-2.12}
 
