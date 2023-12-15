@@ -12,7 +12,7 @@ DB_HOME=/databricks
 SPARK_HOME=$DB_HOME/spark
 SPARK_CONF_DIR=$SPARK_HOME/conf
 
-cat << 'EOF' >> "$SPARK_CONF_DIR/spark-env.sh"
+cat << EOF >> "$SPARK_CONF_DIR/spark-env.sh"
 
 export DB_CLUSTER_ID=$DB_CLUSTER_ID
 export DB_CLUSTER_NAME=$DB_CLUSTER_NAME
