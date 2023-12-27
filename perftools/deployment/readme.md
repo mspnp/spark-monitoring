@@ -2,7 +2,7 @@
 
 ## Deployment of Log Analytics With Spark Metrics
 
-For more details on how to use Grafana to monitor Spark performance, visit: [Use dashboards to visualize Azure Databricks metrics](https://docs.microsoft.com/azure/architecture/databricks-monitoring/dashboards).
+For more details on how to use Grafana to monitor Spark performance, visit: [Use dashboards to visualize Azure Databricks metrics](https://learn.microsoft.com/azure/architecture/databricks-monitoring/dashboards).
 
 ### Step 1: Deploy Log Analytics With Spark Metrics
 

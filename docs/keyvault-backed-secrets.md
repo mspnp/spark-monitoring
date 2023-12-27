@@ -3,7 +3,7 @@
 To set up your databricks cluster to reference Key Vault-backed secrets,
 follow the steps below:
 
-1. Set up an [Azure Key Vault-backed secret scope](https://docs.microsoft.com/en-us/azure/databricks/security/secrets/secret-scopes#--create-an-azure-key-vault-backed-secret-scope).
+1. Set up an [Azure Key Vault-backed secret scope](https://learn.microsoft.com/azure/databricks/security/secrets/secret-scopes#--create-an-azure-key-vault-backed-secret-scope).
 1. Reference your Key Vault-backed keys in your cluster's environment variables:
 
 ```sh
