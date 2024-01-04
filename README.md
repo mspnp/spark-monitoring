@@ -33,7 +33,7 @@ Before you begin, ensure you have the following prerequisites in place:
 * Clone or download this GitHub repository.
 * An active Azure Databricks workspace. For instructions on how to deploy an Azure Databricks workspace, see [get started with Azure Databricks](https://learn.microsoft.com/azure/databricks/getting-started/).
 * Install the [Azure Databricks CLI](https://learn.microsoft.com/azure/databricks/dev-tools/cli/install).
-  * An Azure Databricks personal access token or Microsoft Entra ID access token is required to use the CLI. For instructions, see [Set up authentication](https://learn.microsoft.com/azure/databricks/dev-tools/cli/authentication).
+  * An Azure Databricks personal access token or Microsoft Entra access token is required to use the CLI. For instructions, see [Set up authentication](https://learn.microsoft.com/azure/databricks/dev-tools/cli/authentication).
   * You can also use the Azure Databricks CLI from the Azure Cloud Shell.
 * A Java IDE, with the following resources:
   * [Java Development Kit (JDK) version 1.8](https://www.oracle.com/technetwork/java/javase/downloads/index.html)
