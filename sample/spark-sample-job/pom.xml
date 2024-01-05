@@ -14,7 +14,7 @@
             <properties>
                 <jetty.version>9.4.44.v20210927</jetty.version>
                 <slf4j.version>1.7.30</slf4j.version>
-                <spark.version>3.0.1</spark.version>
+                <spark.version>3.4.0</spark.version>
                 <scala.version>2.12.14</scala.version>
                 <scala.compat.version>2.12</scala.compat.version>
             </properties>
