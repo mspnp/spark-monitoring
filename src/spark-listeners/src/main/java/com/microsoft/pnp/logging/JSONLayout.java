@@ -16,6 +16,7 @@ public class JSONLayout extends Layout {
 
     public static final String TIMESTAMP_FIELD_NAME = "timestamp";
     private boolean locationInfo;
+    private boolean oneLogEventPerLine;
     private String jsonConfiguration;
     private ObjectMapper objectMapper = new ObjectMapper();
 
@@ -84,7 +85,11 @@ public class JSONLayout extends Layout {
         }
 
         try {
-            return objectMapper.writeValueAsString(event);
+            if (oneLogEventPerLine) {
+                return objectMapper.writeValueAsString(event) + '\n';
+            } else {
+                return objectMapper.writeValueAsString(event);
+            }
         } catch (Exception ex) {
             LogLog.warn("Error serializing event", ex);
             return null;
@@ -106,6 +111,14 @@ public class JSONLayout extends Layout {
 
     public void setLocationInfo(boolean locationInfo) {
         this.locationInfo = locationInfo;
+    }
+
+    public boolean isOneLogEventPerLine() {
+        return oneLogEventPerLine;
+    }
+
+    public void setOneLogEventPerLine(boolean oneLogEventPerLine) {
+        this.oneLogEventPerLine = oneLogEventPerLine;
     }
 
     public String getJsonConfiguration() {
