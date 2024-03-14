@@ -12,6 +12,7 @@ DB_HOME=/databricks
 SPARK_HOME=$DB_HOME/spark
 SPARK_CONF_DIR=$SPARK_HOME/conf
 
+mkdir -p $SPARK_CONF_DIR
 cat << 'EOF' >> "$SPARK_CONF_DIR/spark-env.sh"
 
 export DB_CLUSTER_ID=$DB_CLUSTER_ID
@@ -94,13 +95,14 @@ done
 # The spark.extraListeners property has an entry from Databricks by default.
 # We have to read it here because we did not find a way to get this setting when the init script is running.
 # If Databricks changes the default value of this property, it needs to be changed here.
+mkdir -p $DB_HOME/driver/conf
 cat << EOF > "$DB_HOME/driver/conf/00-custom-spark-driver-defaults.conf"
 [driver] {
     "spark.extraListeners" = "com.databricks.backend.daemon.driver.DBCEventLoggingListener,com.microsoft.pnp.listeners.DatabricksListener"
 }
 EOF
 
-
+mkdir -p $STAGE_DIR
 cat << 'EOF' > "$STAGE_DIR/sparkLayout.json"
 {
   "@timestamp": {
