@@ -211,6 +211,11 @@ class LogAnalyticsReporter(val registry: MetricRegistry, val workspaceId: String
     }
   }
 
+  override def stop(): Unit = {
+    super.stop()
+    logAnalyticsBufferedClient.close()
+  }
+
   //private def addProperties(name: String, metric: Metric, timestamp: Instant): JValue = {
   private def addProperties(name: String, metric: Metric, properties: Map[String, String]): JValue = {
     val metricType: String = metric match {
