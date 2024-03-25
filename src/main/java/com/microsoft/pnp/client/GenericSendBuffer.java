@@ -29,7 +29,7 @@ public abstract class GenericSendBuffer<T> implements AutoCloseable {
     // Make configurable
     private final int maxInflightBatches = Optional.ofNullable(System.getenv("SEND_BUFFER_MAX_INFLIGHT_BATCHES"))
             .map(Integer::parseInt)
-            .orElseGet(() -> Runtime.getRuntime().availableProcessors());
+            .orElseGet(() -> Math.max(4, Runtime.getRuntime().availableProcessors()));
     // making it available to every thread to see if changes happen.
     // also this value will be set only when shutdown is called.
     public volatile boolean isClosed = false;
