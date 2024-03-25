@@ -44,6 +44,19 @@
                 <scala.compat.version>2.12</scala.compat.version>
             </properties>
         </profile>
+        <profile>
+            <id>dbr-14.3-lts</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <commons.httpclient.version>4.5.13</commons.httpclient.version>
+                <jetty.version>9.4.52.v20230823</jetty.version>
+                <spark.version>3.5.0</spark.version>
+                <scala.version>2.12.18</scala.version>
+                <scala.compat.version>2.12</scala.compat.version>
+            </properties>
+        </profile>
     </profiles>
          
     <properties>

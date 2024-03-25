@@ -1,5 +1,6 @@
 package com.microsoft.pnp.client;
 
+import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
@@ -26,7 +27,9 @@ public abstract class GenericSendBuffer<T> implements AutoCloseable {
      */
     private final Semaphore inflightBatches;
     // Make configurable
-    private final int maxInflightBatches = 4;
+    private final int maxInflightBatches = Optional.ofNullable(System.getenv("SEND_BUFFER_MAX_INFLIGHT_BATCHES"))
+            .map(Integer::parseInt)
+            .orElseGet(() -> Math.max(4, Runtime.getRuntime().availableProcessors()));
     // making it available to every thread to see if changes happen.
     // also this value will be set only when shutdown is called.
     public volatile boolean isClosed = false;
