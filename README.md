@@ -46,6 +46,7 @@ Before you begin, ensure you have the following prerequisites in place:
 | `11.3LTS` | `dbr-11.3-lts` |  
 | `12.2LTS` | `dbr-12.2-lts` |
 | `13.3LTS` | `dbr-13.3-lts` |  
+| `14.3LTS` | `dbr-14.3-lts` |  
 
 To add a new DBR versions, add a new profile in the pom.xml file
 
