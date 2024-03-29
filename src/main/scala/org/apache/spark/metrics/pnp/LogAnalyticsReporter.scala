@@ -195,7 +195,7 @@ class LogAnalyticsReporter(val registry: MetricRegistry, val workspaceId: String
     import scala.collection.JavaConversions._
 
     val ambientProperties = SparkInformation.get() + ("SparkEventTime" -> now.toString)
-    val metrics = gauges.retain((_, v) => v.getValue != null).toSeq ++
+    val metrics = gauges.filter { case (_, v) => v.getValue != null }.toSeq ++
       counters.toSeq ++ histograms.toSeq ++ meters.toSeq ++ timers.toSeq
     for ((name, metric) <- metrics) {
       try {
