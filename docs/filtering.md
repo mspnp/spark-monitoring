@@ -79,14 +79,34 @@ SparkMetric_CL
 
 ## Limiting Logs in SparkLoggingEvent_CL (Basic)
 
-The logs that propagate to SparkLoggingEvent_CL do so through a log4j appender.  This can be configured by altering the spark-monitoring.sh script that is responsible for writing the log4j.properties file. The script at [spark-monitoring.sh](../src/spark-listeners/scripts/spark-monitoring.sh) can be modified to set the threshold for events to be forwarded.  A commented example is included in the script.
+The logs that propagate to SparkLoggingEvent_CL do so through a log4j2 appender.
+This can be configured by altering the spark-monitoring.sh script that is responsible for writing the log4j2.xml file.
+The script at [spark-monitoring.sh](../src/scripts/spark-monitoring.sh) can be modified to set the threshold for events to be forwarded.
+A commented example is included in the script.
 
-```bash
-# Commented line below shows how to set the threshhold for logging to only capture events that are
-# level ERROR or more severe.
-# log4j.appender.logAnalyticsAppender.Threshold=ERROR
+```xml
+        <!-- Commented line below shows how to restrict the logs pushed to Log Analytics to ERROR level or more severe. -->
+        <!-- <ThresholdFilter level="ERROR" /> -->
 ```
 
+## Limiting Logs in SparkLoggingEvent_CL (Advanced)
+
+You can use the `LA_SPARKLOGGINGEVENT_NAME_REGEX` environment variable
+which is used in [spark-monitoring.sh](../src/scripts/spark-monitoring.sh) to update the log4j2.xml configuration 
+to limit the logging to only include events where `logger_name_s` matches the regex.
+
+The example below will only log events from logger `com.microsoft.pnp.samplejob.StreamingQueryListenerSampleJob`
+or where the logger name starts with `org.apache.spark.util.Utils`.
+
+`export LA_SPARKLOGGINGEVENT_NAME_REGEX="com\.microsoft\.pnp\.samplejob\.StreamingQueryListenerSampleJob|org\.apache\.spark\.util\.Utils.*"`
+
+You can use the `LA_SPARKLOGGINGEVENT_MESSAGE_REGEX` environment variable
+that is used in [spark-monitoring.sh](../src/scripts/spark-monitoring.sh) to update the log4j2.xml configuration 
+to limit the logging to only include events where the message matches the regex.
+
+The example below will only log events where the message begins with the string `FS_CONF_COMPAT`.
+
+`export LA_SPARKLOGGINGEVENT_MESSAGE_REGEX="FS_CONF_COMPAT.*"`
 
 ## Performance Considerations
 
