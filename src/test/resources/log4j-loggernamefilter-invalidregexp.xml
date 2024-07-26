@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="OFF" name="LoggerNameFilterTest">
+    <Appenders>
+        <List name="LISTNOK">
+            <PatternLayout pattern="%-5p %d{dd-MMM-yyyy HH:mm:ss} %t %m%n"/>
+            <!-- let say we are only interested in logger names having iamsecret in the name-->
+            <LoggerNameFilter regex="(this is an invalid regex"/>
+        </List>
+
+    </Appenders>
+
+    <Loggers>
+        <Root level="TRACE">
+            <AppenderRef ref="LISTNOK"/>
+        </Root>
+    </Loggers>
+</Configuration>

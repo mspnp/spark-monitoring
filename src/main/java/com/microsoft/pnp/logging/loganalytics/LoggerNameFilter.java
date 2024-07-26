@@ -6,13 +6,14 @@ import org.apache.logging.log4j.core.Filter;
 import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.Logger;
 import org.apache.logging.log4j.core.config.Node;
+import org.apache.logging.log4j.core.config.plugins.Plugin;
 import org.apache.logging.log4j.core.config.plugins.PluginBuilderAttribute;
 import org.apache.logging.log4j.core.config.plugins.PluginBuilderFactory;
 import org.apache.logging.log4j.core.filter.AbstractFilter;
-import org.apache.logging.log4j.core.config.plugins.Plugin;
 import org.apache.logging.log4j.message.Message;
 
 import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 /**
  * This custom filter is used to filter log events based on the logger name.
@@ -78,7 +79,17 @@ public class LoggerNameFilter extends AbstractFilter {
 
       @Override
       public LoggerNameFilter build() throws IllegalArgumentException{
-        return new LoggerNameFilter(Pattern.compile(regex), getOnMatch(), getOnMismatch());
+          if (regex == null) {
+              LOGGER.warn("LoggerNameFilter regex has been defaulted to .*");
+              regex = ".*";
+          }
+          try {
+              return new LoggerNameFilter(Pattern.compile(regex), getOnMatch(), getOnMismatch());
+          } catch (PatternSyntaxException pse) {
+              String message = "Could not compile the LoggerNameFilter regex : " + pse.getMessage();
+              LOGGER.error(message);
+              throw new IllegalArgumentException(message);
+          }
       }
   }
 }
