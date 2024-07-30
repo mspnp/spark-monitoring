@@ -77,14 +77,25 @@ for log4jDirectory in "${log4jDirectories[@]}"
 do
 
 LOG4J_CONFIG_FILE="$SPARK_HOME/dbconf/log4j/$log4jDirectory/log4j2.xml"
+LOG4J_CONFIG_FILENAME=$(basename "$LOG4J_CONFIG_FILE")
 echo "BEGIN: Updating $LOG4J_CONFIG_FILE with Log Analytics appender"
-CONTENT="\ \ <LogAnalyticsAppender name=\"logAnalyticsAppender\">\n\ \ \ \ <JsonTemplateLayout eventTemplateUri=\"file:${STAGE_DIR}/sparkLayout.json\"/>\n\ \ </LogAnalyticsAppender>"
-C=$(echo $CONTENT | sed 's/\//\\\//g')
-sed -i "/<\/Appenders>/ s/.*/${C}\n&/" $LOG4J_CONFIG_FILE
 
-CONTENT="\ \ \ \ \ \ <AppenderRef ref=\"logAnalyticsAppender\"/>"
-C=$(echo $CONTENT | sed 's/\//\\\//g')
-sed -i "/<\/Root>/ s/.*/${C}\n&/" $LOG4J_CONFIG_FILE
+csplit --quiet --prefix="split$LOG4J_CONFIG_FILENAME" "$LOG4J_CONFIG_FILE" "/<\/Appenders>/" "/<\/Root>/"
+cat "split${LOG4J_CONFIG_FILENAME}00" - "split${LOG4J_CONFIG_FILENAME}01" << EOF >"$LOG4J_CONFIG_FILE"
+    <LogAnalyticsAppender name="logAnalyticsAppender">
+      <JsonTemplateLayout eventTemplateUri="file:${STAGE_DIR}/sparkLayout.json"/>
+      <Filters>
+        <!-- Commented line below shows how to restrict the logs pushed to Log Analytics to ERROR level or more severe. -->
+        <!-- <ThresholdFilter level="ERROR" /> -->
+${LA_SPARKLOGGINGEVENT_NAME_REGEX:+        <LoggerNameFilter regex=\"$LA_SPARKLOGGINGEVENT_NAME_REGEX\" />
+}${LA_SPARKLOGGINGEVENT_MESSAGE_REGEX:+        <RegexFilter regex=\"$LA_SPARKLOGGINGEVENT_MESSAGE_REGEX\" />
+}      </Filters>
+    </LogAnalyticsAppender>
+EOF
+cat - "split${LOG4J_CONFIG_FILENAME}02" << EOF >>"$LOG4J_CONFIG_FILE"
+      <AppenderRef ref="logAnalyticsAppender"/>
+EOF
+rm "split${LOG4J_CONFIG_FILENAME}00" "split${LOG4J_CONFIG_FILENAME}01" "split${LOG4J_CONFIG_FILENAME}02"
 
 sed -i 's/packages="\([^"]*\)"/packages="\1,com.microsoft.pnp.logging.loganalytics"/' $LOG4J_CONFIG_FILE
 

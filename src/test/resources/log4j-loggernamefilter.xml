@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="OFF" name="LoggerNameFilterTest">
+  <Appenders>
+    <List name="LIST">
+      <PatternLayout pattern="%-5p %d{dd-MMM-yyyy HH:mm:ss} %t %m%n"/>
+      <LoggerNameFilter regex="com\.microsoft\.pnp\.logging\.loganalytics.*"/>
+    </List>
+  </Appenders>
+
+  <Loggers>
+    <Root level="TRACE">
+      <AppenderRef ref="LIST"/>
+    </Root>
+  </Loggers>
+</Configuration>

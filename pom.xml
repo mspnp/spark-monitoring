@@ -19,6 +19,7 @@
                 <spark.version>3.3.0</spark.version>
                 <scala.version>2.12.15</scala.version>
                 <scala.compat.version>2.12</scala.compat.version>
+                <log4j.version>2.18.0</log4j.version>
             </properties>
         </profile>
         <profile>
@@ -29,6 +30,7 @@
                 <spark.version>3.3.2</spark.version>
                 <scala.version>2.12.15</scala.version>
                 <scala.compat.version>2.12</scala.compat.version>
+                <log4j.version>2.18.0</log4j.version>
             </properties>
         </profile>
         <profile>
@@ -42,6 +44,7 @@
                 <spark.version>3.4.1</spark.version>
                 <scala.version>2.12.15</scala.version>
                 <scala.compat.version>2.12</scala.compat.version>
+                <log4j.version>2.19.0</log4j.version>
             </properties>
         </profile>
         <profile>
@@ -55,6 +58,7 @@
                 <spark.version>3.5.0</spark.version>
                 <scala.version>2.12.18</scala.version>
                 <scala.compat.version>2.12</scala.compat.version>
+                <log4j.version>2.20.0</log4j.version>
             </properties>
         </profile>
     </profiles>
@@ -145,6 +149,12 @@
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
                 <version>4.13.1</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-core-test</artifactId>
+                <version>${log4j.version}</version>
                 <scope>test</scope>
             </dependency>
         </dependencies>
