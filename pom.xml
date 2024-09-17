@@ -19,7 +19,7 @@
                 <spark.version>3.3.0</spark.version>
                 <scala.version>2.12.15</scala.version>
                 <scala.compat.version>2.12</scala.compat.version>
-                <log4j.version>2.18.0</log4j.version>
+                <log4j.version>2.20.0</log4j.version>
             </properties>
         </profile>
         <profile>
@@ -30,7 +30,7 @@
                 <spark.version>3.3.2</spark.version>
                 <scala.version>2.12.15</scala.version>
                 <scala.compat.version>2.12</scala.compat.version>
-                <log4j.version>2.18.0</log4j.version>
+                <log4j.version>2.20.0</log4j.version>
             </properties>
         </profile>
         <profile>
@@ -39,12 +39,12 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
-                <commons.httpclient.version>4.5.13</commons.httpclient.version>
+                <commons.httpclient.version>4.5.14</commons.httpclient.version>
                 <jetty.version>9.4.51.v20230217</jetty.version>
                 <spark.version>3.4.1</spark.version>
                 <scala.version>2.12.15</scala.version>
                 <scala.compat.version>2.12</scala.compat.version>
-                <log4j.version>2.19.0</log4j.version>
+                <log4j.version>2.20.0</log4j.version>
             </properties>
         </profile>
         <profile>
@@ -53,12 +53,26 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
-                <commons.httpclient.version>4.5.13</commons.httpclient.version>
+                <commons.httpclient.version>4.5.14</commons.httpclient.version>
                 <jetty.version>9.4.52.v20230823</jetty.version>
                 <spark.version>3.5.0</spark.version>
                 <scala.version>2.12.18</scala.version>
                 <scala.compat.version>2.12</scala.compat.version>
                 <log4j.version>2.20.0</log4j.version>
+            </properties>
+        </profile>
+        <profile>
+            <id>dbr-15.4-lts</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <commons.httpclient.version>4.5.14</commons.httpclient.version>
+                <jetty.version>9.4.52.v20230823</jetty.version>
+                <spark.version>3.5.0</spark.version>
+                <scala.version>2.12.18</scala.version>
+                <scala.compat.version>2.12</scala.compat.version>
+                <log4j.version>2.22.1</log4j.version>
             </properties>
         </profile>
     </profiles>
